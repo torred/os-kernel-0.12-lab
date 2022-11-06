@@ -6,12 +6,12 @@
 
 编译结果如下:
 
-![image](https://github.com/sky-big/Linux-0.12/blob/master/compile_picture.jpg)
+![image](https://github.com/torred/os-kernel-0.12-lab/blob/master/code/images/result/compile_picture.jpg)
 
 
 运行结果如下:
 
-![image](https://github.com/sky-big/Linux-0.12/blob/master/run_result.jpg)
+![image](https://github.com/torred/os-kernel-0.12-lab/blob/master/code/images/result/run_result.jpg)
 
 运行环境下载地址:
 http://oldlinux.org/Linux.old/bochs/linux-0.12-080324.zip
