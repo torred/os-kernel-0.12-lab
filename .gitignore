@@ -1,0 +1,6 @@
+.DS_Store
+*.o
+*.pc
+*.a
+*.map
+bochsout.txt

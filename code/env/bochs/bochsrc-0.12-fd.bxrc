@@ -1,0 +1,51 @@
+# You many now use double quotes around pathnames, in case
+# your pathname includes spaces.
+
+#=======================================================================
+# MEGS
+#=======================================================================
+# 此处设置为16M，linux 0.11/0.12最大只支持16M
+megs: 16
+
+#=======================================================================
+# ROMIMAGE:
+# The ROM BIOS controls what the PC does when it first powers on.
+#=======================================================================
+romimage: file=$BOCHS_HOME/share/bochs/BIOS-bochs-latest
+
+#=======================================================================
+# VGAROMIMAGE
+# You now need to load a VGA ROM BIOS into C0000.
+#=======================================================================
+vgaromimage: file=$BOCHS_HOME/share/bochs/VGABIOS-lgpl-latest
+
+#=======================================================================
+# FLOPPYA, FLOPPYB:
+# Point this to pathname of floppy image file or device
+#=======================================================================
+floppya: 1_44="$OS_LAB_ROOT/code/Image", status=inserted
+floppyb: 1_44="$OS_LAB_ENV/bochs/diska.img", status=inserted
+
+#=======================================================================
+# BOOT:
+#   boot: disk
+#   boot: a
+#   boot: c
+#=======================================================================
+boot: a
+
+#=======================================================================
+# LOG:
+# Give the path of the log file you'd like Bochs debug and misc.
+#=======================================================================
+#log: /dev/null
+log: $OS_LAB_ENV/output/bochsout.txt
+
+#=======================================================================
+# VGA_UPDATE_INTERVAL:
+#   vga_update_interval: 300000
+#=======================================================================
+
+
+
+
