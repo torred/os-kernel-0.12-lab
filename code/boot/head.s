@@ -55,24 +55,24 @@ startup_32:
 	call 	setup_gdt		# 调用设置全局描述符表子程序
 
 	movl	$0x10,%eax		# reload all the segment registers
-	mov	%ax,%ds			# after changing gdt. CS was already
-	mov	%ax,%es			# reloaded in 'setup_gdt'
-	mov	%ax,%fs			# 因为修改了gdt,所以需要重新装载所有的段寄存器.CS代码段寄存器已经在setup_gdt中重新加载过了.
-	mov	%ax,%gs
+	mov		%ax,%ds			# after changing gdt. CS was already
+	mov		%ax,%es			# reloaded in 'setup_gdt'
+	mov		%ax,%fs			# 因为修改了gdt,所以需要重新装载所有的段寄存器.CS代码段寄存器已经在setup_gdt中重新加载过了.
+	mov		%ax,%gs
 	# 由于段描述符中的段限长从setup.s中的8MB改成了本程序设置的16MB,因此这里再次对所有段寄存器执行加载操作是必须的.另外,通过使用bochs跟踪观察,如果不对
 	# CS再次执行加载,那么在执行到movl $0x10,%eax时CS代码段不可见部分中的限长还是8MB.这样看来应该重新加载CS.但是由于setup.s中的内核代码段描述符与本
 	# 程序中重新设置的代码段描述符除了段限长以外其余部分完全一样,8MB的限长在内核初始化阶段不会有问题,而且在以后内核执行过程中段间跳转时会重新加载CS.因此
 	# 这里没有加载它并没有让程序出错.针对该问题,目前内核中就在call setup_gdt之后添加了一条长跳转指令:'ljmp $(__KERNEL_CS),$1f',跳转到movl $0x10,$eax
 	# 来确保CS确实被重新加载.
 
-	lss	stack_start,%esp
+	lss		stack_start,%esp
 
 	# 下面代码用于测试A20地址线是否已经开启，如果A20未开通，内核就不能使用1MB以上内存，则访问地址0x100000将环回到0x000000
 	xorl	%eax,%eax
 1:	incl	%eax			# check that A20 really IS enabled
-	movl	%eax,0x000000		# loop forever if it isn't
-	cmpl	%eax,0x100000		# 先向内存0x000000写一个数值，然后比较内存0x100000(1M)处的数值是否与写入的数值相等
-	je	1b			# 如果相等，则跳转到标号1，死循环下去，'1b'表示向后跳转到标号1，若'5f'则表示向前跳转到标号5
+	movl	%eax,0x000000	# loop forever if it isn't
+	cmpl	%eax,0x100000	# 先向内存0x000000写一个数值，然后比较内存0x100000(1M)处的数值是否与写入的数值相等
+	je		1b				# 如果相等，则跳转到标号1，死循环下去，'1b'表示向后跳转到标号1，若'5f'则表示向前跳转到标号5
 
 /*
  * '1:'是一个局部符号构成的标号.标号由符号后跟一个冒号组成.此时该符号表示活动位置计数的当前值,并可以作为指令的操作数.局部符号用于帮助编译器和编程人员临时
@@ -101,13 +101,13 @@ startup_32:
  # 下面这段程序用于检查数学协处理器芯片是否存在
  # 方法是修改控制寄存器CR0，在假设存在协处理器的情况下执行一个协处理器指令，如果出错的话则说明协处理器
  # 芯片不存在，需要设置CR0中的协处理器仿真位EM(位2)，并复位协处理器存在标志MP(位1)。
-	movl	%cr0,%eax		# check math chip # 取出cr0寄存器值 sr0:1000 0000 0000 0000-0000 0000 0001 0001
+	movl	%cr0,%eax			# check math chip # 取出cr0寄存器值 sr0:1000 0000 0000 0000-0000 0000 0001 0001
 	andl	$0x80000011,%eax	# Save PG,ET,PE
 	#orl	$0x10020,%eax		# here for 486 might be good
-	orl	$2,%eax			# set MP
-	movl	%eax,%cr0		# sr0:1000 0000 0000 0000-0000 0000 0001 0011
+	orl		$2,%eax				# set MP
+	movl	%eax,%cr0			# sr0:1000 0000 0000 0000-0000 0000 0001 0011
 	call	check_x87
-	jmp	after_page_tables
+	jmp		after_page_tables
 
 /*
  * We depend on ET to be correct. This checks for 287/387.
@@ -120,10 +120,10 @@ startup_32:
 # 如果系统中存在协处理器的话，那么在执行了fninit指令后其状态字低字节肯定为0。
 
 check_x87:
-	fninit				# 向协处理器发出初始化命令，设置其控制字为默认值，清除状态字和所有浮点栈式寄存器，fninit指令会让协处理器终止执行当前正在执行的任何算术操作。
-	fstsw	%ax			# 取协处理器状态字到ax寄存器中.
+	fninit					# 向协处理器发出初始化命令，设置其控制字为默认值，清除状态字和所有浮点栈式寄存器，fninit指令会让协处理器终止执行当前正在执行的任何算术操作。
+	fstsw	%ax				# 取协处理器状态字到ax寄存器中.
 	cmpb	$0,%al			# 如果系统中存在协处理器的话，执行fninit指令后其状态字低字节为0，否则说明协处理器不存在
-	je	1f			# no coprocessor: have to set bits # 有协处理器则向前跳转到1f
+	je		1f				# no coprocessor: have to set bits # 有协处理器则向前跳转到1f
 	movl	%cr0,%eax		# 没有协处理器则改写cr0.
 	xorl	$6,%eax			# reset MP, set EM
 	movl	%eax,%cr0		# sr0:1000 0000 0000 0000-0000 0000 0001 0101
@@ -169,8 +169,8 @@ rp_sidt:
 	movl	%eax,(%edi)		# 将哑中断门描述符存入表中
 	movl	%edx,4(%edi)
 	addl	$8,%edi			# edi指向表中下一项
-	dec	%ecx
-	jne	rp_sidt
+	dec		%ecx
+	jne		rp_sidt
 	lidt	idt_descr		# 加载中断描述符表寄存器值
 	ret
 
@@ -240,17 +240,17 @@ tmp_floppy_area:
  * 当head.s最后执行ret指令时就会弹出main()的地址，并把控制权转移到init/main.c程序
  */
 after_page_tables:
-	pushl	$0			# These are the parameters to main :-)
-	pushl	$0			# 这些是调用main程序的参数(指init/main.c).
-	pushl	$0			# 其中的'$'符号表示这是一个立即操作数
-	pushl	$L6			# return address for main, if it decides to.
+	pushl	$0				# These are the parameters to main :-)
+	pushl	$0				# 这些是调用main程序的参数(指init/main.c).
+	pushl	$0				# 其中的'$'符号表示这是一个立即操作数
+	pushl	$L6				# return address for main, if it decides to.
 	pushl	$main			# 'main'是编译程序对main的内部表示方法
-	jmp	setup_paging		# 跳转至setup_paging
+	jmp		setup_paging	# 跳转至setup_paging
 L6:
-	jmp 	L6			# main should never return here, but
-					# just in case, we know what happens.
-                                	# main程序绝对不应该返回到这里，不过为了以防万一，所以
-                                	# 添加了该语句。这样我们就知道发生什么问题了。
+	jmp 	L6				# main should never return here, but
+							# just in case, we know what happens.
+                            # main程序绝对不应该返回到这里，不过为了以防万一，所以
+                            # 添加了该语句。这样我们就知道发生什么问题了。
 
 /* This is the default interrupt "handler" :-) */
 /* 下面是默认的中断"向量句柄" */
@@ -261,12 +261,12 @@ int_msg:
  * This is the default interrupt "handler" :-) 
  * 下面是默认的中断"向量句柄" 
  */
-.align 4				# 按4字节方式对齐内存地址.
+.align 4					# 按4字节方式对齐内存地址.
 ignore_int:
 	pushl %eax
 	pushl %ecx
 	pushl %edx
-	push %ds			# 这里请注意!!ds,es,fs,gs等虽然是16位寄存器,但入栈后仍然会以32位的形式入栈,即需要占用4个字节的堆栈空间
+	push %ds				# 这里请注意!!ds,es,fs,gs等虽然是16位寄存器,但入栈后仍然会以32位的形式入栈,即需要占用4个字节的堆栈空间
 	push %es
 	push %fs
 
@@ -275,7 +275,7 @@ ignore_int:
 	mov %ax,%es
 	mov %ax,%fs
 	pushl $int_msg			# 把调用printk函数的参数指针(地址)入栈.注意!若int_msg前不加'$',则表示把int_msg符处的长字('Unkn')入栈
-	call printk			# 该函数在kernel/printk.c中
+	call printk				# 该函数在kernel/printk.c中
 	popl %eax
 
 	pop %fs
@@ -284,7 +284,7 @@ ignore_int:
 	popl %edx
 	popl %ecx
 	popl %eax
-	iret				# 中断返回(把中断调用时压入栈的CPU标志寄存器(32位)值也弹出).
+	iret					# 中断返回(把中断调用时压入栈的CPU标志寄存器(32位)值也弹出).
 
 /*
  * Setup_paging
@@ -319,9 +319,9 @@ ignore_int:
  */
  
 # 初始化页目录表前4项和4个页表，页目录表是系统所有进程共用的,而这里的4页页表则属于内核专用
-.align 4				# 按4字节方式对齐内存地址边界.
+.align 4					# 按4字节方式对齐内存地址边界.
 setup_paging:				# 首先对5页内存(1页目录+4页页表)清零.
-	movl	$1024*5,%ecx		# 5 pages - pg_dir+4 page tables
+	movl	$1024*5,%ecx	# 5 pages - pg_dir+4 page tables
 	xorl	%eax,%eax
 	xorl	%edi,%edi		# pg_dir is at 0x000 # 页目录从0x0000地址开始
 	cld;rep;stosl			# eax内容存到es:edi所指内存位置处,且edi增4.
@@ -341,30 +341,30 @@ setup_paging:				# 首先对5页内存(1页目录+4页页表)清零.
 	# 因此最后一页的最后一项的位置就是$pg3+4092.
 	movl	$pg3+4092,%edi		# edi->最后一页的最后一项.    
 	movl	$0xfff007,%eax		#  16Mb - 4096 + 7 (r/w user,p) # 最后一项对应物理内存页的地址是0xfff000,加上属性标志7,即为xfff007
-	std				# 方向位置位，edi值递减(4字节)
-1:	stosl				# fill pages backwards - more efficient :-)
+	std							# 方向位置位，edi值递减(4字节)
+1:	stosl						# fill pages backwards - more efficient :-)
 	subl	$0x1000,%eax		# 每填好一项，物理地址值减0x1000
-	jge	1b			# 如果大于0则跳转到1b继续执行
+	jge		1b					# 如果大于0则跳转到1b继续执行
 	cld
 	# 设置页目录表基地址寄存器cr3的值,指向页目录表.cr3中保存的是页目录表的物理地址。
-	xorl 	%eax,%eax		/* pg_dir is at 0x0000 */	# 页目录表在0x0000处.
-	movl 	%eax,%cr3		/* cr3 - page directory start */
+	xorl 	%eax,%eax			/* pg_dir is at 0x0000 */	# 页目录表在0x0000处.
+	movl 	%eax,%cr3			/* cr3 - page directory start */
 	# 设置启动使用分页处理(cr0的PG标志，位31)
 	movl	%cr0,%eax
-	orl	$0x80000000,%eax	# 添上PG标志
-	movl	%eax,%cr0		/* set paging (PG) bit */
-	ret				/* this also flushes prefetch-queue */
+	orl	$0x80000000,%eax		# 添上PG标志
+	movl	%eax,%cr0			/* set paging (PG) bit */
+	ret							/* this also flushes prefetch-queue */
 /*
  * 在改变分页处理标志后要求使用转移指令刷新预取指令队列，这里用的是返回指令ret。
  * 该返回指令ret的另一个作用是将pushl $main压入堆栈中的main程序的地址弹出，并跳转到/init/main.c程序去运行,本程序到此就真正结束了。
  */
  
-.align 4				# 按4字节方式对齐内存地址边界.
-	.word 0				# 这里先空出2字节,这样.long _idt的长字是4字节对齐的.
+.align 4					# 按4字节方式对齐内存地址边界.
+	.word 0					# 这里先空出2字节,这样.long _idt的长字是4字节对齐的.
 
 idt_descr:
 	.word	256*8-1			# idt contains 256 entries	# 存放idt的限长，256项 * 8字节/项 - 1 = 0x7ff（idt 0～0x7ff字节，即2KB）
-	.long	idt			# 存放gdt的起始地址（线性地址）
+	.long	idt				# 存放gdt的起始地址（线性地址）
 
 # 这个对齐貌似多余
 .align 4
@@ -372,10 +372,10 @@ idt_descr:
 
 gdt_descr:
 	.word	256*8-1			# so does gdt (not that that's any		# 存放gdt的限长，256项 * 8字节/项 - 1 = 0x7ff（gdt 0～0x7ff字节，即2KB）
-	.long	gdt			# magic number, but it works for me :^) # 存放gdt的起始地址（线性地址）
+	.long	gdt				# magic number, but it works for me :^) # 存放gdt的起始地址（线性地址）
 
-.align 8				# 按8(2^3)字节方式对齐内存地址边界.
-idt:	.fill 	256,8,0			# idt is uninitialized	# 中断描述符表（空表）256项,每项8字节,填0.
+.align 8					# 按8(2^3)字节方式对齐内存地址边界.
+idt:	.fill 	256,8,0		# idt is uninitialized	# 中断描述符表（空表）256项,每项8字节,填0.
 
 /*
  * 全局描述符表，前4项分别是空项(不用)，剩下3项分别是代码段描述符，数据段描述符，系统调用段描述符

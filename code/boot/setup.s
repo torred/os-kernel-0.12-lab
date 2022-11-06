@@ -43,69 +43,69 @@ begbss:
 	ljmp	$SETUPSEG, $_start	# phaddr: 0x90205
 _start:
 # step1. 设置段寄存器 ds,es为 0x9020
-	mov	%cs,%ax			# 0x9020，也是SETUPSEG
-	mov	%ax,%ds			# ds 0x9020
-	mov	%ax,%es			# es 0x9020
+	mov		%cs,%ax			# 0x9020，也是SETUPSEG
+	mov		%ax,%ds			# ds 0x9020
+	mov		%ax,%es			# es 0x9020
 #
 ##print some message
 #
-	mov	$0x03, %ah
-	xor	%bh, %bh
-	int	$0x10
+	mov		$0x03, %ah
+	xor		%bh, %bh
+	int		$0x10
 
-	mov	$27, %cx
-	mov	$0x000b,%bx
-	mov	$msg2,%bp		# es:bp = msg2 "Now we are in setup ..."
-	mov	$0x1301, %ax
-	int	$0x10
+	mov		$27, %cx
+	mov		$0x000b,%bx
+	mov		$msg2,%bp		# es:bp = msg2 "Now we are in setup ..."
+	mov		$0x1301, %ax
+	int		$0x10
 
 ## ok, the read went well so we get current cursor position and save it for
 ## posterity.
 ## 保存当前光标位置
-	mov	$INITSEG, %ax		# this is done in bootsect already, but...
-	mov	%ax, %ds		# ds设置成INITSET
-	mov	$0x03, %ah	    	# read cursor pos #int 10读光标功能号 3，读取光标位置 
-	xor	%bh, %bh
-	int	$0x10		    	# save it in known place, con_init fetches #调用中断，读取光标位置，con_init需要使用
-	mov	%dx, %ds:0	    	# it from 0x90000. # 光标信息存在dx中，dh = 行，dl = 列，存入0x90000处
+	mov		$INITSEG, %ax	# this is done in bootsect already, but...
+	mov		%ax, %ds		# ds设置成INITSET
+	mov		$0x03, %ah	    # read cursor pos #int 10读光标功能号 3，读取光标位置 
+	xor		%bh, %bh
+	int		$0x10		    # save it in known place, con_init fetches #调用中断，读取光标位置，con_init需要使用
+	mov		%dx, %ds:0	    # it from 0x90000. # 光标信息存在dx中，dh = 行，dl = 列，存入0x90000处
 
 ## Get memory size (extended mem, kB)
 ## 获取扩展内存大小
-	mov	$INITSEG, %ax
-	mov	%ax, %ds
-	mov	$0x88, %ah 		# int 15取扩展内存大小功能号0x88
-	int	$0x15
-	mov	%ax, %ds:2		# save the value of extended memory size in 0x90002,
-					# which excludes 1MB. (it's 15MB in this case)
-					# 返回从0x100000开始的扩展内存大小信息存入0x90002
+	mov		$INITSEG, %ax
+	mov		%ax, %ds
+	mov		$0x88, %ah 		# int 15取扩展内存大小功能号0x88
+	int		$0x15
+	mov		%ax, %ds:2		# save the value of extended memory size in 0x90002,
+							# which excludes 1MB. (it's 15MB in this case)
+							# 返回从0x100000开始的扩展内存大小信息存入0x90002
 
 ## Get video-card data:
 ## 保存显卡当前显示模式
-	mov	$INITSEG, %ax
-	mov	%ax, %ds 
-	mov	$0x0f, %ah
-	int	$0x10
-	mov	%bx, %ds:4		# bh = display page (0x00) #存入0x90004
-	mov	%ax, %ds:6		# al = video mode, ah = window width (0x50,0x03)  # #存入0x90006
-					# 80x25(col*row)
+	mov		$INITSEG, %ax
+	mov		%ax, %ds 
+	mov		$0x0f, %ah
+	int		$0x10
+	mov		%bx, %ds:4		# bh = display page (0x00) #存入0x90004
+	mov		%ax, %ds:6		# al = video mode, ah = window width (0x50,0x03)  # #存入0x90006
+							# 80x25(col*row)
 
 ## check for EGA/VGA and some config parameters
 ## 检查显示方式(EGA/VGA)，并选取参数
-	mov	$INITSEG, %ax
-	mov	%ax, %ds
-	mov	$0x12, %ah		# 0x12功能号，显示器的配置中断
-	mov	$0x10, %bl		# 0x10H子功能，读取配置信息
-	int	$0x10
-	mov	%ax, %ds:8		# 调用中断后ax = 0x1200，把此值存下来不清楚什么用？？，存入0x90008
-	mov	%bx, %ds:10		# bh = video mode bl = video memory size(256KB)，存入0x90010
-					# bl = VRAM容量（00h = 64K,01h=128H，02h = 192K, 03h = 256K）
-					# bh = 0，单色模式；1，彩色模式
-	mov	%cx, %ds:12		# EGA 80x25			# 存入0x90012
-					# CH = 特征连接器标志位
-					# CL = EGA开关设置
+	mov		$INITSEG, %ax
+	mov		%ax, %ds
+	mov		$0x12, %ah		# 0x12功能号，显示器的配置中断
+	mov		$0x10, %bl		# 0x10H子功能，读取配置信息
+	int		$0x10
+	mov		%ax, %ds:8		# 调用中断后ax = 0x1200，把此值存下来不清楚什么用？？，存入0x90008
+	mov		%bx, %ds:10		# bh = video mode bl = video memory size(256KB)，存入0x90010
+							# bl = VRAM容量（00h = 64K,01h=128H，02h = 192K, 03h = 256K）
+							# bh = 0，单色模式；1，彩色模式
+	mov		%cx, %ds:12		# EGA 80x25			# 存入0x90012
+							# CH = 特征连接器标志位
+							# CL = EGA开关设置
 
-	mov	$0x5019, %ax		# 80x25
-	mov	%ax, %ds:14		# 存入0x90014
+	mov		$0x5019, %ax	# 80x25
+	mov		%ax, %ds:14		# 存入0x90014
 
 /*
  * 硬盘参数表16字节含义
@@ -133,154 +133,154 @@ _start:
  
 ## Get hd0 data(fixed disk parameter table)
 ## 获取第0个硬盘信息
-	mov	$0x0000, %ax
-	mov	%ax, %ds
-	lds	%ds:4*0x41, %si		# src #4*0x41是中断向量41在中断向量表中的偏移地址，取中断向量41的值，中断向量0x41保存的是硬盘0参数表的地址
-					# lds命令：ds:4*0x46 -> si，ds:4*0x46+2 -> ds，
-	mov	$INITSEG, %ax
-	mov	%ax, %es
-	mov	$0x0080, %di		# dst: 0x90080 # 传输向量表到达目的地址 es:si -> 9000:0080
-	mov	$0x10, %cx		# the size of FDPT is 16) 取16个字节
+	mov		$0x0000, %ax
+	mov		%ax, %ds
+	lds		%ds:4*0x41, %si		# src #4*0x41是中断向量41在中断向量表中的偏移地址，取中断向量41的值，中断向量0x41保存的是硬盘0参数表的地址
+								# lds命令：ds:4*0x46 -> si，ds:4*0x46+2 -> ds，
+	mov		$INITSEG, %ax
+	mov		%ax, %es
+	mov		$0x0080, %di		# dst: 0x90080 # 传输向量表到达目的地址 es:si -> 9000:0080
+	mov		$0x10, %cx			# the size of FDPT is 16) 取16个字节
 	rep
 	movsb
 
 ## Get hd1 data
 ## 获取第1个磁盘信息
-	mov	$0x0000, %ax
-	mov	%ax, %ds
-	lds	%ds:4*0x46, %si		# 取中断向量46的值，即硬盘1参数表的地址
-	mov	$INITSEG, %ax
-	mov	%ax, %es
-	mov	$0x0090, %di		# 传输向量表到达目的地址 es:di -> 9000:0090
-	mov	$0x10, %cx		# 取16个字节
+	mov		$0x0000, %ax
+	mov		%ax, %ds
+	lds		%ds:4*0x46, %si		# 取中断向量46的值，即硬盘1参数表的地址
+	mov		$INITSEG, %ax
+	mov		%ax, %es
+	mov		$0x0090, %di		# 传输向量表到达目的地址 es:di -> 9000:0090
+	mov		$0x10, %cx			# 取16个字节
 	rep
 	movsb
 
 ## modify ds # ds修改回0x9000，es为0x9020，为后面显示系统信息做准备
-	mov	$INITSEG,%ax
-	mov	%ax,%ds
-	mov	$SETUPSEG,%ax
-	mov	%ax,%es
+	mov		$INITSEG,%ax
+	mov		%ax,%ds
+	mov		$SETUPSEG,%ax
+	mov		%ax,%es
 
 ##show cursor pos #显示当前光标位置
-	mov	$0x03, %ah 
-	xor	%bh,%bh
-	int	$0x10			# 读取光标位置，在光标当前位置处打印
-	mov	$11,%cx
-	mov	$0x000a,%bx		# 设置显示文字属性
-	mov	$cur,%bp
-	mov	$0x1301,%ax
-	int	$0x10			# 显示光标信息的提示文字
+	mov		$0x03, %ah 
+	xor		%bh,%bh
+	int		$0x10			# 读取光标位置，在光标当前位置处打印
+	mov		$11,%cx
+	mov		$0x000a,%bx		# 设置显示文字属性
+	mov		$cur,%bp
+	mov		$0x1301,%ax
+	int		$0x10			# 显示光标信息的提示文字
 ##show detail(row*col)
-	mov	%ds:0 ,%ax		# 需要打印的光标位置
+	mov		%ds:0 ,%ax		# 需要打印的光标位置
 	call	print_hex		# 打印16进制数据，ax为输入参数
 	call	print_nl
 
 ##show memory size # 显示扩展内存大小
-	mov	$0x03, %ah
-	xor	%bh, %bh
-	int	$0x10
-	mov	$12, %cx
-	mov	$0x000a, %bx
-	mov	$mem, %bp
-	mov	$0x1301, %ax
-	int	$0x10
+	mov		$0x03, %ah
+	xor		%bh, %bh
+	int		$0x10
+	mov		$12, %cx
+	mov		$0x000a, %bx
+	mov		$mem, %bp
+	mov		$0x1301, %ax
+	int		$0x10
 
 ##show detail(KB)
-	mov	%ds:2 , %ax		# 需要打印的内存大小
+	mov		%ds:2 , %ax		# 需要打印的内存大小
 	call	print_hex
 
 ##show nr of cylinders # 显示磁盘磁道数
-	mov	$0x03, %ah
-	xor	%bh, %bh
-	int	$0x10
-	mov	$25, %cx
-	mov	$0x000a, %bx
-	mov	$cyl, %bp
-	mov	$0x1301, %ax
-	int	$0x10
+	mov		$0x03, %ah
+	xor		%bh, %bh
+	int		$0x10
+	mov		$25, %cx
+	mov		$0x000a, %bx
+	mov		$cyl, %bp
+	mov		$0x1301, %ax
+	int		$0x10
 ##show detail
-	mov	%ds:0x80, %ax		# 需要打印的第一个硬盘磁道数
+	mov		%ds:0x80, %ax		# 需要打印的第一个硬盘磁道数
 	call	print_hex
 	call	print_nl
 
 ##show nr of heads # 显示磁盘磁头数
-	mov	$0x03, %ah
-	xor	%bh, %bh
-	int	$0x10
-	mov	$9, %cx
-	mov	$0x000a, %bx
-	mov	$head, %bp
-	mov	$0x1301, %ax
-	int	$0x10
+	mov		$0x03, %ah
+	xor		%bh, %bh
+	int		$0x10
+	mov		$9, %cx
+	mov		$0x000a, %bx
+	mov		$head, %bp
+	mov		$0x1301, %ax
+	int		$0x10
 ##show detail
-	mov	%ds:0x82, %ax		# 需要打印的第一个硬盘磁头数
+	mov		%ds:0x82, %ax		# 需要打印的第一个硬盘磁头数
 	call	print_hex
 	call	print_nl
 
 ##show nr of sectors per track  # 显示每磁道扇区数
-	mov	$0x03, %ah
-	xor	%bh, %bh
-	int	$0x10
-	mov	$9, %cx
-	mov	$0x000a, %bx
-	mov	$sect, %bp
-	mov	$0x1301, %ax
-	int	$0x10
+	mov		$0x03, %ah
+	xor		%bh, %bh
+	int		$0x10
+	mov		$9, %cx
+	mov		$0x000a, %bx
+	mov		$sect, %bp
+	mov		$0x1301, %ax
+	int		$0x10
 ##show detail
-	mov	%ds:0x8e, %ax		# 需要打印的第一个硬盘每磁道扇区数
+	mov		%ds:0x8e, %ax		# 需要打印的第一个硬盘每磁道扇区数
 	call	print_hex
 	call	print_nl
 
 ## Check that there IS a hd1 :-)
 ## 检查是否存在第2个硬盘
-	mov	$0x01500, %ax
-	mov	$0x81, %dl
-	int	$0x13
-	jc	no_disk1		# cf == 1 表示没有第2个磁盘，跳转到no_disk1
-	cmp	$3, %ah			# 判断是否有硬盘
-	je	is_disk1
+	mov		$0x01500, %ax
+	mov		$0x81, %dl
+	int		$0x13
+	jc		no_disk1			# cf == 1 表示没有第2个磁盘，跳转到no_disk1
+	cmp		$3, %ah				# 判断是否有硬盘
+	je		is_disk1
 	
 ## 没有第二个硬盘表则此处参数表清零
 no_disk1:
-	mov	$INITSEG, %ax
-	mov	%ax, %es
-	mov	$0x0090, %di
-	mov	$0x10, %cx
-	mov	$0x00, %ax
+	mov		$INITSEG, %ax
+	mov		%ax, %es
+	mov		$0x0090, %di
+	mov		$0x10, %cx
+	mov		$0x00, %ax
 	rep
-	stosb				# 将累加器AL中的值传递到es:di -> 0x9000:0x0090
+	stosb						# 将累加器AL中的值传递到es:di -> 0x9000:0x0090
 
 is_disk1:
 # now we want to move to protected mode ...
 # 为开始保护模式做准备
-	cli			    	# no interrupts allowed !  # 禁中断
+	cli			    			# no interrupts allowed !  # 禁中断
 
 ## first we move the system to its rightful place(load kernel module)
 ## 首先我们将系统模块移动到新的目标位置0x00000000
-	mov	$0x0000, %ax
-	cld			    	# 'direction'=0, movs moves forward # 指明复制的方向，从低到高
+	mov		$0x0000, %ax
+	cld			    			# 'direction'=0, movs moves forward # 指明复制的方向，从低到高
 do_move:
-	mov	%ax, %es		# destination segment # 此时ax=0x0000，被复制的目的地址es:di -> 0x0000:0000
-	add	$0x1000, %ax		# 每次移动0x1000字节(64KB)
-	cmp	$0x9000, %ax		# 0x9000 SYS_SIZE 
-	jz	end_move
-	mov	%ax, %ds		# source segment # 原地址ds:si -> 0x1000:0 0x2000:0 0x3000:0···
-	sub	%di, %di		# di = 0，实模式下最大偏移是64k（0x0-0xFFFF，共0x10000h=64kb）,所以一次最多复制这么多
-	sub	%si, %si		# 第一次放在0-0x10000处，第二次0x10000-0x20000···
-	mov	$0x8000, %cx		# 总共移动了0x8000(32768)字,即0x10000Byte,(65536/1024=64k)
+	mov		%ax, %es			# destination segment # 此时ax=0x0000，被复制的目的地址es:di -> 0x0000:0000
+	add		$0x1000, %ax		# 每次移动0x1000字节(64KB)
+	cmp		$0x9000, %ax		# 0x9000 SYS_SIZE 
+	jz		end_move
+	mov		%ax, %ds			# source segment # 原地址ds:si -> 0x1000:0 0x2000:0 0x3000:0···
+	sub		%di, %di			# di = 0，实模式下最大偏移是64k（0x0-0xFFFF，共0x10000h=64kb）,所以一次最多复制这么多
+	sub		%si, %si			# 第一次放在0-0x10000处，第二次0x10000-0x20000···
+	mov		$0x8000, %cx		# 总共移动了0x8000(32768)字,即0x10000Byte,(65536/1024=64k)
 	rep							# 1000:0->000:0,2000:0->1000:0···
 	movsw
-	jmp	do_move
+	jmp		do_move
 
 ## then we load the segment descriptors
 ## setup.s中给出了中断描述表和全局描述符表。在这里把它们的首地址放入指定寄存器中idtr,gdtr中
 #  这是专用寄存器
 end_move:
-	mov	$SETUPSEG, %ax		# right, forgot this at first. didn't work :-)
-	mov	%ax, %ds		# 0x9020 # ds指向setup段0x9020
-	lidt	idt_48			# load idt with 0,0,0 # 加载中断描述符表寄存器 idt_48: 0x0000, 0x0000, 0x0000, limit = 0 base = 0L
-	lgdt	gdt_48			# load gdt with whatever appropriate # 加载全局描述符表寄存器  gdt_48: 0x0009，0x0200+gdt，0x07FF，limit=2048 base = 0x9xxxx,
+	mov		$SETUPSEG, %ax		# right, forgot this at first. didn't work :-)
+	mov		%ax, %ds			# 0x9020 # ds指向setup段0x9020
+	lidt	idt_48				# load idt with 0,0,0 # 加载中断描述符表寄存器 idt_48: 0x0000, 0x0000, 0x0000, limit = 0 base = 0L
+	lgdt	gdt_48				# load gdt with whatever appropriate # 加载全局描述符表寄存器  gdt_48: 0x0009，0x0200+gdt，0x07FF，limit=2048 base = 0x9xxxx,
 
 ## that was painless, now we enable A20
 ## 通过键盘控制器的设置开启A20地址线，准备进入32位寻址模式
@@ -398,39 +398,39 @@ empty_8042:
  */
  
 # 设置8259中断控制器
-	mov	$0x11, %al		# initialization sequence(ICW1)
-					# ICW4 needed(1),CASCADE mode,Level-triggered
-	out	%al, $0x20		# send it to 8259A-1
+	mov		$0x11, %al			# initialization sequence(ICW1)
+								# ICW4 needed(1),CASCADE mode,Level-triggered
+	out		%al, $0x20			# send it to 8259A-1
 	.word	0x00eb,0x00eb		# jmp $+2, jmp $+2 $表示当前指令地址
-	out	%al, $0xA0		# and to 8259A-2
+	out		%al, $0xA0			# and to 8259A-2
 	.word	0x00eb,0x00eb
 	
-	mov	$0x20, %al		# start of hardware int's (0x20)(ICW2)
-	out	%al, $0x21		# from 0x20-0x27
+	mov		$0x20, %al			# start of hardware int's (0x20)(ICW2)
+	out		%al, $0x21			# from 0x20-0x27
 	.word	0x00eb,0x00eb
 	
-	mov	$0x28, %al		# start of hardware int's 2 (0x28)
-	out	%al, $0xA1		# from 0x28-0x2F
+	mov		$0x28, %al			# start of hardware int's 2 (0x28)
+	out		%al, $0xA1			# from 0x28-0x2F
 	.word	0x00eb,0x00eb		# IR 7654 3210
 	
-	mov	$0x04, %al		# 8259-1 is master(0000 0100)
-	out	%al, $0x21		#
+	mov		$0x04, %al			# 8259-1 is master(0000 0100)
+	out		%al, $0x21			#
 	.word	0x00eb,0x00eb		# INT
 	
-	mov	$0x02, %al		# 8259-2 is slave(010 --> 2)
-	out	%al, $0xA1
+	mov		$0x02, %al			# 8259-2 is slave(010 --> 2)
+	out		%al, $0xA1
 	.word	0x00eb,0x00eb
 	
-	mov	$0x01, %al		# 8086 mode for both
-	out	%al, $0x21
+	mov		$0x01, %al			# 8086 mode for both
+	out		%al, $0x21
 	.word	0x00eb,0x00eb
-	out	%al, $0xA1
+	out		%al, $0xA1
 	.word	0x00eb,0x00eb
 	
-	mov	$0xFF, %al		# mask off all interrupts for now
-	out	%al, $0x21
+	mov		$0xFF, %al			# mask off all interrupts for now
+	out		%al, $0x21
 	.word	0x00eb,0x00eb
-	out	%al, $0xA1
+	out		%al, $0xA1
 
 /*
  * well, that certainly wasn't fun :-(. Hopefully it works, and we don't
@@ -452,10 +452,10 @@ empty_8042:
  
 # 开启保护模式
 	#mov	$0x0001, %ax		# protected mode (PE) bit # 开启保护模式，此方法已经不用
-	#lmsw	%ax			# This is it!
-	mov		%cr0, %eax	# get machine status(cr0|MSW)	
-	bts	$0, %eax		# turn on the PE-bit 		# cr0的第0位为PE位，置此位为1
-	mov	%eax, %cr0		# protection enabled
+	#lmsw	%ax					# This is it!
+	mov		%cr0, %eax			# get machine status(cr0|MSW)	
+	bts		$0, %eax			# turn on the PE-bit 		# cr0的第0位为PE位，置此位为1
+	mov		%eax, %cr0			# protection enabled
 
 # 跳转到head.s入口地址startup_32
 	.equ	sel_cs0, 0x0008 	# select for code segment 0 (  001:0 :00)  # 0x0008 = 001:0:00(INDEX:TI:RPL)，因此INDEX = 1，TI = 0， RPL = 0
@@ -487,20 +487,20 @@ empty_8042:
 
 # 此全局描述符表只是临时使用，在head.s中还会重新设置正式全局描画符表
 gdt:
-	.word	0,0,0,0			# dummy # 第一描述符，作为NULL指向
+	.word	0,0,0,0				# dummy # 第一描述符，作为NULL指向
 
 	# 这里在gdt表中的偏移量为08，联系到我们上面的jmpi 0,8，也就是调用此处的表内容
 	# 加载代码段寄存器时，使用这个偏移
-	.word	0x07FF			# 8Mb - limit = 2048 (2048 * 4096 = 8Mb)	# limit：0x007FF~0x00000 = 0x800，表示0x800个4kB，0x800*4K = 8MB
-	.word	0x0000			# base address=0 # system所在的 0x00000000
-	.word	0x9A00			# code read/exec        	# 0x9A = 1001 1010 P = 1 该段可用；DPL = 0级（最高）；type = 1010 可读可执行
-	.word	0x00C0			# granularity=4096, 386 	# 0xC0 = 1100 0000 G = 1 段限最小单位4kB；D = 1 32位程序
+	.word	0x07FF				# 8Mb - limit = 2048 (2048 * 4096 = 8Mb)	# limit：0x007FF~0x00000 = 0x800，表示0x800个4kB，0x800*4K = 8MB
+	.word	0x0000				# base address=0 # system所在的 0x00000000
+	.word	0x9A00				# code read/exec        	# 0x9A = 1001 1010 P = 1 该段可用；DPL = 0级（最高）；type = 1010 可读可执行
+	.word	0x00C0				# granularity=4096, 386 	# 0xC0 = 1100 0000 G = 1 段限最小单位4kB；D = 1 32位程序
 
 	# 这里在gdt表中的偏移量是0x10,当加载数据段寄存器时,使用这个偏移
-	.word	0x07FF			# 8Mb - limit=2047 (2048*4096=8Mb)
-	.word	0x0000			# base address=0 # base = 0x00000000
-	.word	0x9200			# data read/write			# 0x92 = 1001 0010 P = 1 该段可用；DPL = 0级（最高）；type = 0010 可读可写数据段
-	.word	0x00C0			# granularity=4096, 386
+	.word	0x07FF				# 8Mb - limit=2047 (2048*4096=8Mb)
+	.word	0x0000				# base address=0 # base = 0x00000000
+	.word	0x9200				# data read/write			# 0x92 = 1001 0010 P = 1 该段可用；DPL = 0级（最高）；type = 0010 可读可写数据段
+	.word	0x00C0				# granularity=4096, 386
 
 /*
  * GDTR/IDTR寄存器值
@@ -509,39 +509,39 @@ gdt:
  */
  
 idt_48:
-	.word	0			# idt limit = 0
-	.word	0,0			# idt base = 0L
+	.word	0					# idt limit = 0
+	.word	0,0					# idt base = 0L
 
 gdt_48:
-	.word	0x7FF			# gdt limit=2048, 256 GDT entries # limit:0x0800~0x0000 每个描述符8字节，总共描述符项 = 0x800 / 8 = 256项
-	.word   512+gdt, 0x9	# gdt base = 0X9xxxx  # base = 0x0009 0200+$gdt -> 0x9xxxx，表示从90000开始，偏移bootsect 512字节，再偏移gdt在setup的偏移，得到gdt在内存中的物理地址。
+	.word	0x7FF				# gdt limit=2048, 256 GDT entries # limit:0x0800~0x0000 每个描述符8字节，总共描述符项 = 0x800 / 8 = 256项
+	.word   512+gdt, 0x9		# gdt base = 0X9xxxx  # base = 0x0009 0200+$gdt -> 0x9xxxx，表示从90000开始，偏移bootsect 512字节，再偏移gdt在setup的偏移，得到gdt在内存中的物理地址。
 	# 512+gdt is the real gdt after setup is moved to 0x9020 * 0x10
 
 # print_hex()
 print_hex:
-	mov	$4,%cx
-	mov	%ax,%dx
+	mov		$4,%cx
+	mov		%ax,%dx
 
 print_digit:
-	rol	$4,%dx	    		#循环以使低4位用上，高4位移至低4位
-	mov	$0xe0f,%ax  		#ah ＝ 请求的功能值，al = 半个字节的掩码
-	and	%dl,%al
-	add	$0x30,%al
-	cmp	$0x3a,%al
-	jl	outp
-	add	$0x07,%al
+	rol		$4,%dx	    		#循环以使低4位用上，高4位移至低4位
+	mov		$0xe0f,%ax  		#ah ＝ 请求的功能值，al = 半个字节的掩码
+	and		%dl,%al
+	add		$0x30,%al
+	cmp		$0x3a,%al
+	jl		outp
+	add		$0x07,%al
 
 outp:
-	int	$0x10
+	int		$0x10
 	loop	print_digit
 	ret
 
 #打印回车换行
 print_nl:
-	mov	$0xe0d,%ax
-	int	$0x10
-	mov	$0xa,%al
-	int	$0x10
+	mov		$0xe0d,%ax
+	int		$0x10
+	mov		$0xa,%al
+	int		$0x10
 	ret
 
 msg2:
