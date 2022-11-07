@@ -74,16 +74,16 @@ begbss:
 # 源代码中的ROOT_DEV=0x306表示第二个硬盘的第一个分区，设备号 = 主设备号 * 256 + 次设备号（dev_no = (major << 8) + minor）
 # 主设备号定义：1-内存，2-磁盘，3-硬盘，4-ttyx，5-tty，6-并行口，7-非命名管道
 # ROOT_DEV:	0x000 - same type of floppy as boot.
-#			0x300	/dev/hd0	系统中第一个硬盘
-#			0x301 - first partition on first drive etc	# 系统中第一个硬盘的第一分区
-#			0x302	/dev/hd2	系统中第一个硬盘的第二分区
-#			0x303	/dev/hd3	系统中第一个硬盘的第三分区
-#			0x304	/dev/hd4	系统中第一个硬盘的第四分区
-#			0x305	/dev/hd5	系统中第二个硬盘
-#			0x306 - first partition on second drive etc
-#			0x307	/dev/hd7	系统中第二个硬盘的第二分区
-#			0x308	/dev/hd8	系统中第二个硬盘的第三分区
-#			0x309	/dev/hd9	系统中第二个硬盘的第四分区
+#           0x300	/dev/hd0	系统中第一个硬盘
+#           0x301 - first partition on first drive etc	# 系统中第一个硬盘的第一分区
+#           0x302	/dev/hd2	系统中第一个硬盘的第二分区
+#           0x303	/dev/hd3	系统中第一个硬盘的第三分区
+#           0x304	/dev/hd4	系统中第一个硬盘的第四分区
+#           0x305	/dev/hd5	系统中第二个硬盘
+#           0x306 - first partition on second drive etc
+#           0x307	/dev/hd7	系统中第二个硬盘的第二分区
+#           0x308	/dev/hd8	系统中第二个硬盘的第三分区
+#           0x309	/dev/hd9	系统中第二个硬盘的第四分区
 # ROOT_DEV & SWAP_DEV are now written by "build".
 .equ 	ROOT_DEV, 0x0
 .equ 	SWAP_DEV, 0x0
@@ -96,16 +96,16 @@ begbss:
 	ljmp	$BOOTSEG, $_start	# 标准化起始地址 EA 05 00 C0 07 ljmp 0x07c0:0005
 _start:
 # step1. 复制自身到 INITSEG(0x9000:0000)
-	mov	$BOOTSEG, %ax		
-	mov	%ax, %ds		# 将ds段寄存器设置为0x07C0，引导代码当前所处地址（源地址）
-	mov	$INITSEG, %ax
-	mov	%ax, %es		# 将es段寄存器设置为0x9000,引导代码要被复制到的目的地址
-	mov	$256, %cx		# movsw 一次移动1个字，总共移动次数为 512字节/2 = 256个字，循环256次
-	sub	%si, %si		# 源地址偏移si清零，ds:si = 0x07C0:0x0000，ds:si物理地址0x07c00
-	sub	%di, %di		# 目标地址di清零， es:si = 0x9000:0x0000，es:di物理地址0x90000
-	rep				# 循环指令，重复执行并递减cx的值，到cx==0时停止
-	movsw				# 将ds:si复制到es:di，每次搬运2字节
-	ljmp	$INITSEG, $go		# 段间跳转，跳转到复制后的代码段go标志处，即cs:ip = INITSEG(0x9000):go
+	mov		$BOOTSEG, %ax
+	mov		%ax, %ds		# 将ds段寄存器设置为0x07C0，引导代码当前所处地址（源地址）
+	mov		$INITSEG, %ax
+	mov		%ax, %es		# 将es段寄存器设置为0x9000,引导代码要被复制到的目的地址
+	mov		$256, %cx		# movsw 一次移动1个字，总共移动次数为 512字节/2 = 256个字，循环256次
+	sub		%si, %si		# 源地址偏移si清零，ds:si = 0x07C0:0x0000，ds:si物理地址0x07c00
+	sub		%di, %di		# 目标地址di清零， es:si = 0x9000:0x0000，es:di物理地址0x90000
+	rep						# 循环指令，重复执行并递减cx的值，到cx==0时停止
+	movsw					# 将ds:si复制到es:di，每次搬运2字节
+	ljmp	$INITSEG, $go	# 段间跳转，跳转到复制后的代码段go标志处，即cs:ip = INITSEG(0x9000):go
 
 # step2. 设置新位置bootsect代码运行的ds，es，ss，sp段寄存器值
 # 从现在开始，CPU移动到0x90000位置处的代码中执行。
@@ -113,12 +113,12 @@ _start:
 # 从0x90200地址开始出还要开始放置setup程序，而此时setup程序大约为４个扇区，因此sp要指向大于（0x200+0x200*4+堆栈大小）位置处。
 # 这里sp设置为0x9ff00-12（参数表长度），即sp=0xfef4。在此之上位置会存放一个自建的驱动器参数表。实际上BIOS把引导扇区加载到0x7c00处
 # 并把执行权交给引导程序时，ss=0x00，sp=0xfffe。
-go:	mov	%cs, %ax		# 跳转到移动后代码执行的代码段寄存器cs = 0x9000
-	mov	%ax, %ds
-	mov	%ax, %es
+go:	mov		%cs, %ax			# 跳转到移动后代码执行的代码段寄存器cs = 0x9000
+	mov		%ax, %ds
+	mov		%ax, %es
  	#put 	stack at 0x9ff00	# 此指令已不支持
-	mov	%ax, %ss
-	mov	$0xFF00, %sp		# arbitrary value >>512 # 栈空间的起始地址为0x9ff00(ss:0x9000,sp:0xFF00)
+	mov		%ax, %ss
+	mov		$0xFF00, %sp		# arbitrary value >>512 # 栈空间的起始地址为0x9ff00(ss:0x9000,sp:0xFF00)
 
 # load the setup-sectors directly after the bootblock.
 # Note that 'es'(0x9000) is already set up. 
@@ -134,16 +134,16 @@ go:	mov	%cs, %ax		# 跳转到移动后代码执行的代码段寄存器cs = 0x90
 # dh = 磁头号；				dl = 驱动器号（如果是硬盘则位7要置位）；
 # es:bx 指向数据缓冲区;	如果出错则CF标志置位,ah中是出错码.
 load_setup:
-	mov	$0x0000, %dx		# drive 0, head 0 # dh=磁头号，dl=驱动器号(硬盘则7要置位)
-	mov	$0x0002, %cx		# sector 2, track 0 # ch=磁道(柱面)号的低八位   cl＝开始扇区(位0-5),磁道号高2位(位6－7)
-	mov	$0x0200, %bx		# es:bx = 0x9000:0200，紧接着bootsect 0x9000:0x01FF(1个扇区512B大小)
-	mov	$(0x0200+SETUPLEN), %ax	# service 2, nr of sectors # ah=0x02 读磁盘扇区到内存	al＝需要读出的扇区数量
-	int	$0x13			# read it # (interupt 19)BIOS中断，es:bx ->指向数据缓冲区；如果出错则CF标志置位，ah保存错误码
-	jnc	ok_load_setup		# ok - continue # cf标志寄存器为0(读取成功)就跳转至ok_load_setup
-	mov	$0x0000, %dx		# dx:需要复位的驱动器信息
-	mov	$0x0000, %ax		# reset the diskette # cf!=０中断出错复位dx指定的驱动器
-	int	$0x13			# 0x13中断，ah=0x00 复位驱动器，，ah保存错误码
-	jmp	load_setup
+	mov		$0x0000, %dx		# drive 0, head 0 # dh=磁头号，dl=驱动器号(硬盘则7要置位)
+	mov		$0x0002, %cx		# sector 2, track 0 # ch=磁道(柱面)号的低八位   cl＝开始扇区(位0-5),磁道号高2位(位6－7)
+	mov 	$0x0200, %bx		# es:bx = 0x9000:0200，紧接着bootsect 0x9000:0x01FF(1个扇区512B大小)
+	mov		$(0x0200+SETUPLEN), %ax	# service 2, nr of sectors # ah=0x02 读磁盘扇区到内存	al＝需要读出的扇区数量
+	int		$0x13				# read it # (interupt 19)BIOS中断，es:bx ->指向数据缓冲区；如果出错则CF标志置位，ah保存错误码
+	jnc		ok_load_setup		# ok - continue # cf标志寄存器为0(读取成功)就跳转至ok_load_setup
+	mov		$0x0000, %dx		# dx:需要复位的驱动器信息
+	mov		$0x0000, %ax		# reset the diskette # cf!=０中断出错复位dx指定的驱动器
+	int		$0x13				# 0x13中断，ah=0x00 复位驱动器，，ah保存错误码
+	jmp		load_setup
 
 # step4. 取磁盘驱动器参数
 ok_load_setup:
@@ -157,15 +157,15 @@ ok_load_setup:
 # ch = 最大磁道号的低8位	cl = 每磁道最大扇区数(位0~5),最大磁道号高2位(位6~7)
 # dh = 最大磁头数		dl = 驱动器数量
 # es:di 软驱磁盘参数表.
-	mov	$0x00, %dl		# floppy # DL＝驱动器，00H~7FH：软盘；80H~0FFH：硬盘
-	mov	$0x0800, %ax		# AH=8 is get drive parameters # ah=0x08 读取磁盘参数
-	int	$0x13
+	mov		$0x00, %dl			# floppy # DL＝驱动器，00H~7FH：软盘；80H~0FFH：硬盘
+	mov		$0x0800, %ax		# AH=8 is get drive parameters # ah=0x08 读取磁盘参数
+	int		$0x13
 	#mov 	$0x00, %ch
-	#seg 	cs			# 下一条语句的操作数在cs所指段中
-	and	$0x003f, %cx		# 获取cx中 0-5 位 = 每磁道最大扇区数
-	mov	%cx, %cs:sectors+0	# %cs means sectors is in %cs # 保存每磁道扇区数
-	mov	$INITSEG, %ax
-	mov	%ax, %es		# 为下面int 10h答应字符设置字符串地址所在段 $INITSEG（0x9000）
+	#seg 	cs					# 下一条语句的操作数在cs所指段中
+	and		$0x003f, %cx		# 获取cx中 0-5 位 = 每磁道最大扇区数
+	mov		%cx, %cs:sectors+0	# %cs means sectors is in %cs # 保存每磁道扇区数
+	mov		$INITSEG, %ax
+	mov		%ax, %es			# 为下面int 10h答应字符设置字符串地址所在段 $INITSEG（0x9000）
 
 # 通过设置显示模式达到清屏效果
 	mov 	$0x0003, %ax		# AH = 00H 设定显示模式；AL = 03H 文字模式，分辨率 80*25，颜色 16
@@ -174,9 +174,9 @@ ok_load_setup:
 	#mov	$0x0600, %ax		# AH = 06H 滚动屏幕，AL = 00 清窗口		
 	#mov	$0x0000, %cx 		# CH = 左上角的行号， CL = 左上角的列号
 	#mov	$0x184F, %dx 		# DH = 右下角的行号， DL = 右下角的行号
-	#mov	$0x17, %bh		# 属性为蓝底白字
+	#mov	$0x17, %bh			# 属性为蓝底白字
 	
-	int	$0x10
+	int		$0x10
 	
 # Print some inane message
 # 显示信息:"'Loading'+回车+换行",共显示包括回车和换行控制字符在内的9个字符.
@@ -188,23 +188,23 @@ ok_load_setup:
 # 输入: al = 放置光标的方式及规定属性.0x01表示使用bl中的属性值,光标停在字符串结尾处.
 # es:bp此寄存器对指向要显示的字符串起始位置处.cx = 显示的字符串字符数.bh = 显示页面号;
 # bl = 字符属性. dh = 行号; dl = 列号.
-	mov	$0x03, %ah		# read cursor pos # ah=0x03指示读光标位置
-	xor	%bh, %bh
-	int	$0x10			# dh(row 0-24) dl(col 0-79) # 0x10号中断,读取光标位置，DH = 光标行数，DL = 光标列数
+	mov		$0x03, %ah			# read cursor pos # ah=0x03指示读光标位置
+	xor		%bh, %bh
+	int		$0x10				# dh(row 0-24) dl(col 0-79) # 0x10号中断,读取光标位置，DH = 光标行数，DL = 光标列数
 
-	mov	$32, %cx		# nr of characters # CX = 串长度
-	mov	$0x000b, %bx		# page 0, attribute b，attribute 7 (normal) # BH = 页号， BL = 属性
+	mov		$32, %cx			# nr of characters # CX = 串长度
+	mov		$0x000b, %bx		# page 0, attribute b，attribute 7 (normal) # BH = 页号， BL = 属性
 	#lea	msg1, %bp
-	mov	$msg1, %bp		# 指向要显示字符串的地址,即显示在屏幕上的第一个string "linux 0.12 OS is booting ..."
-	mov	$0x1301, %ax		# write string, move cursor # ah=0x13 输出一个字符，移动一下光标
-	int	$0x10			# 实现在屏幕上连续打印字符
+	mov		$msg1, %bp			# 指向要显示字符串的地址,即显示在屏幕上的第一个string "linux 0.12 OS is booting ..."
+	mov		$0x1301, %ax		# write string, move cursor # ah=0x13 输出一个字符，移动一下光标
+	int		$0x10				# 实现在屏幕上连续打印字符
 
 # step4. 加载系统内核代码
 # ok, we've written the message, now we want to load the system (at 0x10000)
-	mov	$SYSSEG, %ax		# 
-	mov	%ax, %es		# segment of 0x01000 # 内核代码加载段地址 es = 0x1000
-	call	read_it			# 读取磁盘上的system模块，读到 es:0x0000 处
-	call	kill_motor		# 关闭驱动器
+	mov		$SYSSEG, %ax		#
+	mov		%ax, %es			# segment of 0x01000 # 内核代码加载段地址 es = 0x1000
+	call	read_it				# 读取磁盘上的system模块，读到 es:0x0000 处
+	call	kill_motor			# 关闭驱动器
 
 # After that we check which root-device to use. If the device is
 # defined (#= 0), nothing is done and the given device is used.
@@ -221,23 +221,23 @@ ok_load_setup:
 # 对于1.44MB 的软驱，设备号 = 2 << 8 + 7 * 4 + 0 = 0x21C
 
 	#seg 	cs
-	mov	%cs:root_dev+0, %ax 	# ax = ROOT_DEV（0x301）
-	cmp	$0, %ax
-	jne	root_defined		# 如果ROOT_DEV不等于0，则跳转到 root_defined
+	mov		%cs:root_dev+0, %ax # ax = ROOT_DEV（0x301）
+	cmp		$0, %ax
+	jne		root_defined		# 如果ROOT_DEV不等于0，则跳转到 root_defined
 	#seg 	cs
-	mov	%cs:sectors+0, %bx	# 取磁道扇区数，如果sectors==15,则说明是1.2Mb驱动器
-					# 如果sectors==18,则说明是1.44Mb驱动器
-	mov	$0x0208, %ax		# /dev/ps0 - 1.2Mb
-	cmp	$15, %bx		# 判断磁道扇区数是否为15
-	je	root_defined		# 如果等于15，说明是1.2MB的软盘
-	mov	$0x021c, %ax		# /dev/PS0 - 1.44Mb
-	cmp	$18, %bx		# 判断每磁道扇区数是否等于18
-	je	root_defined
+	mov		%cs:sectors+0, %bx	# 取磁道扇区数，如果sectors==15,则说明是1.2Mb驱动器
+								# 如果sectors==18,则说明是1.44Mb驱动器
+	mov		$0x0208, %ax		# /dev/ps0 - 1.2Mb
+	cmp		$15, %bx			# 判断磁道扇区数是否为15
+	je		root_defined		# 如果等于15，说明是1.2MB的软盘
+	mov		$0x021c, %ax		# /dev/PS0 - 1.44Mb
+	cmp		$18, %bx			# 判断每磁道扇区数是否等于18
+	je		root_defined
 undef_root:
-	jmp 	undef_root		# 如果都不是，死循环
+	jmp 	undef_root			# 如果都不是，死循环
 root_defined:
 	#seg 	cs
-	mov	%ax, %cs:root_dev+0	# 将检查过的设备号保存到 root_dev 中
+	mov		%ax, %cs:root_dev+0	# 将检查过的设备号保存到 root_dev 中
 
 # after that (everyting loaded), we jump to
 # the setup-routine loaded directly after
@@ -255,31 +255,31 @@ root_defined:
 sread:	
 	.word	1 + SETUPLEN		# sectors read of current track # 当前磁道已经读取的扇区数（引导扇区1 + setup模块4 = 5）
 head:
-	.word	0			# current head # 当前磁头号
+	.word	0					# current head # 当前磁头号
 track:
-	.word	0			# current track # 当前磁道号
+	.word	0					# current track # 当前磁道号
 
 # 读取磁盘上system模块函数
 read_it:
-	mov	%es, %ax
+	mov		%es, %ax
 	test	$0x0fff, %ax		# 测试es段地址是否在4k边界，最终system模块加载内存地址边界64KB边界(0x1000 << 4 = 0x10000)
 die:
-	jne	die			# es must be at 64kB boundary # 如果不是则进入死循环
-	xor 	%bx, %bx		# bx is starting address within segment # 段内偏移，清零 bx = 0
-rp_read:					# 重复读system模块
+	jne		die					# es must be at 64kB boundary # 如果不是则进入死循环
+	xor 	%bx, %bx			# bx is starting address within segment # 段内偏移，清零 bx = 0
+rp_read:						# 重复读system模块
 	mov 	%es, %ax
-	cmp	$ENDSEG, %ax		# have we loaded all yet? # ax - ENDSEG，看是否到了末尾，ENDSEG =SYSSEG+SYSSIZE = 0x10000 + 0x30000 = 0x40000，SYSSIZE = 0x3000*0x10 = 192kB
-	jb	ok1_read		# ax >= 0x40000则返回
+	cmp		$ENDSEG, %ax		# have we loaded all yet? # ax - ENDSEG，看是否到了末尾，ENDSEG =SYSSEG+SYSSIZE = 0x10000 + 0x30000 = 0x40000，SYSSIZE = 0x3000*0x10 = 192kB
+	jb		ok1_read			# ax >= 0x40000则返回
 	ret
 ok1_read:
 	#seg 	cs
-	mov	%cs:sectors+0, %ax	# 每磁道总扇区数
-	sub	sread, %ax		# ax = ax - sread，得出本磁道未读扇区数 
-	mov	%ax, %cx
-	shl	$9, %cx			# 右移9位，计算剩余扇区的总字节数 总字节数 = 扇区数cx << 9 = 扇区数cx * 512
-	add	%bx, %cx		# 偏移地址累加将要读取的字节数 cx = ax * 512 + bx
+	mov		%cs:sectors+0, %ax	# 每磁道总扇区数
+	sub		sread, %ax		# ax = ax - sread，得出本磁道未读扇区数
+	mov		%ax, %cx
+	shl		$9, %cx			# 右移9位，计算剩余扇区的总字节数 总字节数 = 扇区数cx << 9 = 扇区数cx * 512
+	add		%bx, %cx		# 偏移地址累加将要读取的字节数 cx = ax * 512 + bx
 	jnc 	ok2_read		# 若cx < 0x10000（CF=0,没有进位）则跳转到ok2_read，不会越界
-	je 	ok2_read		# 若cx = 0（ZF=1），说明刚好不越界，则跳转到ok2_read
+	je 		ok2_read		# 若cx = 0（ZF=1），说明刚好不越界，则跳转到ok2_read
 	xor 	%ax, %ax		# 执行到这里说明越界，令 ax = 0x0000
 	sub 	%bx, %ax		# 计算bx离边界有多远，用0减去bx，结果在ax中
 	shr 	$9, %ax			# 越界后，只读到越界的扇区，读取字节数 = 扇区数ax << 9 = 扇区数 * 512
@@ -296,51 +296,51 @@ ok2_read:
 	jne 	ok4_read		# 不相等说明磁头号为0，跳转到 ok4_read，ax=1,读完0磁头，再读1磁头
 	incw    track 			# 说明磁头号为1，ax=0,设置磁头号为0，磁道号增加1
 ok4_read:
-	mov	%ax, head		# 保存当前磁头号
-	xor	%ax, %ax		# ax=0, 当前磁道已读扇区数置0
+	mov		%ax, head		# 保存当前磁头号
+	xor		%ax, %ax		# ax=0, 当前磁道已读扇区数置0
 ok3_read:
-	mov	%ax, sread		# 更新当前磁道已经读取的扇区数
-	shl	$9, %cx			# cx当前磁道已经读取的扇区数，乘以512得当前磁道已经读取字节数
-	add	%cx, %bx		# 更新偏移地址
-	jnc	rp_read			# 没有进位则跳转到rp_read继续读
-	mov	%es, %ax		# 有进位，说明bx达到了64kB边界
-	add	$0x1000, %ax
-	mov	%ax, %es		# es增加0x1000
-	xor	%bx, %bx		# 偏移地址清零 bx = 0x0
-	jmp	rp_read			# 继续读取
+	mov		%ax, sread		# 更新当前磁道已经读取的扇区数
+	shl		$9, %cx			# cx当前磁道已经读取的扇区数，乘以512得当前磁道已经读取字节数
+	add		%cx, %bx		# 更新偏移地址
+	jnc		rp_read			# 没有进位则跳转到rp_read继续读
+	mov		%es, %ax		# 有进位，说明bx达到了64kB边界
+	add		$0x1000, %ax
+	mov		%ax, %es		# es增加0x1000
+	xor		%bx, %bx		# 偏移地址清零 bx = 0x0
+	jmp		rp_read			# 继续读取
 
 read_track:
 	push	%ax
 	push	%bx
 	push	%cx
 	push	%dx
-	mov	track, %dx		# 当前磁道号
-	mov	sread, %cx		# 已经读取的扇区数
-	inc	%cx			# CL是起始扇区号
-	mov	%dl, %ch		# CH是磁道号
-	mov	head, %dx		# 当前磁头号
-	mov	%dl, %dh		# DH是磁头号
-	mov	$0, %dl			# DL是驱动器号，0表示软盘
-	and	$0x0100, %dx		# DH是磁头号，磁头号不大于 1
-	mov	$2, %ah			# 功能号2，读扇区
-	int	$0x13			# CF=1，表示出错，复位磁盘
-	jc	bad_rt
-	pop	%dx
-	pop	%cx
-	pop	%bx
-	pop	%ax
+	mov		track, %dx		# 当前磁道号
+	mov		sread, %cx		# 已经读取的扇区数
+	inc		%cx				# CL是起始扇区号
+	mov		%dl, %ch		# CH是磁道号
+	mov		head, %dx		# 当前磁头号
+	mov		%dl, %dh		# DH是磁头号
+	mov		$0, %dl			# DL是驱动器号，0表示软盘
+	and		$0x0100, %dx	# DH是磁头号，磁头号不大于 1
+	mov		$2, %ah			# 功能号2，读扇区
+	int		$0x13			# CF=1，表示出错，复位磁盘
+	jc		bad_rt
+	pop		%dx
+	pop		%cx
+	pop		%bx
+	pop		%ax
 	ret
 
 # 读磁盘操作出错.则先显示出错信息,然后执行驱动器复位操作(磁盘中断功能号0),再跳转到read_track处重试.
 bad_rt:	
-	mov	$0, %ax			# AH=0，磁盘复位功能
-	mov	$0, %dx			# DL是驱动器号，0表示软盘
-	int	$0x13
-	pop	%dx
-	pop	%cx
-	pop	%bx
-	pop	%ax
-	jmp	read_track		# 重新读取
+	mov		$0, %ax			# AH=0，磁盘复位功能
+	mov		$0, %dx			# DL是驱动器号，0表示软盘
+	int		$0x13
+	pop		%dx
+	pop		%cx
+	pop		%bx
+	pop		%ax
+	jmp		read_track		# 重新读取
 
 #/*
 # * This procedure turns off the floppy drive motor, so
@@ -350,10 +350,10 @@ bad_rt:
 # */
 kill_motor:
 	push	%dx
-	mov	$0x3f2, %dx		# 软盘控制器的端口-数字输出寄存器端口，只写
-	mov	$0, %al			# 驱动器A，关闭FDC，禁止DMA和中断请求，关闭马达
-	outsb				# 将al的值写入端口dx
-	pop	%dx
+	mov		$0x3f2, %dx		# 软盘控制器的端口-数字输出寄存器端口，只写
+	mov		$0, %al			# 驱动器A，关闭FDC，禁止DMA和中断请求，关闭马达
+	outsb					# 将al的值写入端口dx
+	pop		%dx
 	ret
 
 sectors:

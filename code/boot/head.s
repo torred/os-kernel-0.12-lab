@@ -41,11 +41,11 @@ pg_dir:
 
 .globl startup_32
 startup_32:
-	movl 	$0x10,%eax		# 对于GNU汇编,每个直接操作数要以'$'开始,否则表示地址.每个寄存器名都要以'$'开头,eax表示是32位的ax寄存器.
+	movl 	$0x10,%eax			# 对于GNU汇编,每个直接操作数要以'$'开始,否则表示地址.每个寄存器名都要以'$'开头,eax表示是32位的ax寄存器.
 	mov 	%ax,%ds
 	mov 	%ax,%es
 	mov 	%ax,%fs
-	mov 	%ax,%gs			# ds,es,fs,gs 设置为0x10，物理地址0x00000000
+	mov 	%ax,%gs				# ds,es,fs,gs 设置为0x10，物理地址0x00000000
 	lss 	stack_start,%esp	# 设置系统堆栈，表示stack_start->ss:esp，stack_start定义在kernel/sched.c中
 								# stack_start = { &user_stack [PAGE_SIZE >> 2], 0x10 }，ss = 0x10，esp = user_stack
 	
