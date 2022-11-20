@@ -361,7 +361,7 @@ func_table:
 
 # 扫描码-ASCII字符映射表
 # 根据前面定义的键盘类型(FINNISH,US,GERMEN,FRANCH),将相应键的扫描码映射到ASCII字符.
-#if	defined(KBD_FINNISH)    /* 以上是芬兰语键盘的扫描码映射表. /*
+#if	defined(KBD_FINNISH)    /* 以上是芬兰语键盘的扫描码映射表. */
 key_map:
 	.byte 0,27                  # 扫描码0x00,0x01对应的ASCII码；
 	.ascii "1234567890+'"       # 扫描码0x02,...0x0c,0x0d对应的ASCII码，以下类似。
