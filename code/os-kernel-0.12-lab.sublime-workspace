@@ -64,6 +64,9 @@
 	],
 	"file_history":
 	[
+		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab/code/boot/bootsect.s",
+		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab/code/boot/head.s",
+		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab/code/boot/setup.s",
 		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab-gcc-3.4/code/init/main.c",
 		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab-gcc-3.4/code/mm/memory.c",
 		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab-gcc-3.4/code/include/linux/mm.h",
@@ -93,7 +96,6 @@
 		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab/code/Makefile.make",
 		"/Users/todd/NFS/centos_mnt/mnt/kernel/linux-0.95/Makefile",
 		"/Users/todd/NFS/centos_mnt/mnt/kernel/linux-0.95/boot/bootsect.S",
-		"/Users/todd/Workspace/git-repo/os-kernel-0.12-lab/code/boot/bootsect.s",
 		"/Users/todd/NFS/centos_mnt/mnt/kernel/linux-0.95/boot/setup.S",
 		"/Users/todd/NFS/centos_mnt/mnt/kernel/os-linux-0.12-lab-gcc-4-old/env/bochs/bochsrc.bxrc",
 		"/Users/todd/NFS/centos_mnt/mnt/kernel/os-linux-0.12-lab-gcc-4-old/env/bochs/bochsrc-0.12-hd.bxrc",
@@ -189,9 +191,7 @@
 		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/code/tools/setrootdev.sh",
 		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/code/Makefile.emulators",
 		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/code/rootfs/Makefile",
-		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/code/tools/build.sh",
-		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/env/bochs/bochsrc-fda.bxrc.dbg",
-		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/env/bochs/bochsrc-fda.bxrc"
+		"/Users/todd/Workspace/kernel/os-linux-0.11-lab/code/tools/build.sh"
 	],
 	"find":
 	{
@@ -322,7 +322,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 259.0,
+	"side_bar_width": 393.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

@@ -4,3 +4,4 @@
 *.a
 *.map
 bochsout.txt
+*.sublime-workspace
