@@ -96,16 +96,13 @@ _start:
 	mov		$0x12, %ah		# 0x12功能号，显示器的配置中断
 	mov		$0x10, %bl		# 0x10H子功能，读取配置信息
 	int		$0x10
-	mov		%ax, %ds:8		# 调用中断后ax = 0x1200，把此值存下来不清楚什么用？？，存入0x90008
-	mov		%bx, %ds:10		# bh = video mode bl = video memory size(256KB)，存入0x90010
-							# bl = VRAM容量（00h = 64K,01h=128H，02h = 192K, 03h = 256K）
-							# bh = 0，单色模式；1，彩色模式
-	mov		%cx, %ds:12		# EGA 80x25			# 存入0x90012
-							# CH = 特征连接器标志位
-							# CL = EGA开关设置
-
+	mov		%ax, %ds:8		# ax存入0x90008, 调用中断后ax = 0x1200, 把此值存下来不清楚什么用？？
+	mov		%bx, %ds:10		# bx存入0x9000a
+							# bh = video mode, bh = 0，单色模式；1，彩色模式
+							# bl = VRAM容量, bl = 00h->64K, 01h->128H，02h->192K, 03h->256K
+	mov		%cx, %ds:12		# cx存入0x9000c, ch:特征连接器标志位; cl:EGA开关设置(EGA 80x25)
 	mov		$0x5019, %ax	# 80x25
-	mov		%ax, %ds:14		# 存入0x90014
+	mov		%ax, %ds:14		# 存入0x9000e
 
 /*
  * 硬盘参数表16字节含义

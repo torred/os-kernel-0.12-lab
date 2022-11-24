@@ -28,14 +28,14 @@ CFLAGS  += -O -finline-functions -nostdinc -I../include
 CPP     += -E -I../include
 DEP	+= -E -I../include
 
+.s.pc:
+	$(CPP) -traditional $< -o $*.pc
 .c.s:
-	@$(CC) $(CFLAGS) \
-	-S -o $*.s $<
-.s.o:
+	@$(CC) $(CFLAGS) -S -o $*.s $<
+.pc.o:
 	@$(AS) -o $*.o $<
 .c.o:
-	@$(CC) $(CFLAGS) \
-	-c -o $*.o $<
+	@$(CC) $(CFLAGS) -c -o $*.o $<
 
 kernel.o: $(OBJS)
 	@$(LD) $(LDFLAGS) -o kernel.o $(OBJS)
