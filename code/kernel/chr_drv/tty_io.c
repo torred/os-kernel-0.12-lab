@@ -561,20 +561,24 @@ void do_tty_interrupt(int tty)
 	copy_to_cooked(TTY_TABLE(tty));
 }
 
-//字符设备初始化函数.空,为以后扩展做准备.
+/* 字符设备初始化函数.空,为以后扩展做准备 */
 void chr_dev_init(void)
 {
 }
 
-// tty终端初始化函数
-// 初始化所有终端缓冲队列,初始化串口终端和控制台终端.
+/**
+ * tty终端初始化函数
+ * 初始化所有终端缓冲队列,初始化串口终端和控制台终端
+ */
 void tty_init(void)
 {
 	int i;
 
-	// 首先初始化所有终端的缓冲队列结构,设置初值.对于串行终端的读/写缓冲队列,将它们的data字段设置为串行端口基地址值.串中1是0x3f8,
-	// 串口2是0x2f8.然后先初步设置所有终端的tty结构.
-	// 其中特殊字符数组c_cc[]设置的初值定义在include/linux/tty.h文件中.
+	/**
+	 * 首先初始化所有终端的缓冲队列结构,设置初值.对于串行终端的读/写缓冲队列,将它们的data字段设置为串行端口基地址值.
+	 * 串中1是0x3f8, 串口2是0x2f8.然后先初步设置所有终端的tty结构.
+	 * 其中特殊字符数组c_cc[]设置的初值定义在include/linux/tty.h文件中.
+	 */
 	for (i = 0 ; i < QUEUES ; i++)   // QUEUES = 54
 		tty_queues[i] = (struct tty_queue) {0, 0, 0, 0, ""};
 	rs_queues[0] = (struct tty_queue) {0x3f8, 0, 0, 0, ""};
@@ -587,11 +591,13 @@ void tty_init(void)
 			0, 0, 0, NULL, NULL, NULL, NULL
 		};
 	}
-	// 接着初始化控制台终端(console.c).把con_init()放在这里,是因为我们需要根据显示卡类型和显示内存容量来确定系统虚拟控制台的数量
-	// NR_CONSOLES.该值被用于随后的控制tty结构初始化循环中.对于控制台的tty结构,425--430行是tty结构中包含的termios结构字段.其中
-	// 输入模式标志集被初始化为ICRNL标志;输出模式标志被初始化含有后处理标志OPOST和把NL转换成CRNL的标志ONLCR;本地模式标志集被初始化
-	// 含有IXON,ICAON,ECHO,ECHOCTL和ECHOKE标志;控制字符数组c_cc[]被设置含有初始值INIT_C_CC.
-	// 435行上初始化控制台终端tty结构中的读缓冲,写缓冲和辅助缓冲队列结构,它们分别指向tty缓冲队列结构数组tty_table[]中的相应结构项.
+	/**
+	 * 接着初始化控制台终端(console.c).把con_init()放在这里,是因为我们需要根据显示卡类型和显示内存容量来确定系统虚拟控制台的数量
+	 * NR_CONSOLES.该值被用于随后的控制tty结构初始化循环中.对于控制台的tty结构,604--609行是tty结构中包含的termios结构字段.其中
+	 * 输入模式标志集被初始化为ICRNL标志;输出模式标志被初始化含有后处理标志OPOST和把NL转换成CRNL的标志ONLCR;本地模式标志集被初始化
+	 * 含有IXON,ICAON,ECHO,ECHOCTL和ECHOKE标志;控制字符数组c_cc[]被设置含有初始值INIT_C_CC.
+	 * 435行上初始化控制台终端tty结构中的读缓冲,写缓冲和辅助缓冲队列结构,它们分别指向tty缓冲队列结构数组tty_table[]中的相应结构项.
+	 */
 	con_init();
 	for (i = 0 ; i < NR_CONSOLES ; i++) {
 		con_table[i] = (struct tty_struct) {

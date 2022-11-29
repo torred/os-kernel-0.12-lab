@@ -2,8 +2,8 @@
 # if you want the ram-disk device, define this to be the size in blocks.
 #
 RAMDISK      =  #-DRAMDISK=512
-CLEAR_FILE   = images/Image images/system images/system.map images/kernel images/system.S images/system.tmp images/bootsect.map images/setup.map tmp_make
-OBJDUMP_FILE = images/system.S
+CLEAR_FILE   = images/Image images/system images/system.sym images/system.map images/system.s images/kernel images/bootsect.sym images/bootsect.map images/setup.sym images/setup.map tmp_make
+OBJDUMP_FILE = images/system.s
 NM_FILE      = images/system.map
 
 # -0: 使用16bit代码段　
@@ -36,8 +36,10 @@ LIBS	=lib/lib.a
 
 all:	Image
 
-Image: boot/bootsect boot/setup tools/system
-	@cp -f images/system images/system.tmp
+Image: boot/bootsect boot/setup images/system
+	@cp -f images/system images/system.sym
+	@$(NM) images/system | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > $(NM_FILE)
+	@$(OBJDUMP) -S images/system > $(OBJDUMP_FILE)
 
 # strip
 # strip.symbol.debug strip strip
@@ -61,9 +63,9 @@ Image: boot/bootsect boot/setup tools/system
 # -V --version
 # -h --help
 # -o
-	@$(STRIP) images/system.tmp
+	@$(STRIP) images/system
 
-#.note.comment system.tmp kernel
+#.note.comment system kernel
 # -I bfdname
 # --input-target=bfdname
 # Objcopy bfdname BFD
@@ -79,13 +81,13 @@ Image: boot/bootsect boot/setup tools/system
 # -g
 # --strip-debug
 #--strip-undeeded
-	@$(OBJCOPY) -O binary -R .note -R .comment images/system.tmp images/kernel
+	@$(OBJCOPY) -O binary -R .note -R .comment images/system images/kernel
 	@$(BUILD) boot/bootsect boot/setup images/kernel images/Image
 	@sync
 
 # 上面的修改就可以保证开启gcc调试后，System文件不变大，build也就不会失败了(build对system大小有
 # 限制)。原先规则为下面两句
-# tools/build boot/bootsect boot/setup tools/system $(ROOT_DEV) $(SWAP_DEV) > Image
+# tools/build boot/bootsect boot/setup images/system $(ROOT_DEV) $(SWAP_DEV) > Image
 # sync
 
 # disk: Image
@@ -98,7 +100,7 @@ init/main.o: FORCE
 boot/head.o: boot/head.s
 	@make head.o -C boot/
 
-tools/system:	boot/head.o init/main.o \
+images/system:	boot/head.o init/main.o \
 		$(ARCHIVES) $(DRIVERS) $(MATH) $(LIBS)
 	@$(LD) $(LDFLAGS) boot/head.o init/main.o \
 	$(ARCHIVES) \
@@ -127,8 +129,6 @@ tools/system:	boot/head.o init/main.o \
 # -l line-numbers
 # -V version nm
 #  help nm
-	@$(NM) images/system | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > images/system.map
-	@$(OBJDUMP) -S images/system > images/system.S
 
 kernel/math/math.a: FORCE
 	@make -C kernel/math

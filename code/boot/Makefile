@@ -11,10 +11,9 @@ all: bootsect setup
 bootsect: bootsect.pc
 	@$(AS) -o bootsect.o bootsect.pc
 	@$(LD) $(LDFLAGS) -o bootsect bootsect.o
-	@cp -f bootsect bootsect.sym
-	@nm bootsect.sym | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > ../images/bootsect.map
-	@rm -f bootsect.sym
-	@$(OBJCOPY) -R .pdr -R .comment -R.note -S -O binary bootsect
+	@cp -f bootsect ../images/bootsect.sym
+	@nm bootsect | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > ../images/bootsect.map
+	@$(OBJCOPY) -R .pdr -R .comment -R .note -S -O binary bootsect
 
 bootsect.pc: bootsect.s
 	@$(CPP) -o bootsect.pc bootsect.s
@@ -22,10 +21,9 @@ bootsect.pc: bootsect.s
 setup: setup.pc
 	@$(AS) -o setup.o setup.pc
 	@$(LD) $(LDFLAGS) -o setup setup.o
-	@cp -f setup setup.sym
-	@nm setup.sym | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > ../images/setup.map
-	@rm -f setup.sym
-	@$(OBJCOPY) -R .pdr -R .comment -R.note -S -O binary setup
+	@cp -f setup ../images/setup.sym
+	@nm setup | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > ../images/setup.map
+	@$(OBJCOPY) -R .pdr -R .comment -R .note -S -O binary setup
 
 setup.pc: setup.s
 	@$(CPP) -o setup.pc setup.s

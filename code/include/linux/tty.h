@@ -31,7 +31,7 @@ struct tty_queue {
 	unsigned long head;									// 缓冲区中数据头指针
 	unsigned long tail;									// 缓冲区中数据尾指针
 	struct task_struct * proc_list;						// 等待本队列的进程列表.
-	char buf[TTY_BUF_SIZE];								// 队列的缓冲区.
+	char buf[TTY_BUF_SIZE];								// 队列的缓冲区, TTY_BUF_SIZE=1024
 };
 
 #define IS_A_CONSOLE(min)			(((min) & 0xC0) == 0x00)	// 是一个控制终端.
@@ -89,21 +89,21 @@ extern int fg_console;							// 前台控制台号
 #define TTY_TABLE(nr) \
 (tty_table + ((nr) ? (((nr) < 64)? (nr) - 1 : (nr))	: fg_console))
 
-// 这里给出了终端termios结构中可更改的特殊字符数组c_cc[]的初始值.该termios结构定义在include/termios.h中.POSIX.1定义了11个
-// 特殊字符,但是Linux系统还另外定义了SVR4使用的6个特殊字符.如果定义了_POSIX_VDISABLE(\0),那么当某一项值等于_POSIX_VDISABLE
-// 的值时,表示禁止使用相应的特殊字符.[8进制值]
-/*	intr=^C		quit=^|		erase=del	kill=^U
-	eof=^D		vtime=\0	vmin=\1		sxtc=\0
-	start=^Q	stop=^S		susp=^Z		eol=\0
-	reprint=^R	discard=^U	werase=^W	lnext=^V
-	eol2=\0
-*/
-/*	中断intr=^C	退出quit=^|	删除erase=del	终止kill=^U
-	文件结束eof=^D	vtime=\0	vmin=\1		sxtc=\0
-	开始start=^Q	停止stop=^S	挂起susp=^Z	行结束eol=\0
-	重显reprint=^R	丢弃discard=^U	werase=^W	lnext=^V
-	行结束eol2=\0
-*/
+/*
+ * 这里给出了终端termios结构中可更改的特殊字符数组c_cc[]的初始值.该termios结构定义在include/termios.h中.POSIX.1定义了11个
+ * 特殊字符,但是Linux系统还另外定义了SVR4使用的6个特殊字符.如果定义了_POSIX_VDISABLE(\0),那么当某一项值等于_POSIX_VDISABLE
+ * 的值时,表示禁止使用相应的特殊字符.[8进制值]
+ *	intr=^C		quit=^|		erase=del	kill=^U
+ *  eof=^D		vtime=\0	vmin=\1		sxtc=\0
+ *  start=^Q	stop=^S		susp=^Z		eol=\0
+ *  reprint=^R	discard=^U	werase=^W	lnext=^V
+ *  eol2=\0
+ *  中断intr=^C	退出quit=^|	删除erase=del	终止kill=^U
+ *  文件结束eof=^D	vtime=\0	vmin=\1		sxtc=\0
+ *  开始start=^Q	停止stop=^S	挂起susp=^Z	行结束eol=\0
+ *  重显reprint=^R	丢弃discard=^U	werase=^W	lnext=^V
+ *  行结束eol2=\0
+ */
 #define INIT_C_CC "\003\034\177\025\004\0\1\0\021\023\032\0\022\017\027\026\0"
 
 void rs_init(void);     // 异步串行通信初始化。（kernel/chr_drv/serial.c）

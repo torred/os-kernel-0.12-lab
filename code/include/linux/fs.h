@@ -97,22 +97,15 @@ typedef char buffer_block[BLOCK_SIZE];	/* 块缓冲区 */
  * 块高速缓冲头数据结构(重要) ，在程序中常用bh来表示buffer_head类型的缩写.
  */
 struct buffer_head {
-	char * b_data;						/* pointer to data block (1024 bytes) */	
-										/* 数据指针 */
-	unsigned long b_blocknr;			/* block number */
-										/* 块号 */
-	unsigned short b_dev;				/* device (0 = free) */
-										/* 数据源的设备号 */
+	char * b_data;						/* 数据指针 pointer to data block (1024 bytes) */
+	unsigned long b_blocknr;			/* 块号 block number */
+	unsigned short b_dev;				/* 数据源的设备号 device (0 = free) */
 	unsigned char b_uptodate;       	/* 更新标志：表示数据是否已更新 */
+	unsigned char b_dirt;				/* 修改标志：0未修改，1已修改 0-clean, 1-dirty */
+	unsigned char b_count;				/* 使用用户数 users using this block */
+	unsigned char b_lock;				/* 缓冲区是否被锁定 0 - ok, 1 -locked */
 
-	unsigned char b_dirt;				/* 0-clean, 1-dirty */	
-										/* 修改标志：0未修改，1已修改 */
-	unsigned char b_count;				/* users using this block */
-										/* 使用用户数 */
-	unsigned char b_lock;				/* 0 - ok, 1 -locked */	
-										/* 缓冲区是否被锁定 */
 	struct task_struct * b_wait;		/* 指向等待该缓冲区解锁的任务 */
-
 	/* 这四个指针用于缓冲区的管理 */
 	struct buffer_head * b_prev;		/* hash队列上的前一块 */
 	struct buffer_head * b_next;		/* hash队列上的后一块 */
