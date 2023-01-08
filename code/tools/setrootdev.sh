@@ -10,7 +10,7 @@
 #
 # ramfs: 0000
 # Floppy B: 021d
-# hd1: 0301
+# hd0: 0301
 IMAGE=$1
 root_dev=$2
 ram_img=$3

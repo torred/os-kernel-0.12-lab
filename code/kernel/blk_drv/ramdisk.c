@@ -76,23 +76,25 @@ void do_rd_request(void)
 
 /*
  * Returns amount of memory which needs to be reserved.
+ *
+ * 虚拟盘初始化函数.
+ * 返回内存虚拟盘ramdisk所需的内存量
+ *
+ * 该函数首先设置虚拟盘设备的请求项处理函数指针指向do_rd_request(),然后确定虚拟盘在物理内存中的起始地址,占用字节长度
+ * 值.并对整个虚拟盘区清零.最后返回盘区长度.当linux/Makefile文件中设置过RAMDISK值不为零时,表示系统中会创建RAM虚拟盘
+ * 设备.在这种情况下的内核初始化过程中,本函数就会被调用(init/main.c).该函数在第2个参数length会被赋值成RAMDISK*1024
+ * 单位为字节.
  */
-/* 返回内存虚拟盘ramdisk所需的内存量 */
-// 虚拟盘初始化函数.
-// 该函数首先设置虚拟盘设备的请求项处理函数指针指向do_rd_request(),然后确定虚拟盘在物理内存中的起始地址,占用字节长度
-// 值.并对整个虚拟盘区清零.最后返回盘区长度.当linux/Makefile文件中设置过RAMDISK值不为零时,表示系统中会创建RAM虚拟盘
-// 设备.在这种情况下的内核初始化过程中,本函数就会被调用(init/main.c).该函数在第2个参数length会被赋值成RAMDISK*1024
-// 单位为字节.
 long rd_init(long mem_start, int length)
 {
 	int	i;
-	char	*cp;
+	char *cp;
 
 	blk_dev[MAJOR_NR].request_fn = DEVICE_REQUEST;
 	rd_start = (char *) mem_start;
 	rd_length = length;
 	cp = rd_start;
-	// 将内存空间清零
+	/* 将内存空间清零 */
 	for (i = 0; i < length; i++)
 		*cp++ = '\0';
 	return(length);
@@ -102,18 +104,18 @@ long rd_init(long mem_start, int length)
  * If the root device is the ram disk, try to load it.
  * In order to do this, the root device is originally set to the
  * floppy, and we later change it to be ram disk.
- */
-/*
+ *
  * 如果根文件设备(root device)是ramdisk的话,则尝试加载它.root device原先是指向软盘的,我们将它改成指向ramdisk.
+ *
+ * 尝试根文件系统加载到虚拟盘中.
+ * 该函数将在内核设置函数setup()(hd.c)中被调用.另外,1磁盘块 = 1024字节.变量block=256表示根文件系统映像被存储于boot盘第
+ * 256磁盘块开始处.
  */
-// 尝试根文件系统加载到虚拟盘中.
-// 该函数将在内核设置函数setup()(hd.c)中被调用.另外,1磁盘块 = 1024字节.变量block=256表示根文件系统映像被存储于boot盘第
-// 256磁盘块开始处.
 void rd_load(void)
 {
 	struct buffer_head *bh;								// 调整缓冲块头指针.
 	struct super_block	s;								// 文件超级块结构.
-	int		block = 256;								/* Start at block 256 */	/* 开始于256盘块 */
+	int		block = 256;								/* Start at block 256 ,开始于256盘块 */
 	int		i = 1;
 	int		nblocks;									// 文件系统盘块总数.
 	char		*cp;									/* Move pointer */

@@ -2,7 +2,9 @@
 	"folders":
 	[
 		{
-			"path": "."
+			"path": ".",
+			"folder_exclude_patterns": ["rootfs"],
+    		"file_exclude_patterns": ["*.o", "*.a", "*.tags*", "*.xz", ".gdb*","*.sublime-workspace","*.sublime-project","*.udb","bootsect", "setup","system.S"],
 		}
 	]
 }

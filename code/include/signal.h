@@ -66,10 +66,10 @@ typedef unsigned int sigset_t;		                /* 32 bits */	// 定义信号集
 // as_restorer是恢复函数指针，由函数库Libc提供，用于清理用户态堆栈。参见signal.c。
 // 另外，引起触发信号处理的信号也将被阻塞，除非使用了SA_NOMASK标志。
 struct sigaction {
-	void (*sa_handler)(int);                       // 对应某信号指定要采取的行动。可以用上面的SIG_DEL，或SIG_IGN来忽略该信号，也可以是指向处理该信号函数的一个指针
-	sigset_t sa_mask;                              // 对信号的屏蔽码，在信号程序执行时将阻塞对这些信号的处理。
-	int sa_flags;                                  // 改变信号处理过程的信号集。它是由37-40行的位标志定义的。
-	void (*sa_restorer)(void);                     // 恢复函数指针，由函数库Libc提供，用于清理用户态堆栈
+	void (*sa_handler)(int);               // 对应某信号指定要采取的行动。可以用上面的SIG_DEL，或SIG_IGN来忽略该信号，也可以是指向处理该信号函数的一个指针
+	sigset_t sa_mask;                      // 对信号的屏蔽码，在信号程序执行时将阻塞对这些信号的处理。
+	int sa_flags;                          // 改变信号处理过程的信号集。它是由37-40行的位标志定义的。
+	void (*sa_restorer)(void);             // 恢复函数指针，由函数库Libc提供，用于清理用户态堆栈
 };
 
 // 下面signal函数用于是为信号_sig安装一新的信号处理程序（信号句柄），与sigaction()类似。该函数含有两个参数：指定需要捕获的

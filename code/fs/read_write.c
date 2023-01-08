@@ -29,6 +29,9 @@ extern int file_read(struct m_inode * inode, struct file * filp,
 extern int file_write(struct m_inode * inode, struct file * filp,
 		char * buf, int count);
 
+/* 新增proc_read函数外部调用 */
+extern int proc_read(int dev, unsigned long *pos, char * buf, int count);
+
 // 重定位文件读写指针系统调用。
 // 参数fd是文件句柄，offset是新的文件读写指针偏移值，origin是偏移的起始位置，可有三种选择：SEEK_SET（0,
 // 从文件开始处）、SEEK_CUR（1,从当前读写位置）、SEEK_END（2,从文件尾处）。
@@ -94,6 +97,11 @@ int sys_read(unsigned int fd, char * buf, int count)
 	// 管道文件的读操作
 	if (inode->i_pipe)
 		return (file->f_mode & 1) ? read_pipe(inode, buf, count) : -EIO;
+
+	/* 新增proc_read调用 */
+	if (S_ISPROC(inode->i_mode))
+		return proc_read(inode->i_zone[0], &file->f_pos, buf, count);
+
 	// 字符设备的读操作
 	if (S_ISCHR(inode->i_mode))
 		return rw_char(READ, inode->i_zone[0], buf, count, &file->f_pos);

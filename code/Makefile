@@ -3,7 +3,7 @@
 #
 RAMDISK      =  #-DRAMDISK=512
 CLEAR_FILE   = images/Image images/system images/system.sym images/system.map images/system.s images/kernel images/bootsect.sym images/bootsect.map images/setup.sym images/setup.map tmp_make
-OBJDUMP_FILE = images/system.s
+OBJDUMP_FILE = images/system.S
 NM_FILE      = images/system.map
 
 # -0: 使用16bit代码段　
@@ -38,8 +38,6 @@ all:	Image
 
 Image: boot/bootsect boot/setup images/system
 	@cp -f images/system images/system.sym
-	@$(NM) images/system | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > $(NM_FILE)
-	@$(OBJDUMP) -S images/system > $(OBJDUMP_FILE)
 
 # strip
 # strip.symbol.debug strip strip
@@ -109,6 +107,9 @@ images/system:	boot/head.o init/main.o \
 	$(LIBS) \
 	-o images/system
 
+	@$(NM) images/system | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aU] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)'| sort > $(NM_FILE)
+	@$(OBJDUMP) -S images/system > $(OBJDUMP_FILE)
+
 # nm   File
 # -a debug-syms debugger-only symbols
 # -B format=bsd MIPS nm
@@ -173,9 +174,13 @@ boot/bootsect: boot/bootsect.s FORCE
 # endif
 
 clean:
-	@make clean -C rootfs
 	@$(RM) -f $(CLEAR_FILE)
 	@for i in init mm fs kernel lib boot; do make clean -C $$i; done
+
+clean-images:
+	@make clean -C rootfs
+
+clean-all: clean clean-images
 
 #info:
 #	@make clean

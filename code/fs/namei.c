@@ -716,7 +716,7 @@ int sys_mknod(const char * filename, int mode, int dev)
 	inode->i_mode = mode;
 	// 如果要创建的是块设备文件或者是字符设备文件，则令i节点的直接逻辑块指针0等于设备号。即对于设备文件来说，
 	// 其i节点的i_zone[0]中存放的是该设备文件所定义设备的设备号。
-	if (S_ISBLK(mode) || S_ISCHR(mode))
+	if (S_ISBLK(mode) || S_ISCHR(mode) || S_ISPROC(mode))
 		inode->i_zone[0] = dev;
 	// 设置该i节点的修改时间、访问时间为当前时间，并设置i节点已修改标志。
 	inode->i_mtime = inode->i_atime = CURRENT_TIME;

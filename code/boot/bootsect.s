@@ -404,7 +404,7 @@ swap_dev:
 root_dev:
     .word   ROOT_DEV            /* 第508 byte,存放根文件系统所在设备号(init/main.c中会用) */
 boot_flag:
-    .word   0xAA55              /* 第511,512byte,启动盘且有有效引导扇区标志.仅供BIOS中的程序加载引导扇区时识别使用 */
+    .word   0xAA55              /* 第510,511byte,启动盘且有有效引导扇区标志.仅供BIOS中的程序加载引导扇区时识别使用 */
 
 .text
 endtext:

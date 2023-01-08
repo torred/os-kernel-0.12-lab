@@ -2,38 +2,37 @@
  *  linux/kernel/traps.c
  *
  *  (C) 1991  Linus Torvalds
- */
-
-/*
+ *
  * 'Traps.c' handles hardware traps and faults after we have saved some
  * state in 'asm.s'. Currently mostly a debugging-aid, will be extended
  * to mainly kill the offending process (probably by giving it a signal,
  * but possibly by killing it outright if necessary).
- */
-/* 在程序asm.s中保存了一些状态后,本程序用来处理硬件陷阱和故障.目前主要用于调试目的,以后将扩展用来杀死遭损坏的进程(主是通过发送一个信号,
+ *
+ * 在程序asm.s中保存了一些状态后,本程序用来处理硬件陷阱和故障.目前主要用于调试目的,以后将扩展用来杀死遭损坏的进程(主是通过发送一个信号,
  * 但如果必要也会直接杀死.
  */
-// #include <string.h>
+
+/* #include <string.h> */
 
 #include <linux/head.h>
-#include <linux/sched.h>				// 调度程序头文件,定义了任务结构task_struct,初始任务0的数据.
+#include <linux/sched.h>				/* 调度程序头文件,定义了任务结构task_struct,初始任务0的数据. */
 #include <linux/kernel.h>
-#include <asm/system.h>					// 系统头文件.定义了设置或修改描述符/中断门等的嵌入式汇编宏.
+#include <asm/system.h>					/* 系统头文件.定义了设置或修改描述符/中断门等的嵌入式汇编宏. */
 #include <asm/segment.h>
-#include <asm/io.h>						// 输入/输出头文件.定义硬件端口输入/输出宏汇编语句.
+#include <asm/io.h>						/* 输入/输出头文件.定义硬件端口输入/输出宏汇编语句. */
 
-// 取seg中地址addr处的一个字节.
-// 参数: seg - 段选择符;addr - 段内指定地址.
-// 输出: %0 - eax(__res);输入: %1 - eax(seg); %2 - 内存地址(*(addr))
+/* 取seg中地址addr处的一个字节. */
+/* 参数: seg - 段选择符;addr - 段内指定地址. */
+/* 输出: %0 - eax(__res);输入: %1 - eax(seg); %2 - 内存地址(*(addr)) */
 #define get_seg_byte(seg, addr) ({ \
 register char __res; \
 __asm__("push %%fs;mov %%ax,%%fs;movb %%fs:%2,%%al;pop %%fs" \
 	:"=a" (__res):"0" (seg),"m" (*(addr))); \
 __res;})
 
-// 取seg中地址addr处的一个长字(4字节).
-// 参数: seg - 段选择符;addr - 段内指定地址.
-// 输出: %0 - eax(__res);输入: %1 - eax(seg); %2 - 内存地址(*(addr))
+/* 取seg中地址addr处的一个长字(4字节). */
+/* 参数: seg - 段选择符;addr - 段内指定地址. */
+/* 输出: %0 - eax(__res);输入: %1 - eax(seg); %2 - 内存地址(*(addr)) */
 #define get_seg_long(seg, addr) ({ \
 register unsigned long __res; \
 __asm__("push %%fs;mov %%ax,%%fs;movl %%fs:%2,%%eax;pop %%fs" \
@@ -203,22 +202,24 @@ void do_reserved(long esp, long error_code)
 	die("reserved (15,17-47) error", esp, error_code);
 }
 
-// 下面是异常(陷阱)中断程序初始化子程序.设置它们的中断调用门(中断向量).
-// set_trap_gate()与set_system_gate()都使用了中断描述符表IDT中的陷阱门(Trap Gate),它们之间的主要区别在于前者设置的特权级为0,
-// 后者是3.因此断点陷阱中断int3,溢出中断overflow和边界出错中断bounds可以由任何程序调用.这两个函数均是嵌入式汇编宏程序,参见
-// include/asm/system.h
+/**
+ * 下面是异常(陷阱)中断程序初始化子程序.设置它们的中断调用门(中断向量).
+ * set_trap_gate()与set_system_gate()都使用了中断描述符表IDT中的陷阱门(Trap Gate),它们之间的主要区别在于前者设置的特权级为0,
+ * 后者是3.因此断点陷阱中断int3,溢出中断overflow和边界出错中断bounds可以由任何程序调用.这两个函数均是嵌入式汇编宏程序,参见
+ * include/asm/system.h
+ */
 void trap_init(void)
 {
 	int i;
 
-	set_trap_gate(0, &divide_error);							// 设置除操作出错的中断向量值.
+	set_trap_gate(0, &divide_error);							/* 设置除操作出错的中断向量值. */
 	set_trap_gate(1, &debug);
 	set_trap_gate(2, &nmi);
 	set_system_gate(3, &int3);									/* int3-5 can be called from all */
 	set_system_gate(4, &overflow);
 	set_system_gate(5, &bounds);
 	set_trap_gate(6, &invalid_op);
-	set_trap_gate(7, &device_not_available);					// 函数未实现
+	set_trap_gate(7, &device_not_available);					/* 函数未实现 */
 	set_trap_gate(8, &double_fault);
 	set_trap_gate(9, &coprocessor_segment_overrun);
 	set_trap_gate(10, &invalid_TSS);
@@ -227,14 +228,14 @@ void trap_init(void)
 	set_trap_gate(13, &general_protection);
 	set_trap_gate(14, &page_fault);
 	set_trap_gate(15, &reserved);
-	set_trap_gate(16, &coprocessor_error);						// 函数未实现
+	set_trap_gate(16, &coprocessor_error);						/* 函数未实现 */
 	set_trap_gate(17, &alignment_check);
-	// 下面把int17-47的陷阱门先均设置为reserved,以后各硬件初始化时会重新设置自己的陷阱门.
+	/* 下面把int17-47的陷阱门先均设置为reserved,以后各硬件初始化时会重新设置自己的陷阱门. */
 	for (i = 18; i < 48; i++)
 		set_trap_gate(i, &reserved);
-	// 设置协处理器中断0x2d(45)陷阱门描述符,并允许其产生中断请求.设置并行口中断描述符.
+	/* 设置协处理器中断0x2d(45)陷阱门描述符,并允许其产生中断请求.设置并行口中断描述符. */
 	set_trap_gate(45, &irq13);
-	outb_p(inb_p(0x21)&0xfb, 0x21);								// 允许8259A主芯片的IRQ2中断请求(连接从芯片)
-	outb(inb_p(0xA1)&0xdf, 0xA1);								// 允许8259A从芯片的IRQ13中断请求(协处理器中断)
-	set_trap_gate(39, &parallel_interrupt);						// 设置并行口1的中断0x27陷阱门描述符.
+	outb_p(inb_p(0x21)&0xfb, 0x21);								/* 允许8259A主芯片的IRQ2中断请求(连接从芯片) */
+	outb(inb_p(0xA1)&0xdf, 0xA1);								/* 允许8259A从芯片的IRQ13中断请求(协处理器中断) */
+	set_trap_gate(39, &parallel_interrupt);						/* 设置并行口1的中断0x27陷阱门描述符. */
 }

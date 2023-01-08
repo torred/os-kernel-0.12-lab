@@ -5,7 +5,7 @@ romimage:    file=$BXSHARE/BIOS-bochs-latest
 vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
 
 floppya: 1_44="images/Image", status=inserted, write_protected=1
-floppyb: 1_44="rootfs/rootimage-0.11", status=inserted
+floppyb: 1_44="rootfs/rootimage-0.12", status=inserted
 boot: a
 
 display_library: $BOCHS_DISP_LIB

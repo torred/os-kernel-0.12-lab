@@ -10,7 +10,7 @@ include ../Makefile.make
 
 OBJS  = sched.o sys_call.o traps.o asm.o fork.o \
 	panic.o printk.o vsprintf.o sys.o exit.o \
-	signal.o mktime.o
+	signal.o mktime.o who.o
 CLEAR_FILE = $(OBJS) kernel.o tmp_make
 
 LDFLAGS += -r
@@ -63,8 +63,7 @@ fork.o: fork.c ../include/errno.h ../include/linux/sched.h \
  ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
  ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
  ../include/sys/param.h ../include/sys/time.h ../include/time.h \
- ../include/sys/resource.h ../include/asm/segment.h \
- ../include/asm/system.h
+ ../include/sys/resource.h ../include/asm/system.h
 mktime.o: mktime.c ../include/time.h
 panic.o: panic.c ../include/linux/kernel.h ../include/linux/sched.h \
  ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
@@ -77,7 +76,7 @@ sched.o: sched.c ../include/linux/sched.h ../include/linux/head.h \
  ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \
  ../include/sys/time.h ../include/time.h ../include/sys/resource.h \
  ../include/linux/sys.h ../include/linux/fdreg.h ../include/asm/system.h \
- ../include/asm/io.h ../include/asm/segment.h
+ ../include/asm/io.h
 signal.o: signal.c ../include/linux/sched.h ../include/linux/head.h \
  ../include/linux/fs.h ../include/sys/types.h ../include/linux/mm.h \
  ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \
@@ -87,13 +86,17 @@ sys.o: sys.c ../include/errno.h ../include/linux/sched.h \
  ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
  ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
  ../include/sys/param.h ../include/sys/time.h ../include/time.h \
- ../include/sys/resource.h ../include/linux/tty.h ../include/termios.h \
- ../include/linux/config.h ../include/asm/segment.h \
- ../include/sys/times.h ../include/sys/utsname.h ../include/string.h
-traps.o: traps.c ../include/string.h ../include/linux/head.h \
- ../include/linux/sched.h ../include/linux/fs.h ../include/sys/types.h \
- ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
- ../include/sys/param.h ../include/sys/time.h ../include/time.h \
- ../include/sys/resource.h ../include/asm/system.h \
- ../include/asm/segment.h ../include/asm/io.h
+ ../include/sys/resource.h ../include/linux/config.h \
+ ../include/asm/segment.h ../include/sys/times.h ../include/sys/utsname.h \
+ ../include/string.h
+traps.o: traps.c ../include/linux/head.h ../include/linux/sched.h \
+ ../include/linux/fs.h ../include/sys/types.h ../include/linux/mm.h \
+ ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \
+ ../include/sys/time.h ../include/time.h ../include/sys/resource.h \
+ ../include/asm/system.h ../include/asm/segment.h ../include/asm/io.h
 vsprintf.o: vsprintf.c ../include/stdarg.h ../include/string.h
+who.o: who.c ../include/unistd.h ../include/sys/stat.h \
+ ../include/sys/types.h ../include/sys/time.h ../include/time.h \
+ ../include/sys/times.h ../include/sys/utsname.h ../include/sys/param.h \
+ ../include/sys/resource.h ../include/utime.h ../include/asm/segment.h \
+ ../include/errno.h

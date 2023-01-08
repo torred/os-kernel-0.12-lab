@@ -40,8 +40,8 @@ begbss:
  * 跳转到system模块中head.s中代码执行
  */
 
-    ljmp    $SETUPSEG, $_start      /* phaddr: 0x90205 */
-_start:
+    ljmp    $SETUPSEG, $_start
+_start:                         /* phaddr: 0x90205 */
 /** step1. 设置段寄存器 ds,es为 0x9020 */
     movw    %cs,%ax             /* 0x9020，也是SETUPSEG */
     movw    %ax,%ds             /* ds 0x9020 */
@@ -477,10 +477,11 @@ empty_8042:
  * ljmp指令解释：段间跳转，参数1:偏移量，参数2：段选择子
  * 跳转到0x0008:0位置，这里的8为保护模式下的段选择子，INDEX = 1，第一个GDT描述符的base = 0x0，offset = 0x0，
  * 因此目的地址是0x00000000:0x00000000，物理地址是0x00000000，刚好为head.s的入口
+ * ljmp 0x0008:0000 内存里的指令码: ea00000800 -> ea 0x00080000
  */
-    .equ    sel_cs0, 0x0008     /* select for code segment 0 (  001:0 :00)  */
-                                /* 0x0008 = 001:0:00(INDEX:TI:RPL)，因此INDEX = 1，TI = 0， RPL = 0 */
-    ljmp    $sel_cs0, $0        /* jmp offset 0 of code segment 0 in gdt # 跳转到0x00000000:00000000 */
+    .equ    sel_cs0, 0x0008     /* selector等于0x0008 = (0x001:0 :00),INDEX = 1，TI = 0， RPL = 0,第1个selector, 为内核code seg  */
+    ljmp    $sel_cs0, $0        /* jmp offset 0 of code segment 1 in gdt
+                                /* selector1的 base = 0x00000000, offset = 0x00000000 */
 
 /**
  * 全局描述符表开始处

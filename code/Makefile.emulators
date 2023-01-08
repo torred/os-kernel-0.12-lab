@@ -40,6 +40,7 @@ QEMU_CMD_HDA_PARA = $(QEMU_CMD_PARA) -hda rootfs/$(HDA_IMG)
 BOCHS_DBG = .dbg
 BOCHS_CMD = $(BOCHS)
 
+
 BOCHS_CMD_RC = -f $(BOCHS_RC)/bochsrc-fda.bxrc
 BOCHS_CMD_FDB_RC = -f $(BOCHS_RC)/bochsrc-fdb.bxrc
 BOCHS_CMD_HDA_RC = -f $(BOCHS_RC)/bochsrc-hd.bxrc

@@ -15,23 +15,23 @@
 #ifndef _TTY_H
 #define _TTY_H
 
-#define MAX_CONSOLES	8								// 最大虚拟控制台数量.
-#define NR_SERIALS		2								// 串行终端数量
-#define NR_PTYS			4								// 伪终端数量
+#define MAX_CONSOLES	8				// 最大虚拟控制台数量.
+#define NR_SERIALS		2				// 串行终端数量
+#define NR_PTYS			4				// 伪终端数量
 
 extern int NR_CONSOLES;
 
 #include <termios.h>
 
-#define TTY_BUF_SIZE 1024								// tty缓冲区(缓冲队列)大小.
+#define TTY_BUF_SIZE 1024				// tty缓冲区(缓冲队列)大小.
 
-// tty字符缓冲队列数据结构.用于tty_struc结构中的读/写和辅助(规范)缓冲队列.
+/** tty字符缓冲队列数据结构.用于tty_struc结构中的读/写和辅助(规范)缓冲队列. */
 struct tty_queue {
-	unsigned long data;									// 队列缓冲区中含有字符行数值(不是当前字符数).对于串口终端,则存放串行端口地址.
-	unsigned long head;									// 缓冲区中数据头指针
-	unsigned long tail;									// 缓冲区中数据尾指针
-	struct task_struct * proc_list;						// 等待本队列的进程列表.
-	char buf[TTY_BUF_SIZE];								// 队列的缓冲区, TTY_BUF_SIZE=1024
+	unsigned long data;					// 队列缓冲区中含有字符行数值(不是当前字符数).对于串口终端,则存放串行端口地址.
+	unsigned long head;					// 缓冲区中数据头指针
+	unsigned long tail;					// 缓冲区中数据尾指针
+	struct task_struct * proc_list;		// 等待本队列的进程列表.
+	char buf[TTY_BUF_SIZE];				// 队列的缓冲区, TTY_BUF_SIZE=1024
 };
 
 #define IS_A_CONSOLE(min)			(((min) & 0xC0) == 0x00)	// 是一个控制终端.

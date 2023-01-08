@@ -95,6 +95,9 @@ extern int sys_lstat();         // 84 - 取符号链接文件状态。     （fs
 extern int sys_readlink();      // 85 - 读取符号链接文件信息。    （fs/stat.c）
 extern int sys_uselib();        // 86 - 选择共享库。            （fs/exec.c）
 
+extern int sys_iam();           // 87 - 实验使用。             （kernel/who.c）
+extern int sys_whoami();        // 88 - 实验使用。             （kernel/who.c）
+
 // 系统调用函数指针表.用于系统调用中断处理程序(int 0x80),作为跳转表.
 fn_ptr sys_call_table[] = { sys_setup, sys_exit, sys_fork, sys_read,
 sys_write, sys_open, sys_close, sys_waitpid, sys_creat, sys_link,
@@ -111,7 +114,7 @@ sys_getpgrp, sys_setsid, sys_sigaction, sys_sgetmask, sys_ssetmask,
 sys_setreuid,sys_setregid, sys_sigsuspend, sys_sigpending, sys_sethostname,
 sys_setrlimit, sys_getrlimit, sys_getrusage, sys_gettimeofday,
 sys_settimeofday, sys_getgroups, sys_setgroups, sys_select, sys_symlink,
-sys_lstat, sys_readlink, sys_uselib };
+sys_lstat, sys_readlink, sys_uselib, sys_iam, sys_whoami };
 
 /* So we don't have to do any more manual updating.... */
 /*　下面这样定义后,我们就无需手工更新系统调用数目了　*/

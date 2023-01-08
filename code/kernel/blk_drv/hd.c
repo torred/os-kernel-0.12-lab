@@ -200,22 +200,22 @@ int sys_setup(void * BIOS)
 	// 1个扇区最后两个字节应该是0xAA55来判断扇区中数据的有效性,从而可以知道扇区中位于偏移0x1BE开始处的分区表是否有效.若有效则将硬盘分区表信息
 	// 放入硬盘分区结构数组hd[]中.最后释放bh缓冲区.
 	for (drive = 0 ; drive < NR_HD ; drive++) {
-		if (!(bh = bread(0x300 + drive * 5, 0))) {								// 0x300,0x305是设备号.
+		if (!(bh = bread(0x300 + drive * 5, 0))) {						// 0x300,0x305是设备号.
 			printk("Unable to read partition table of drive %d\n\r",
 				drive);
 			panic("");
 		}
 		if (bh->b_data[510] != 0x55 || (unsigned char)
-		    bh->b_data[511] != 0xAA) {											// 判断硬盘标志0xAA55.
+		    bh->b_data[511] != 0xAA) {									// 判断硬盘标志0xAA55.
 			printk("Bad partition table on drive %d\n\r",drive);
 			panic("");
 		}
-		p = 0x1BE + (void *)bh->b_data;	 										// 分区表位于第1扇区0x1BE处.
+		p = 0x1BE + (void *)bh->b_data;	 								// 分区表位于第1扇区0x1BE处.
 		for (i = 1; i < 5; i++, p++) {
 			hd[i + 5 * drive].start_sect = p->start_sect;
 			hd[i + 5 * drive].nr_sects = p->nr_sects;
 		}
-		brelse(bh);																// 释放为存放硬盘数据块而申请的缓冲区.
+		brelse(bh);														// 释放为存放硬盘数据块而申请的缓冲区.
     }
 	// 现在再对每个分区中的数据块总数进行统计,并保存在硬盘分区总数据数组hd_sizes[]中.然后让设备数据块总数指针数组的本设备项指向该数组.
 	for (i = 0 ; i < 5 * MAX_HD ; i++) {
@@ -231,7 +231,7 @@ int sys_setup(void * BIOS)
 		printk(" Partition table%s ok.\n\r",(NR_HD > 1) ? "s":"");
 	
 	for (i = 0; i < NR_HD; i++)
-		Log(LOG_INFO_TYPE, " HD%d Info: cyl = %d, head = %d, sect = %d, ctl = %x\n", hd_info[i].cyl, hd_info[i].head, hd_info[i].sect, hd_info[i].ctl);
+		Log(LOG_INFO_TYPE, " HD Info: cyl = %d, head = %d, sect = %d, ctl = %x\n", hd_info[i].cyl, hd_info[i].head, hd_info[i].sect, hd_info[i].ctl);
 	
 	rd_load();																	// blk_drv/ramdisk.c
 	init_swapping();															// mm/swap.c

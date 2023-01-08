@@ -391,6 +391,12 @@ void do_exit(long code)
 	iput(current->library);
 	current->library = NULL;
 	current->state = TASK_ZOMBIE;
+
+	/*
+	*修改--退出一个进程
+	*/
+	fprintk(3,"%d\tE\t%d\n",current->pid,jiffies);
+
 	current->exit_code = code;
 	/*
 	 * Check to see if any process groups have become orphaned
@@ -604,6 +610,12 @@ repeat:
 		if (options & WNOHANG)
 			return 0;
 		current->state = TASK_INTERRUPTIBLE;
+
+		/*
+		*修改--当前进程 => 等待
+		*/
+		fprintk(3,"%d\tW\t%d\n",current->pid,jiffies);
+
 		oldblocked = current->blocked;
 		current->blocked &= ~(1 << (SIGCHLD - 1));
 		schedule();

@@ -16,13 +16,66 @@
 // 用于vsprintf,vprintf,vfprintf函数。
 #include <stdarg.h>
 #include <stddef.h>             			// 标准定义头文件。定义了NULL，offsetof(TYPE,MEMBER)。
+#include <linux/sched.h>
+#include <sys/stat.h>
 
 #include <linux/kernel.h>       			// 内核头文件。含有一些内核常用函数的原形定义。
 
 static char buf[1024];          			// 显示用临时缓冲区。
+static char logbuf[1024];
 
 // 函数vsprintf()定义在linux/kernel/vsprintf.c中
 extern int vsprintf(char * buf, const char * fmt, va_list args);
+
+int fprintk(int fd, const char * fmt, ...) {
+	va_list args;
+    int count;
+    struct file * file;
+    struct m_inode * inode;
+    va_start(args, fmt);
+    count=vsprintf(logbuf, fmt, args);
+    va_end(args);
+
+	/* 如果输出到stdout或stderr，直接调用sys_write即可 */
+    if (fd < 3)
+    {
+        __asm__("push %%fs\n\t"
+            "push %%ds\n\t"
+            "pop %%fs\n\t"
+            "pushl %0\n\t"
+        /* 注意对于Windows环境来说，是_logbuf,下同 */
+            "pushl $logbuf\n\t"
+            "pushl %1\n\t"
+        /* 注意对于Windows环境来说，是_sys_write,下同 */
+            "call sys_write\n\t"
+            "addl $8,%%esp\n\t"
+            "popl %0\n\t"
+            "pop %%fs"
+            ::"r" (count),"r" (fd):"ax","cx","dx");
+    }
+    else
+	/* 假定>=3的描述符都与文件关联。事实上，还存在很多其它情况，这里并没有考虑。*/
+    {
+    	/* 从进程0的文件描述符表中得到文件句柄 */
+        if (!(file=FIRST_TASK->filp[fd]))
+            return 0;
+        inode=file->f_inode;
+
+        __asm__("push %%fs\n\t"
+            "push %%ds\n\t"
+            "pop %%fs\n\t"
+            "pushl %0\n\t"
+            "pushl $logbuf\n\t"
+            "pushl %1\n\t"
+            "pushl %2\n\t"
+            "call file_write\n\t"
+            "addl $12,%%esp\n\t"
+            "popl %0\n\t"
+            "pop %%fs"
+            ::"r" (count),"r" (file),"r" (inode):"ax","cx","dx");
+    }
+    return count;
+}
 
 // 内核使用的显示函数.
 int printk(const char *fmt, ...)

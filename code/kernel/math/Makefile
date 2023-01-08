@@ -78,17 +78,18 @@ error.o: error.c ../../include/signal.h ../../include/sys/types.h \
  ../../include/linux/kernel.h ../../include/sys/param.h \
  ../../include/sys/time.h ../../include/time.h \
  ../../include/sys/resource.h
-get_put.o: get_put.c ../../include/signal.h ../../include/sys/types.h \
- ../../include/linux/math_emu.h ../../include/linux/sched.h \
- ../../include/linux/head.h ../../include/linux/fs.h \
- ../../include/linux/mm.h ../../include/linux/kernel.h \
- ../../include/sys/param.h ../../include/sys/time.h ../../include/time.h \
- ../../include/sys/resource.h ../../include/asm/segment.h
-math_emulate.o: math_emulate.c ../../include/signal.h \
- ../../include/sys/types.h ../../include/linux/math_emu.h \
+get_put.o: get_put.c ../../include/linux/math_emu.h \
  ../../include/linux/sched.h ../../include/linux/head.h \
- ../../include/linux/fs.h ../../include/linux/mm.h \
- ../../include/linux/kernel.h ../../include/sys/param.h \
+ ../../include/linux/fs.h ../../include/sys/types.h \
+ ../../include/linux/mm.h ../../include/linux/kernel.h \
+ ../../include/signal.h ../../include/sys/param.h \
+ ../../include/sys/time.h ../../include/time.h \
+ ../../include/sys/resource.h ../../include/asm/segment.h
+math_emulate.o: math_emulate.c ../../include/linux/math_emu.h \
+ ../../include/linux/sched.h ../../include/linux/head.h \
+ ../../include/linux/fs.h ../../include/sys/types.h \
+ ../../include/linux/mm.h ../../include/linux/kernel.h \
+ ../../include/signal.h ../../include/sys/param.h \
  ../../include/sys/time.h ../../include/time.h \
  ../../include/sys/resource.h ../../include/asm/segment.h
 mul.o: mul.c ../../include/linux/math_emu.h ../../include/linux/sched.h \

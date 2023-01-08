@@ -16,7 +16,7 @@ swap_dev=$4
 
 if [ -z "$swap_dev" ]; then
 	DEFAULT_MAJOR_SWAP=3
-	DEFAULT_MINOR_SWAP=4
+	DEFAULT_MINOR_SWAP=2
 else
 	DEFAULT_MAJOR_SWAP=${swap_dev:0:2}
 	DEFAULT_MINOR_SWAP=${swap_dev:2:3}

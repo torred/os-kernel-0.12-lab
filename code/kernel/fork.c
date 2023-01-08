@@ -134,6 +134,10 @@ int copy_process(int nr, long ebp, long edi, long esi, long gs, long none,
 	p->utime = p->stime = 0;				// 用户态时间和核心态运行时间.
 	p->cutime = p->cstime = 0;				// 子进程用户态和核心态运行时间.
 	p->start_time = jiffies;				// 进程开始运行时间(当前时间滴答数).
+
+	//新增修改
+	fprintk(3, "%d\tN\t%d\n", p->pid, jiffies);
+
 	// 再修改任务状态段TSS数据.由于系统给任务结构p分配了1页新内存,所以(PAGE_SIZE + (long) p)让esp0正好指向该页顶端.ss0:esp0用作程序在内核
 	// 态执行时的栈.另外,在第3章中我们已经知道,每个任务在GDT表中都有两个段描述符,一个是任务的TSS段描述符,另一个是任务的LDT表段描述符.下面语句就是
 	// 把GDT中本任务LDT段描述符的选择符保存在本任务的TSS段.当CPU执行切换任务时,会自动从TSS中把LDT段描述符的选择符加载到ldtr寄存器中.
@@ -202,6 +206,10 @@ int copy_process(int nr, long ebp, long edi, long esi, long gs, long none,
 	current->p_cptr = p;				// 让当前进程最新子进程指针指向新进程.
 	p->state = TASK_RUNNING;			/* do this last, just in case */        /* 设置进程状态为待运行状态栏 */
 	// Log(LOG_INFO_TYPE, "<<<<< fork new process current_pid = %d, child_pid = %d, nr = %d >>>>>\n", current->pid, p->pid, nr);
+
+	//新增修改
+	fprintk(3, "%d\tJ\t%d\n", p->pid, jiffies);
+
 	return last_pid;        			// 返回新进程号
 }
 

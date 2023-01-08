@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 ARCHIVES	Makefile	/^ARCHIVES=kernel\/kernel.o mm\/mm.o fs\/fs.o$/;"	m
-CLEAR_FILE	Makefile	/^CLEAR_FILE   = images\/Image images\/system images\/system.map images\/kernel images\/system.S images\/system.tmp images\/bootsect.map images\/setup.map tmp_make$/;"	m
+CLEAR_FILE	Makefile	/^CLEAR_FILE   = images\/Image images\/system images\/system.sym images\/system.map images\/system.s images\/kernel images\/bootsect.sym images\/bootsect.map images\/setup.sym images\/setup.map tmp_make$/;"	m
 DRIVERS	Makefile	/^DRIVERS =kernel\/blk_drv\/blk_drv.a kernel\/chr_drv\/chr_drv.a$/;"	m
 LIBS	Makefile	/^LIBS	=lib\/lib.a$/;"	m
 MATH	Makefile	/^MATH	=kernel\/math\/math.a$/;"	m
@@ -12,8 +12,24 @@ NM_FILE	Makefile	/^NM_FILE      = images\/system.map$/;"	m
 OBJDUMP_FILE	Makefile	/^OBJDUMP_FILE = images\/system.S$/;"	m
 RAMDISK	Makefile	/^RAMDISK      =  #-DRAMDISK=512$/;"	m
 CLEAR_FILE	boot/Makefile	/^CLEAR_FILE = bootsect bootsect.o setup setup.o head.o bootsect.pc setup.pc tmp_make$/;"	m
+_start	boot/bksc.s	/^_start:$/;"	l
+begbss	boot/bksc.s	/^begbss:$/;"	l
+begdata	boot/bksc.s	/^begdata:$/;"	l
+begtext	boot/bksc.s	/^begtext:$/;"	l
+boot_flag	boot/bksc.s	/^boot_flag:$/;"	l
+docr	boot/bksc.s	/^docr:$/;"	l
+dprnt	boot/bksc.s	/^dprnt:$/;"	l
+endbss	boot/bksc.s	/^endbss:/;"	l
+enddata	boot/bksc.s	/^enddata:$/;"	l
+endtext	boot/bksc.s	/^endtext:$/;"	l
+getkey	boot/bksc.s	/^getkey:$/;"	l
+line	boot/bksc.s	/^line:$/;"	l
+lt100	boot/bksc.s	/^lt100:$/;"	l
+prnt1	boot/bksc.s	/^prnt1:$/;"	l
+skip10	boot/bksc.s	/^skip10:$/;"	l
+spcing	boot/bksc.s	/^spcing:$/;"	l
 _start	boot/bootsect.s	/^_start:$/;"	l
-bad_rt	boot/bootsect.s	/^bad_rt:	$/;"	l
+bad_rt	boot/bootsect.s	/^bad_rt:$/;"	l
 begbss	boot/bootsect.s	/^begbss:$/;"	l
 begdata	boot/bootsect.s	/^begdata:$/;"	l
 begtext	boot/bootsect.s	/^begtext:$/;"	l
@@ -22,7 +38,7 @@ die	boot/bootsect.s	/^die:$/;"	l
 endbss	boot/bootsect.s	/^endbss:$/;"	l
 enddata	boot/bootsect.s	/^enddata:$/;"	l
 endtext	boot/bootsect.s	/^endtext:$/;"	l
-go	boot/bootsect.s	/^go:	mov	%cs, %ax		# 跳转到移动后代码执行的代码段寄存器cs = 0x9000$/;"	l
+go	boot/bootsect.s	/^go:$/;"	l
 head	boot/bootsect.s	/^head:$/;"	l
 kill_motor	boot/bootsect.s	/^kill_motor:$/;"	l
 load_setup	boot/bootsect.s	/^load_setup:$/;"	l
@@ -36,9 +52,9 @@ read_it	boot/bootsect.s	/^read_it:$/;"	l
 read_track	boot/bootsect.s	/^read_track:$/;"	l
 root_defined	boot/bootsect.s	/^root_defined:$/;"	l
 root_dev	boot/bootsect.s	/^root_dev:$/;"	l
-rp_read	boot/bootsect.s	/^rp_read:					# 重复读system模块$/;"	l
+rp_read	boot/bootsect.s	/^rp_read:                            \/* 重复读system模块 *\/$/;"	l
 sectors	boot/bootsect.s	/^sectors:$/;"	l
-sread	boot/bootsect.s	/^sread:	$/;"	l
+sread	boot/bootsect.s	/^sread:$/;"	l
 swap_dev	boot/bootsect.s	/^swap_dev:$/;"	l
 track	boot/bootsect.s	/^track:$/;"	l
 undef_root	boot/bootsect.s	/^undef_root:$/;"	l
@@ -47,7 +63,7 @@ after_page_tables	boot/head.s	/^after_page_tables:$/;"	l
 check_x87	boot/head.s	/^check_x87:$/;"	l
 gdt	boot/head.s	/^gdt:$/;"	l
 gdt_descr	boot/head.s	/^gdt_descr:$/;"	l
-idt	boot/head.s	/^idt:	.fill 	256,8,0		# idt is uninitialized	# 中断描述符表（空表）256项,每项8字节,填0.$/;"	l
+idt	boot/head.s	/^idt:$/;"	l
 idt_descr	boot/head.s	/^idt_descr:$/;"	l
 ignore_int	boot/head.s	/^ignore_int:$/;"	l
 int_msg	boot/head.s	/^int_msg:$/;"	l
@@ -59,10 +75,10 @@ pg_dir	boot/head.s	/^pg_dir:$/;"	l
 rp_sidt	boot/head.s	/^rp_sidt:$/;"	l
 setup_gdt	boot/head.s	/^setup_gdt:$/;"	l
 setup_idt	boot/head.s	/^setup_idt:$/;"	l
-setup_paging	boot/head.s	/^setup_paging:				# 首先对5页内存(1页目录+4页页表)清零.$/;"	l
+setup_paging	boot/head.s	/^setup_paging:                   \/* 首先对5页内存(1页目录+4页页表)清零. *\/$/;"	l
 startup_32	boot/head.s	/^startup_32:$/;"	l
 tmp_floppy_area	boot/head.s	/^tmp_floppy_area:$/;"	l
-_start	boot/setup.s	/^_start:$/;"	l
+_start	boot/setup.s	/^_start:                         \/* phaddr: 0x90205 *\/$/;"	l
 begbss	boot/setup.s	/^begbss:$/;"	l
 begdata	boot/setup.s	/^begdata:$/;"	l
 begtext	boot/setup.s	/^begtext:$/;"	l
@@ -205,6 +221,13 @@ pipe_ioctl	fs/pipe.c	/^int pipe_ioctl(struct m_inode *pino, int cmd, int arg)$/;
 read_pipe	fs/pipe.c	/^int read_pipe(struct m_inode * inode, char * buf, int count)$/;"	f
 sys_pipe	fs/pipe.c	/^int sys_pipe(unsigned long * fildes)$/;"	f
 write_pipe	fs/pipe.c	/^int write_pipe(struct m_inode * inode, char * buf, int count)$/;"	f
+get_hdinfo	fs/proc.c	/^int get_hdinfo() {$/;"	f
+get_inodeinfo	fs/proc.c	/^int get_inodeinfo() {$/;"	f
+get_psinfo	fs/proc.c	/^int get_psinfo() {$/;"	f
+proc_buf	fs/proc.c	/^char proc_buf[4096]={'\\0'};$/;"	v
+proc_read	fs/proc.c	/^int proc_read(int dev, unsigned long * pos, char* buf, int count) {$/;"	f
+set_bit	fs/proc.c	/^#define set_bit(/;"	d	file:
+sprintf	fs/proc.c	/^int sprintf(char * buf, const char * fmt, ...) {$/;"	f
 sys_lseek	fs/read_write.c	/^int sys_lseek(unsigned int fd, off_t offset, int origin)$/;"	f
 sys_read	fs/read_write.c	/^int sys_read(unsigned int fd, char * buf, int count)$/;"	f
 sys_write	fs/read_write.c	/^int sys_write(unsigned int fd, char * buf, int count)$/;"	f
@@ -213,15 +236,15 @@ check_ex	fs/select.c	/^static int check_ex(select_table * wait, struct m_inode *
 check_in	fs/select.c	/^static int check_in(select_table * wait, struct m_inode * inode)$/;"	f	file:
 check_out	fs/select.c	/^static int check_out(select_table * wait, struct m_inode * inode)$/;"	f	file:
 do_select	fs/select.c	/^int do_select(fd_set in, fd_set out, fd_set ex,$/;"	f
-entry	fs/select.c	/^	wait_entry entry[NR_OPEN * 3];$/;"	m	struct:__anon9	file:
+entry	fs/select.c	/^	wait_entry entry[NR_OPEN * 3];$/;"	m	struct:__anon12	file:
 free_wait	fs/select.c	/^static void free_wait(select_table * p)$/;"	f	file:
 get_tty	fs/select.c	/^static struct tty_struct * get_tty(struct m_inode * inode)$/;"	f	file:
-nr	fs/select.c	/^	int nr;$/;"	m	struct:__anon9	file:
-old_task	fs/select.c	/^	struct task_struct * old_task;$/;"	m	struct:__anon8	typeref:struct:__anon8::task_struct	file:
-select_table	fs/select.c	/^} select_table;$/;"	t	typeref:struct:__anon9	file:
+nr	fs/select.c	/^	int nr;$/;"	m	struct:__anon12	file:
+old_task	fs/select.c	/^	struct task_struct * old_task;$/;"	m	struct:__anon11	typeref:struct:__anon11::task_struct	file:
+select_table	fs/select.c	/^} select_table;$/;"	t	typeref:struct:__anon12	file:
 sys_select	fs/select.c	/^int sys_select( unsigned long *buffer )$/;"	f
-wait_address	fs/select.c	/^	struct task_struct ** wait_address;$/;"	m	struct:__anon8	typeref:struct:__anon8::task_struct	file:
-wait_entry	fs/select.c	/^} wait_entry;$/;"	t	typeref:struct:__anon8	file:
+wait_address	fs/select.c	/^	struct task_struct ** wait_address;$/;"	m	struct:__anon11	typeref:struct:__anon11::task_struct	file:
+wait_entry	fs/select.c	/^} wait_entry;$/;"	t	typeref:struct:__anon11	file:
 cp_stat	fs/stat.c	/^static void cp_stat(struct m_inode * inode, struct stat * statbuf)$/;"	f	file:
 sys_fstat	fs/stat.c	/^int sys_fstat(unsigned int fd, struct stat * statbuf)$/;"	f
 sys_lstat	fs/stat.c	/^int sys_lstat(char * filename, struct stat * statbuf)$/;"	f
@@ -293,12 +316,12 @@ a_text	include/a.out.h	/^  unsigned a_text;		\/* length of text, in bytes *\/$/;
 a_trsize	include/a.out.h	/^  unsigned a_trsize;		\/* length of relocation info for text, in bytes *\/$/;"	m	struct:exec
 exec	include/a.out.h	/^struct exec {$/;"	s
 n_desc	include/a.out.h	/^  short n_desc;$/;"	m	struct:nlist
-n_name	include/a.out.h	/^    char *n_name;$/;"	m	union:nlist::__anon7
-n_next	include/a.out.h	/^    struct nlist *n_next;$/;"	m	union:nlist::__anon7	typeref:struct:nlist::__anon7::nlist
+n_name	include/a.out.h	/^    char *n_name;$/;"	m	union:nlist::__anon1
+n_next	include/a.out.h	/^    struct nlist *n_next;$/;"	m	union:nlist::__anon1	typeref:struct:nlist::__anon1::nlist
 n_other	include/a.out.h	/^  char n_other;$/;"	m	struct:nlist
-n_strx	include/a.out.h	/^    long n_strx;$/;"	m	union:nlist::__anon7
+n_strx	include/a.out.h	/^    long n_strx;$/;"	m	union:nlist::__anon1
 n_type	include/a.out.h	/^  unsigned char n_type;$/;"	m	struct:nlist
-n_un	include/a.out.h	/^  } n_un;                       \/\/ 该字节分成3个字段，146--154行是相应字段的屏蔽码。$/;"	m	struct:nlist	typeref:union:nlist::__anon7
+n_un	include/a.out.h	/^  } n_un;                       \/\/ 该字节分成3个字段，146--154行是相应字段的屏蔽码。$/;"	m	struct:nlist	typeref:union:nlist::__anon1
 n_value	include/a.out.h	/^  unsigned long n_value;$/;"	m	struct:nlist
 nlist	include/a.out.h	/^struct nlist {$/;"	s
 r_address	include/a.out.h	/^  int r_address;$/;"	m	struct:relocation_info
@@ -528,12 +551,12 @@ WRITE	include/linux/fs.h	/^#define WRITE /;"	d
 WRITEA	include/linux/fs.h	/^#define WRITEA /;"	d
 Z_MAP_SLOTS	include/linux/fs.h	/^#define Z_MAP_SLOTS /;"	d
 _FS_H	include/linux/fs.h	/^#define _FS_H$/;"	d
-b_blocknr	include/linux/fs.h	/^	unsigned long b_blocknr;			\/* block number *\/$/;"	m	struct:buffer_head
-b_count	include/linux/fs.h	/^	unsigned char b_count;				\/* users using this block *\/$/;"	m	struct:buffer_head
-b_data	include/linux/fs.h	/^	char * b_data;						\/* pointer to data block (1024 bytes) *\/	$/;"	m	struct:buffer_head
-b_dev	include/linux/fs.h	/^	unsigned short b_dev;				\/* device (0 = free) *\/$/;"	m	struct:buffer_head
-b_dirt	include/linux/fs.h	/^	unsigned char b_dirt;				\/* 0-clean, 1-dirty *\/	$/;"	m	struct:buffer_head
-b_lock	include/linux/fs.h	/^	unsigned char b_lock;				\/* 0 - ok, 1 -locked *\/	$/;"	m	struct:buffer_head
+b_blocknr	include/linux/fs.h	/^	unsigned long b_blocknr;			\/* 块号 block number *\/$/;"	m	struct:buffer_head
+b_count	include/linux/fs.h	/^	unsigned char b_count;				\/* 使用用户数 users using this block *\/$/;"	m	struct:buffer_head
+b_data	include/linux/fs.h	/^	char * b_data;						\/* 数据指针 pointer to data block (1024 bytes) *\/$/;"	m	struct:buffer_head
+b_dev	include/linux/fs.h	/^	unsigned short b_dev;				\/* 数据源的设备号 device (0 = free) *\/$/;"	m	struct:buffer_head
+b_dirt	include/linux/fs.h	/^	unsigned char b_dirt;				\/* 修改标志：0未修改，1已修改 0-clean, 1-dirty *\/$/;"	m	struct:buffer_head
+b_lock	include/linux/fs.h	/^	unsigned char b_lock;				\/* 缓冲区是否被锁定 0 - ok, 1 -locked *\/$/;"	m	struct:buffer_head
 b_next	include/linux/fs.h	/^	struct buffer_head * b_next;		\/* hash队列上的后一块 *\/$/;"	m	struct:buffer_head	typeref:struct:buffer_head::buffer_head
 b_next_free	include/linux/fs.h	/^	struct buffer_head * b_next_free;	\/* 空闲表上的后一块 *\/$/;"	m	struct:buffer_head	typeref:struct:buffer_head::buffer_head
 b_prev	include/linux/fs.h	/^	struct buffer_head * b_prev;		\/* hash队列上的前一块 *\/$/;"	m	struct:buffer_head	typeref:struct:buffer_head::buffer_head
@@ -644,16 +667,16 @@ WIN_WRITE	include/linux/hdreg.h	/^#define WIN_WRITE	/;"	d
 WRERR_STAT	include/linux/hdreg.h	/^#define WRERR_STAT	/;"	d
 _HDREG_H	include/linux/hdreg.h	/^#define _HDREG_H$/;"	d
 boot_ind	include/linux/hdreg.h	/^	unsigned char boot_ind;		\/* 0x80 - active (unused) *\/$/;"	m	struct:partition
-cyl	include/linux/hdreg.h	/^	unsigned char cyl;		\/* ? *\/$/;"	m	struct:partition
+cyl	include/linux/hdreg.h	/^	unsigned char cyl;			\/* 起始柱面 *\/$/;"	m	struct:partition
 end_cyl	include/linux/hdreg.h	/^	unsigned char end_cyl;		\/* ? *\/$/;"	m	struct:partition
 end_head	include/linux/hdreg.h	/^	unsigned char end_head;		\/* ? *\/$/;"	m	struct:partition
 end_sector	include/linux/hdreg.h	/^	unsigned char end_sector;	\/* ? *\/$/;"	m	struct:partition
-head	include/linux/hdreg.h	/^	unsigned char head;		\/* ? *\/$/;"	m	struct:partition
+head	include/linux/hdreg.h	/^	unsigned char head;			\/* 起始磁头 *\/$/;"	m	struct:partition
 nr_sects	include/linux/hdreg.h	/^	unsigned int nr_sects;		\/* nr of sectors in partition *\/$/;"	m	struct:partition
 partition	include/linux/hdreg.h	/^struct partition {$/;"	s
-sector	include/linux/hdreg.h	/^	unsigned char sector;		\/* ? *\/$/;"	m	struct:partition
+sector	include/linux/hdreg.h	/^	unsigned char sector;		\/* 起始扇区 *\/$/;"	m	struct:partition
 start_sect	include/linux/hdreg.h	/^	unsigned int start_sect;	\/* starting sector counting from 0 *\/$/;"	m	struct:partition
-sys_ind	include/linux/hdreg.h	/^	unsigned char sys_ind;		\/* ? *\/$/;"	m	struct:partition
+sys_ind	include/linux/hdreg.h	/^	unsigned char sys_ind;		\/* 系统标示，0x81:Linux minix, 0x82:Solaris swap *\/$/;"	m	struct:partition
 GDT_CODE	include/linux/head.h	/^#define GDT_CODE /;"	d
 GDT_DATA	include/linux/head.h	/^#define GDT_DATA /;"	d
 GDT_NUL	include/linux/head.h	/^#define GDT_NUL /;"	d
@@ -725,28 +748,28 @@ ___orig_eax	include/linux/math_emu.h	/^	long ___orig_eax;               \/\/ 如
 ___orig_eip	include/linux/math_emu.h	/^	long ___orig_eip;               \/\/ 临时保存原EIP的地方。$/;"	m	struct:info
 ___ss	include/linux/math_emu.h	/^	long ___ss;$/;"	m	struct:info
 ___sys_call_ret	include/linux/math_emu.h	/^	long ___sys_call_ret;           \/\/ 中断7返回时将去执行系统调用的返回处理代码。$/;"	m	struct:info
-a	include/linux/math_emu.h	/^	long a,b;               \/\/ 有效数。$/;"	m	struct:__anon3
-a	include/linux/math_emu.h	/^	long a,b;$/;"	m	struct:__anon5
+a	include/linux/math_emu.h	/^	long a,b;               \/\/ 有效数。$/;"	m	struct:__anon4
 a	include/linux/math_emu.h	/^	long a,b;$/;"	m	struct:__anon6
+a	include/linux/math_emu.h	/^	long a,b;$/;"	m	struct:__anon7
 b	include/linux/math_emu.h	/^	int b:1;                \/\/ 忙。$/;"	m	struct:swd
-b	include/linux/math_emu.h	/^	long a,b;               \/\/ 有效数。$/;"	m	struct:__anon3
-b	include/linux/math_emu.h	/^	long a,b;$/;"	m	struct:__anon5
+b	include/linux/math_emu.h	/^	long a,b;               \/\/ 有效数。$/;"	m	struct:__anon4
 b	include/linux/math_emu.h	/^	long a,b;$/;"	m	struct:__anon6
+b	include/linux/math_emu.h	/^	long a,b;$/;"	m	struct:__anon7
 c0	include/linux/math_emu.h	/^	int c0:1;               \/\/ 条件位。$/;"	m	struct:swd
 c1	include/linux/math_emu.h	/^	int c1:1;$/;"	m	struct:swd
 c2	include/linux/math_emu.h	/^	int c2:1;$/;"	m	struct:swd
 c3	include/linux/math_emu.h	/^	int c3:1;$/;"	m	struct:swd
 de	include/linux/math_emu.h	/^	int de:1;               \/\/ 非规格化。$/;"	m	struct:swd
-exponent	include/linux/math_emu.h	/^	short exponent;         \/\/ 指数。$/;"	m	struct:__anon3
 exponent	include/linux/math_emu.h	/^	short exponent;         \/\/ 指数。$/;"	m	struct:__anon4
+exponent	include/linux/math_emu.h	/^	short exponent;         \/\/ 指数。$/;"	m	struct:__anon5
 ie	include/linux/math_emu.h	/^	int ie:1;               \/\/ 无效操作。$/;"	m	struct:swd
 info	include/linux/math_emu.h	/^struct info {$/;"	s
 ir	include/linux/math_emu.h	/^	int ir:1;               \/\/ $/;"	m	struct:swd
-long_real	include/linux/math_emu.h	/^} long_real;$/;"	t	typeref:struct:__anon5
-m0	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon4
-m1	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon4
-m2	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon4
-m3	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon4
+long_real	include/linux/math_emu.h	/^} long_real;$/;"	t	typeref:struct:__anon6
+m0	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon5
+m1	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon5
+m2	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon5
+m3	include/linux/math_emu.h	/^	short m0,m1,m2,m3;      \/\/ 有效数。$/;"	m	struct:__anon5
 math_abort	include/linux/math_emu.h	/^#define math_abort(/;"	d
 oe	include/linux/math_emu.h	/^	int oe:1;               \/\/ 上溢出。$/;"	m	struct:swd
 pe	include/linux/math_emu.h	/^	int pe:1;               \/\/ 精度。$/;"	m	struct:swd
@@ -763,11 +786,11 @@ set_UE	include/linux/math_emu.h	/^#define set_UE(/;"	d
 set_ZE	include/linux/math_emu.h	/^#define set_ZE(/;"	d
 sf	include/linux/math_emu.h	/^	int sf:1;               \/\/ 栈出错标志。$/;"	m	struct:swd
 short_real	include/linux/math_emu.h	/^typedef long short_real;        \/\/ 短实型。$/;"	t
-sign	include/linux/math_emu.h	/^	short sign;$/;"	m	struct:__anon6
+sign	include/linux/math_emu.h	/^	short sign;$/;"	m	struct:__anon7
 swd	include/linux/math_emu.h	/^struct swd {$/;"	s
-temp_int	include/linux/math_emu.h	/^} temp_int;                     \/\/ 临时整型。$/;"	t	typeref:struct:__anon6
-temp_real	include/linux/math_emu.h	/^} temp_real;$/;"	t	typeref:struct:__anon3
-temp_real_unaligned	include/linux/math_emu.h	/^} temp_real_unaligned;$/;"	t	typeref:struct:__anon4
+temp_int	include/linux/math_emu.h	/^} temp_int;                     \/\/ 临时整型。$/;"	t	typeref:struct:__anon7
+temp_real	include/linux/math_emu.h	/^} temp_real;$/;"	t	typeref:struct:__anon4
+temp_real_unaligned	include/linux/math_emu.h	/^} temp_real_unaligned;$/;"	t	typeref:struct:__anon5
 top	include/linux/math_emu.h	/^	int top:3;              \/\/ 用于指明当前哪个80位寄存器位于栈顶。$/;"	m	struct:swd
 ue	include/linux/math_emu.h	/^	int ue:1;               \/\/ 下溢出。$/;"	m	struct:swd
 ze	include/linux/math_emu.h	/^	int ze:1;               \/\/ 除零。$/;"	m	struct:swd
@@ -797,117 +820,117 @@ HZ	include/linux/sched.h	/^#define HZ /;"	d
 INIT_TASK	include/linux/sched.h	/^#define INIT_TASK /;"	d
 LAST_TASK	include/linux/sched.h	/^#define LAST_TASK /;"	d
 LIBRARY_OFFSET	include/linux/sched.h	/^#define LIBRARY_OFFSET /;"	d
-LIBRARY_SIZE	include/linux/sched.h	/^#define LIBRARY_SIZE	/;"	d
-NR_TASKS	include/linux/sched.h	/^#define NR_TASKS	/;"	d
+LIBRARY_SIZE	include/linux/sched.h	/^#define LIBRARY_SIZE /;"	d
+NR_TASKS	include/linux/sched.h	/^#define NR_TASKS /;"	d
 NULL	include/linux/sched.h	/^#define NULL /;"	d
 PAGE_ALIGN	include/linux/sched.h	/^#define PAGE_ALIGN(/;"	d
-PF_ALIGNWARN	include/linux/sched.h	/^#define PF_ALIGNWARN	/;"	d
-TASK_INTERRUPTIBLE	include/linux/sched.h	/^#define TASK_INTERRUPTIBLE	/;"	d
-TASK_RUNNING	include/linux/sched.h	/^#define TASK_RUNNING	/;"	d
-TASK_SIZE	include/linux/sched.h	/^#define TASK_SIZE	/;"	d
-TASK_STOPPED	include/linux/sched.h	/^#define TASK_STOPPED	/;"	d
-TASK_UNINTERRUPTIBLE	include/linux/sched.h	/^#define TASK_UNINTERRUPTIBLE	/;"	d
-TASK_ZOMBIE	include/linux/sched.h	/^#define TASK_ZOMBIE	/;"	d
+PF_ALIGNWARN	include/linux/sched.h	/^#define PF_ALIGNWARN /;"	d
+TASK_INTERRUPTIBLE	include/linux/sched.h	/^#define TASK_INTERRUPTIBLE /;"	d
+TASK_RUNNING	include/linux/sched.h	/^#define TASK_RUNNING /;"	d
+TASK_SIZE	include/linux/sched.h	/^#define TASK_SIZE /;"	d
+TASK_STOPPED	include/linux/sched.h	/^#define TASK_STOPPED /;"	d
+TASK_UNINTERRUPTIBLE	include/linux/sched.h	/^#define TASK_UNINTERRUPTIBLE /;"	d
+TASK_ZOMBIE	include/linux/sched.h	/^#define TASK_ZOMBIE /;"	d
 _LDT	include/linux/sched.h	/^#define _LDT(/;"	d
 _SCHED_H	include/linux/sched.h	/^#define _SCHED_H$/;"	d
 _TSS	include/linux/sched.h	/^#define _TSS(/;"	d
 _get_base	include/linux/sched.h	/^#define _get_base(/;"	d
 _set_base	include/linux/sched.h	/^#define _set_base(/;"	d
 _set_limit	include/linux/sched.h	/^#define _set_limit(/;"	d
-alarm	include/linux/sched.h	/^	unsigned long alarm;				\/\/ 报警定时值(滴答数)$/;"	m	struct:task_struct
-back_link	include/linux/sched.h	/^	long	back_link;			\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-blocked	include/linux/sched.h	/^	long blocked;						\/\/ 进程信号屏蔽码(对应信号位图)$/;"	m	struct:task_struct
-brk	include/linux/sched.h	/^	unsigned long brk;					\/\/ 总长度(字节数)$/;"	m	struct:task_struct
-close_on_exec	include/linux/sched.h	/^	unsigned long close_on_exec;		\/\/ 执行时关闭文件句柄位图标志.(include\/fcntl.h)$/;"	m	struct:task_struct
-counter	include/linux/sched.h	/^	long counter;						\/\/ 任务运行时间计数(递减)(滴答数),运行时间片$/;"	m	struct:task_struct
-cr3	include/linux/sched.h	/^	long	cr3;$/;"	m	struct:tss_struct
-cs	include/linux/sched.h	/^	long	cs;					\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-cstime	include/linux/sched.h	/^	long cstime;						\/\/ 子进程系统态运行时间$/;"	m	struct:task_struct
-cutime	include/linux/sched.h	/^	long cutime;						\/\/ 子进程用户态运行时间$/;"	m	struct:task_struct
-cwd	include/linux/sched.h	/^	long	cwd;            	\/\/ 控制字（Control word）。$/;"	m	struct:i387_struct
-ds	include/linux/sched.h	/^	long	ds;					\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-eax	include/linux/sched.h	/^	long	eax;$/;"	m	struct:tss_struct
-ebp	include/linux/sched.h	/^	long	ebp;$/;"	m	struct:tss_struct
-ebx	include/linux/sched.h	/^	long	ebx;$/;"	m	struct:tss_struct
-ecx	include/linux/sched.h	/^	long	ecx;$/;"	m	struct:tss_struct
-edi	include/linux/sched.h	/^	long	edi;$/;"	m	struct:tss_struct
-edx	include/linux/sched.h	/^	long	edx;$/;"	m	struct:tss_struct
-eflags	include/linux/sched.h	/^	long	eflags;$/;"	m	struct:tss_struct
-egid	include/linux/sched.h	/^	unsigned short egid;				\/\/ 有效级id$/;"	m	struct:task_struct
-eip	include/linux/sched.h	/^	long	eip;$/;"	m	struct:tss_struct
-end_code	include/linux/sched.h	/^	unsigned long end_code;				\/\/ 代码长度(字节数)$/;"	m	struct:task_struct
-end_data	include/linux/sched.h	/^	unsigned long end_data;				\/\/ 代码长度+数据长度(字节数)$/;"	m	struct:task_struct
-es	include/linux/sched.h	/^	long	es;					\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-esi	include/linux/sched.h	/^	long	esi;$/;"	m	struct:tss_struct
-esp	include/linux/sched.h	/^	long	esp;$/;"	m	struct:tss_struct
-esp0	include/linux/sched.h	/^	long	esp0;$/;"	m	struct:tss_struct
-esp1	include/linux/sched.h	/^	long	esp1;$/;"	m	struct:tss_struct
-esp2	include/linux/sched.h	/^	long	esp2;$/;"	m	struct:tss_struct
-euid	include/linux/sched.h	/^	unsigned short euid;				\/\/ 有效用户id$/;"	m	struct:task_struct
-executable	include/linux/sched.h	/^	struct m_inode * executable;		\/\/ 执行文件i节点结构指针$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
-exit_code	include/linux/sched.h	/^	int exit_code;						\/\/ 任务执行停止的退出码,其父进程会取.$/;"	m	struct:task_struct
-fcs	include/linux/sched.h	/^	long	fcs;            	\/\/ 协处理器代码段寄存器。$/;"	m	struct:i387_struct
-filp	include/linux/sched.h	/^	struct file * filp[NR_OPEN];		\/\/ 文件结构指针表,最多32项.表项号即是文件描述符的值$/;"	m	struct:task_struct	typeref:struct:task_struct::file
-fip	include/linux/sched.h	/^	long	fip;            	\/\/ 协处理器代码指针。$/;"	m	struct:i387_struct
-flags	include/linux/sched.h	/^	unsigned int flags;					\/\/ 各进程的标志$/;"	m	struct:task_struct
-fn_ptr	include/linux/sched.h	/^typedef int (*fn_ptr)();			\/\/ 定义函数指针类型.$/;"	t
-foo	include/linux/sched.h	/^	long	foo;            	\/\/ 内存操作数的偏移位置。$/;"	m	struct:i387_struct
-fos	include/linux/sched.h	/^	long	fos;            	\/\/ 内存操作数的段值。$/;"	m	struct:i387_struct
-fs	include/linux/sched.h	/^	long	fs;					\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+alarm	include/linux/sched.h	/^    unsigned long alarm;                \/* 报警定时值(滴答数) (4B) *\/$/;"	m	struct:task_struct
+back_link	include/linux/sched.h	/^    long    back_link;          \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+blocked	include/linux/sched.h	/^    long blocked;                       \/* 进程信号屏蔽码(对应信号位图) (4B) *\/$/;"	m	struct:task_struct
+brk	include/linux/sched.h	/^    unsigned long brk;                  \/* 总长度(字节数) (4B) *\/$/;"	m	struct:task_struct
+close_on_exec	include/linux/sched.h	/^    unsigned long close_on_exec;        \/* 执行时关闭文件句柄位图标志.(include\/fcntl.h) (4B) *\/$/;"	m	struct:task_struct
+counter	include/linux/sched.h	/^    long counter;                       \/* 任务运行时间计数(递减)(滴答数),运行时间片 (4B) *\/$/;"	m	struct:task_struct
+cr3	include/linux/sched.h	/^    long    cr3;$/;"	m	struct:tss_struct
+cs	include/linux/sched.h	/^    long    cs;                 \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+cstime	include/linux/sched.h	/^    long cstime;                        \/* 子进程系统态运行时间 (4B) *\/$/;"	m	struct:task_struct
+cutime	include/linux/sched.h	/^    long cutime;                        \/* 子进程用户态运行时间 (4B) *\/$/;"	m	struct:task_struct
+cwd	include/linux/sched.h	/^    long    cwd;                \/* 控制字(Control word) *\/$/;"	m	struct:i387_struct
+ds	include/linux/sched.h	/^    long    ds;                 \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+eax	include/linux/sched.h	/^    long    eax;$/;"	m	struct:tss_struct
+ebp	include/linux/sched.h	/^    long    ebp;$/;"	m	struct:tss_struct
+ebx	include/linux/sched.h	/^    long    ebx;$/;"	m	struct:tss_struct
+ecx	include/linux/sched.h	/^    long    ecx;$/;"	m	struct:tss_struct
+edi	include/linux/sched.h	/^    long    edi;$/;"	m	struct:tss_struct
+edx	include/linux/sched.h	/^    long    edx;$/;"	m	struct:tss_struct
+eflags	include/linux/sched.h	/^    long    eflags;$/;"	m	struct:tss_struct
+egid	include/linux/sched.h	/^    unsigned short egid;                \/* 有效级id (2B) *\/$/;"	m	struct:task_struct
+eip	include/linux/sched.h	/^    long    eip;$/;"	m	struct:tss_struct
+end_code	include/linux/sched.h	/^    unsigned long end_code;             \/* 代码长度(字节数) (4B) *\/$/;"	m	struct:task_struct
+end_data	include/linux/sched.h	/^    unsigned long end_data;             \/* 代码长度+数据长度(字节数) (4B) *\/$/;"	m	struct:task_struct
+es	include/linux/sched.h	/^    long    es;                 \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+esi	include/linux/sched.h	/^    long    esi;$/;"	m	struct:tss_struct
+esp	include/linux/sched.h	/^    long    esp;$/;"	m	struct:tss_struct
+esp0	include/linux/sched.h	/^    long    esp0;$/;"	m	struct:tss_struct
+esp1	include/linux/sched.h	/^    long    esp1;$/;"	m	struct:tss_struct
+esp2	include/linux/sched.h	/^    long    esp2;$/;"	m	struct:tss_struct
+euid	include/linux/sched.h	/^    unsigned short euid;                \/* 有效用户id (2B) *\/$/;"	m	struct:task_struct
+executable	include/linux/sched.h	/^    struct m_inode * executable;        \/* 执行文件i节点结构指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
+exit_code	include/linux/sched.h	/^    int exit_code;                      \/* 任务执行停止的退出码,其父进程会取 (4B) *\/$/;"	m	struct:task_struct
+fcs	include/linux/sched.h	/^    long    fcs;                \/* 协处理器代码段寄存器 *\/$/;"	m	struct:i387_struct
+filp	include/linux/sched.h	/^    struct file * filp[NR_OPEN];        \/* 文件结构指针表,最多32项.表项号即是文件描述符的值 (4*20=80B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::file
+fip	include/linux/sched.h	/^    long    fip;                \/* 协处理器代码指针 *\/$/;"	m	struct:i387_struct
+flags	include/linux/sched.h	/^    unsigned int flags;                 \/* 各进程的标志 (4B) *\/$/;"	m	struct:task_struct
+fn_ptr	include/linux/sched.h	/^typedef int (*fn_ptr)();            \/* 定义函数指针类型. *\/$/;"	t
+foo	include/linux/sched.h	/^    long    foo;                \/* 内存操作数的偏移位置 *\/$/;"	m	struct:i387_struct
+fos	include/linux/sched.h	/^    long    fos;                \/* 内存操作数的段值 *\/$/;"	m	struct:i387_struct
+fs	include/linux/sched.h	/^    long    fs;                 \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
 get_base	include/linux/sched.h	/^#define get_base(/;"	d
 get_limit	include/linux/sched.h	/^#define get_limit(/;"	d
-gid	include/linux/sched.h	/^	unsigned short gid;					\/\/ 组标识号(级id)$/;"	m	struct:task_struct
-groups	include/linux/sched.h	/^	int	groups[NGROUPS];				\/\/ 进程所属组号.一个进程可属于多个组$/;"	m	struct:task_struct
-gs	include/linux/sched.h	/^	long	gs;					\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-i387	include/linux/sched.h	/^	struct i387_struct i387;$/;"	m	struct:tss_struct	typeref:struct:tss_struct::i387_struct
+gid	include/linux/sched.h	/^    unsigned short gid;                 \/* 组标识号(级id) (2B) *\/$/;"	m	struct:task_struct
+groups	include/linux/sched.h	/^    int groups[NGROUPS];                \/* 进程所属组号.一个进程可属于多个组 (32*4=128B) *\/$/;"	m	struct:task_struct
+gs	include/linux/sched.h	/^    long    gs;                 \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+i387	include/linux/sched.h	/^    struct i387_struct i387;$/;"	m	struct:tss_struct	typeref:struct:tss_struct::i387_struct
 i387_struct	include/linux/sched.h	/^struct i387_struct {$/;"	s
-ldt	include/linux/sched.h	/^	long	ldt;				\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-ldt	include/linux/sched.h	/^	struct desc_struct ldt[3];			\/\/ 局部描述符表, 0 - 空,1 - 代码段cs,2 - 数据和堆栈段ds&ss$/;"	m	struct:task_struct	typeref:struct:task_struct::desc_struct
-leader	include/linux/sched.h	/^	long leader;						\/\/ 会话首领$/;"	m	struct:task_struct
-library	include/linux/sched.h	/^	struct m_inode * library;			\/\/ 被加载库文件i节点结构指针$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
+ldt	include/linux/sched.h	/^    long    ldt;                \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+ldt	include/linux/sched.h	/^    struct desc_struct ldt[3];          \/* 局部描述符表, 0 - 空,1 - 代码段cs,2 - 数据和堆栈段ds&ss (24B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::desc_struct
+leader	include/linux/sched.h	/^    long leader;                        \/* 会话首领 (4B) *\/$/;"	m	struct:task_struct
+library	include/linux/sched.h	/^    struct m_inode * library;           \/* 被加载库文件i节点结构指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
 lldt	include/linux/sched.h	/^#define lldt(/;"	d
 ltr	include/linux/sched.h	/^#define ltr(/;"	d
-p_cptr	include/linux/sched.h	/^	struct task_struct *p_cptr;			\/\/ 指向最新子进程的指针$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
-p_osptr	include/linux/sched.h	/^	struct task_struct *p_osptr;		\/\/ 指向比自己早创建的相邻进程的指针$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
-p_pptr	include/linux/sched.h	/^	struct task_struct *p_pptr;			\/\/ 指向父进程的指针$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
-p_ysptr	include/linux/sched.h	/^	struct task_struct *p_ysptr;		\/\/ 指向比自己后创建的相邻进程的指针$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
-pgrp	include/linux/sched.h	/^	long pgrp;							\/\/ 进程组号$/;"	m	struct:task_struct
-pid	include/linux/sched.h	/^	long pid;							\/\/ 进程标识号(进程号)$/;"	m	struct:task_struct
-priority	include/linux/sched.h	/^	long priority;						\/\/ 优先数.任务开始运行时counter=priority,越大运行越长$/;"	m	struct:task_struct
-pwd	include/linux/sched.h	/^	struct m_inode * pwd;				\/\/ 当前工作目录i节点结构指针$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
-rlim	include/linux/sched.h	/^	struct rlimit rlim[RLIM_NLIMITS];	\/\/ 进程资源使用统计数组.$/;"	m	struct:task_struct	typeref:struct:task_struct::rlimit
-root	include/linux/sched.h	/^	struct m_inode * root;				\/\/ 根目录i节点结构指针$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
-session	include/linux/sched.h	/^	long session;						\/\/ 会话号$/;"	m	struct:task_struct
+p_cptr	include/linux/sched.h	/^    struct task_struct *p_cptr;         \/* 指向最新子进程的指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
+p_osptr	include/linux/sched.h	/^    struct task_struct *p_osptr;        \/* 指向比自己早创建的相邻进程的指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
+p_pptr	include/linux/sched.h	/^    struct task_struct *p_pptr;         \/* 指向父进程的指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
+p_ysptr	include/linux/sched.h	/^    struct task_struct *p_ysptr;        \/* 指向比自己后创建的相邻进程的指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::task_struct
+pgrp	include/linux/sched.h	/^    long pgrp;                          \/* 进程组号 (4B) *\/$/;"	m	struct:task_struct
+pid	include/linux/sched.h	/^    long pid;                           \/* 进程标识号(进程号) (4B) *\/$/;"	m	struct:task_struct
+priority	include/linux/sched.h	/^    long priority;                      \/* 优先数.任务开始运行时counter=priority,越大运行越长 (4B) *\/$/;"	m	struct:task_struct
+pwd	include/linux/sched.h	/^    struct m_inode * pwd;               \/* 当前工作目录i节点结构指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
+rlim	include/linux/sched.h	/^    struct rlimit rlim[RLIM_NLIMITS];   \/* 进程资源使用统计数组 (48B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::rlimit
+root	include/linux/sched.h	/^    struct m_inode * root;              \/* 根目录i节点结构指针 (4B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::m_inode
+session	include/linux/sched.h	/^    long session;                       \/* 会话号 (4B) *\/$/;"	m	struct:task_struct
 set_base	include/linux/sched.h	/^#define set_base(/;"	d
 set_limit	include/linux/sched.h	/^#define set_limit(/;"	d
-sgid	include/linux/sched.h	/^	unsigned short sgid;				\/\/ 保存的组id$/;"	m	struct:task_struct
-sigaction	include/linux/sched.h	/^	struct sigaction sigaction[32];		\/\/ 信号执行属性结构,对应信号将要执行的操作和标志信息$/;"	m	struct:task_struct	typeref:struct:task_struct::sigaction
-signal	include/linux/sched.h	/^	long signal;						\/\/ 信号位图,每个比特位代表一种信号,信号值=位偏移值+1$/;"	m	struct:task_struct
-ss	include/linux/sched.h	/^	long	ss;					\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-ss0	include/linux/sched.h	/^	long	ss0;				\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-ss1	include/linux/sched.h	/^	long	ss1;				\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-ss2	include/linux/sched.h	/^	long	ss2;				\/* 16 high bits zero *\/$/;"	m	struct:tss_struct
-st_space	include/linux/sched.h	/^	long	st_space[20];		\/* 8*10 bytes for each FP-reg = 80 bytes *\/$/;"	m	struct:i387_struct
-start_code	include/linux/sched.h	/^	unsigned long start_code;			\/\/ 代码段地址$/;"	m	struct:task_struct
-start_stack	include/linux/sched.h	/^	unsigned long start_stack;			\/\/ 堆栈段地址$/;"	m	struct:task_struct
-start_time	include/linux/sched.h	/^	long start_time;					\/\/ 进程开始运行时刻.$/;"	m	struct:task_struct
-state	include/linux/sched.h	/^	long state;							\/\/ 任务的运行状态(-1 不可运行,0 可运行(就绪), >0 已停止)$/;"	m	struct:task_struct
-stime	include/linux/sched.h	/^	long stime;							\/\/ 系统态运行时间(滴答数)$/;"	m	struct:task_struct
+sgid	include/linux/sched.h	/^    unsigned short sgid;                \/* 保存的组id (2B) *\/$/;"	m	struct:task_struct
+sigaction	include/linux/sched.h	/^    struct sigaction sigaction[32];     \/* 信号执行属性结构,对应信号将要执行的操作和标志信息 (16*32=512B) *\/$/;"	m	struct:task_struct	typeref:struct:task_struct::sigaction
+signal	include/linux/sched.h	/^    long signal;                        \/* 信号位图,每个比特位代表一种信号,信号值=位偏移值+1 (4B) *\/$/;"	m	struct:task_struct
+ss	include/linux/sched.h	/^    long    ss;                 \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+ss0	include/linux/sched.h	/^    long    ss0;                \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+ss1	include/linux/sched.h	/^    long    ss1;                \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+ss2	include/linux/sched.h	/^    long    ss2;                \/* 16 high bits zero *\/$/;"	m	struct:tss_struct
+st_space	include/linux/sched.h	/^    long    st_space[20];       \/* 8*10 bytes for each FP-reg = 80 bytes, 8个10字节的协处理器累加器*\/$/;"	m	struct:i387_struct
+start_code	include/linux/sched.h	/^    unsigned long start_code;           \/* 代码段地址 (4B) *\/$/;"	m	struct:task_struct
+start_stack	include/linux/sched.h	/^    unsigned long start_stack;          \/* 堆栈段地址 (4B) *\/$/;"	m	struct:task_struct
+start_time	include/linux/sched.h	/^    long start_time;                    \/* 进程开始运行时刻 (4B) *\/$/;"	m	struct:task_struct
+state	include/linux/sched.h	/^    long state;                         \/* 任务的运行状态(-1 不可运行,0 可运行(就绪), >0 已停止) (4B) *\/$/;"	m	struct:task_struct
+stime	include/linux/sched.h	/^    long stime;                         \/* 系统态运行时间(滴答数) (4B) *\/$/;"	m	struct:task_struct
 str	include/linux/sched.h	/^#define str(/;"	d
-suid	include/linux/sched.h	/^	unsigned short suid;				\/\/ 保存的用户id$/;"	m	struct:task_struct
-swd	include/linux/sched.h	/^	long	swd;            	\/\/ 状态字（Status word）。$/;"	m	struct:i387_struct
+suid	include/linux/sched.h	/^    unsigned short suid;                \/* 保存的用户id (2B) *\/$/;"	m	struct:task_struct
+swd	include/linux/sched.h	/^    long    swd;                \/* 状态字(Status word) *\/$/;"	m	struct:i387_struct
 switch_to	include/linux/sched.h	/^#define switch_to(/;"	d
 task_struct	include/linux/sched.h	/^struct task_struct {$/;"	s
-timeout	include/linux/sched.h	/^	unsigned long timeout;				\/\/ 内核定时超时值$/;"	m	struct:task_struct
-trace_bitmap	include/linux/sched.h	/^	long	trace_bitmap;		\/* bits: trace 0, bitmap 16-31 *\/$/;"	m	struct:tss_struct
-tss	include/linux/sched.h	/^	struct tss_struct tss;				\/\/ 进程的任务状态段信息结构$/;"	m	struct:task_struct	typeref:struct:task_struct::tss_struct
+timeout	include/linux/sched.h	/^    unsigned long timeout;              \/* 内核定时超时值 (4B) *\/$/;"	m	struct:task_struct
+trace_bitmap	include/linux/sched.h	/^    long    trace_bitmap;       \/* bits: trace 0, bitmap 16-31 *\/$/;"	m	struct:tss_struct
+tss	include/linux/sched.h	/^    struct tss_struct tss;              \/* 进程的任务状态段信息结构 (212B)*\/$/;"	m	struct:task_struct	typeref:struct:task_struct::tss_struct
 tss_struct	include/linux/sched.h	/^struct tss_struct {$/;"	s
-tty	include/linux/sched.h	/^	int tty;							\/\/ 进程使用tty终端的子设备号.-1表示没有使用$/;"	m	struct:task_struct
-twd	include/linux/sched.h	/^	long	twd;            	\/\/ 标记字（Tag word）。$/;"	m	struct:i387_struct
-uid	include/linux/sched.h	/^	unsigned short uid;					\/\/ 用户标识号(用户id)$/;"	m	struct:task_struct
-umask	include/linux/sched.h	/^	unsigned short umask;				\/\/ 文件创建属性屏蔽位$/;"	m	struct:task_struct
-used_math	include/linux/sched.h	/^	unsigned short used_math;			\/\/ 标志:是否使用了协处理器.$/;"	m	struct:task_struct
-utime	include/linux/sched.h	/^	long utime;							\/\/ 用户态运行时间(滴答数)$/;"	m	struct:task_struct
+tty	include/linux/sched.h	/^    int tty;                            \/* 进程使用tty终端的子设备号.-1表示没有使用 (4B) *\/$/;"	m	struct:task_struct
+twd	include/linux/sched.h	/^    long    twd;                \/* 标记字(Tag word) *\/$/;"	m	struct:i387_struct
+uid	include/linux/sched.h	/^    unsigned short uid;                 \/* 用户标识号(用户id) (2B) *\/$/;"	m	struct:task_struct
+umask	include/linux/sched.h	/^    unsigned short umask;               \/* 文件创建属性屏蔽位 (4B) *\/$/;"	m	struct:task_struct
+used_math	include/linux/sched.h	/^    unsigned short used_math;           \/* 标志:是否使用了协处理器 (4B) *\/$/;"	m	struct:task_struct
+utime	include/linux/sched.h	/^    long utime;                         \/* 用户态运行时间(滴答数) (4B) *\/$/;"	m	struct:task_struct
 NR_syscalls	include/linux/sys.h	/^int NR_syscalls = sizeof(sys_call_table)\/sizeof(fn_ptr);$/;"	v
 sys_call_table	include/linux/sys.h	/^fn_ptr sys_call_table[] = { sys_setup, sys_exit, sys_fork, sys_read,$/;"	v
 CHARS	include/linux/tty.h	/^#define CHARS(/;"	d
@@ -940,16 +963,16 @@ SUSPEND_CHAR	include/linux/tty.h	/^#define SUSPEND_CHAR(/;"	d
 TTY_BUF_SIZE	include/linux/tty.h	/^#define TTY_BUF_SIZE /;"	d
 TTY_TABLE	include/linux/tty.h	/^#define TTY_TABLE(/;"	d
 _TTY_H	include/linux/tty.h	/^#define _TTY_H$/;"	d
-buf	include/linux/tty.h	/^	char buf[TTY_BUF_SIZE];								\/\/ 队列的缓冲区.$/;"	m	struct:tty_queue
-data	include/linux/tty.h	/^	unsigned long data;									\/\/ 队列缓冲区中含有字符行数值(不是当前字符数).对于串口终端,则存放串行端口地址.$/;"	m	struct:tty_queue
-head	include/linux/tty.h	/^	unsigned long head;									\/\/ 缓冲区中数据头指针$/;"	m	struct:tty_queue
+buf	include/linux/tty.h	/^	char buf[TTY_BUF_SIZE];				\/\/ 队列的缓冲区, TTY_BUF_SIZE=1024$/;"	m	struct:tty_queue
+data	include/linux/tty.h	/^	unsigned long data;					\/\/ 队列缓冲区中含有字符行数值(不是当前字符数).对于串口终端,则存放串行端口地址.$/;"	m	struct:tty_queue
+head	include/linux/tty.h	/^	unsigned long head;					\/\/ 缓冲区中数据头指针$/;"	m	struct:tty_queue
 pgrp	include/linux/tty.h	/^	int pgrp;									\/\/ 所属进程组.$/;"	m	struct:tty_struct
-proc_list	include/linux/tty.h	/^	struct task_struct * proc_list;						\/\/ 等待本队列的进程列表.$/;"	m	struct:tty_queue	typeref:struct:tty_queue::task_struct
+proc_list	include/linux/tty.h	/^	struct task_struct * proc_list;		\/\/ 等待本队列的进程列表.$/;"	m	struct:tty_queue	typeref:struct:tty_queue::task_struct
 read_q	include/linux/tty.h	/^	struct tty_queue *read_q;					\/\/ tty读队列.$/;"	m	struct:tty_struct	typeref:struct:tty_struct::tty_queue
 secondary	include/linux/tty.h	/^	struct tty_queue *secondary;				\/\/ tty辅助队列(存放规范模式字符序列).可称为规范(熟)模式队列.$/;"	m	struct:tty_struct	typeref:struct:tty_struct::tty_queue
 session	include/linux/tty.h	/^	int session;								\/\/ 会话号.$/;"	m	struct:tty_struct
 stopped	include/linux/tty.h	/^	int stopped;								\/\/ 停止标志.$/;"	m	struct:tty_struct
-tail	include/linux/tty.h	/^	unsigned long tail;									\/\/ 缓冲区中数据尾指针$/;"	m	struct:tty_queue
+tail	include/linux/tty.h	/^	unsigned long tail;					\/\/ 缓冲区中数据尾指针$/;"	m	struct:tty_queue
 termios	include/linux/tty.h	/^	struct termios termios;						\/\/ 终端io属性和控制字符数据结构.$/;"	m	struct:tty_struct	typeref:struct:tty_struct::termios
 tty_queue	include/linux/tty.h	/^struct tty_queue {$/;"	s
 tty_struct	include/linux/tty.h	/^struct tty_struct {$/;"	s
@@ -991,10 +1014,10 @@ SIG_SETMASK	include/signal.h	/^#define SIG_SETMASK /;"	d
 SIG_UNBLOCK	include/signal.h	/^#define SIG_UNBLOCK /;"	d
 _NSIG	include/signal.h	/^#define _NSIG /;"	d
 _SIGNAL_H	include/signal.h	/^#define _SIGNAL_H$/;"	d
-sa_flags	include/signal.h	/^	int sa_flags;                                  \/\/ 改变信号处理过程的信号集。它是由37-40行的位标志定义的。$/;"	m	struct:sigaction
-sa_handler	include/signal.h	/^	void (*sa_handler)(int);                       \/\/ 对应某信号指定要采取的行动。可以用上面的SIG_DEL，或SIG_IGN来忽略该信号，也可以是指向处理该信号函数的一个指针$/;"	m	struct:sigaction
-sa_mask	include/signal.h	/^	sigset_t sa_mask;                              \/\/ 对信号的屏蔽码，在信号程序执行时将阻塞对这些信号的处理。$/;"	m	struct:sigaction
-sa_restorer	include/signal.h	/^	void (*sa_restorer)(void);                     \/\/ 恢复函数指针，由函数库Libc提供，用于清理用户态堆栈$/;"	m	struct:sigaction
+sa_flags	include/signal.h	/^	int sa_flags;                          \/\/ 改变信号处理过程的信号集。它是由37-40行的位标志定义的。$/;"	m	struct:sigaction
+sa_handler	include/signal.h	/^	void (*sa_handler)(int);               \/\/ 对应某信号指定要采取的行动。可以用上面的SIG_DEL，或SIG_IGN来忽略该信号，也可以是指向处理该信号函数的一个指针$/;"	m	struct:sigaction
+sa_mask	include/signal.h	/^	sigset_t sa_mask;                      \/\/ 对信号的屏蔽码，在信号程序执行时将阻塞对这些信号的处理。$/;"	m	struct:sigaction
+sa_restorer	include/signal.h	/^	void (*sa_restorer)(void);             \/\/ 恢复函数指针，由函数库Libc提供，用于清理用户态堆栈$/;"	m	struct:sigaction
 sig_atomic_t	include/signal.h	/^typedef int sig_atomic_t;                           \/\/ 定义信号原子操作类型。$/;"	t
 sigaction	include/signal.h	/^struct sigaction {$/;"	s
 sigemptyset	include/signal.h	/^#define sigemptyset(/;"	d
@@ -1084,6 +1107,7 @@ S_IFDIR	include/sys/stat.h	/^#define S_IFDIR /;"	d
 S_IFIFO	include/sys/stat.h	/^#define S_IFIFO /;"	d
 S_IFLNK	include/sys/stat.h	/^#define S_IFLNK	/;"	d
 S_IFMT	include/sys/stat.h	/^#define S_IFMT /;"	d
+S_IFPROC	include/sys/stat.h	/^#define S_IFPROC /;"	d
 S_IFREG	include/sys/stat.h	/^#define S_IFREG /;"	d
 S_IRGRP	include/sys/stat.h	/^#define S_IRGRP /;"	d
 S_IROTH	include/sys/stat.h	/^#define S_IROTH /;"	d
@@ -1097,6 +1121,7 @@ S_ISDIR	include/sys/stat.h	/^#define S_ISDIR(/;"	d
 S_ISFIFO	include/sys/stat.h	/^#define S_ISFIFO(/;"	d
 S_ISGID	include/sys/stat.h	/^#define S_ISGID /;"	d
 S_ISLNK	include/sys/stat.h	/^#define S_ISLNK(/;"	d
+S_ISPROC	include/sys/stat.h	/^#define S_ISPROC(/;"	d
 S_ISREG	include/sys/stat.h	/^#define S_ISREG(/;"	d
 S_ISUID	include/sys/stat.h	/^#define S_ISUID /;"	d
 S_ISVTX	include/sys/stat.h	/^#define S_ISVTX /;"	d
@@ -1164,7 +1189,7 @@ _TIME_T	include/sys/types.h	/^#define _TIME_T$/;"	d
 cc_t	include/sys/types.h	/^typedef unsigned char cc_t;$/;"	t
 daddr_t	include/sys/types.h	/^typedef int daddr_t;$/;"	t
 dev_t	include/sys/types.h	/^typedef unsigned short dev_t;	\/\/ 用于设备号$/;"	t
-div_t	include/sys/types.h	/^typedef struct { int quot,rem; } div_t;         \/\/ 用于DIV操作。$/;"	t	typeref:struct:__anon1
+div_t	include/sys/types.h	/^typedef struct { int quot,rem; } div_t;         \/\/ 用于DIV操作。$/;"	t	typeref:struct:__anon2
 f_fname	include/sys/types.h	/^	char f_fname[6];        \/\/ 文件系统名称。$/;"	m	struct:ustat
 f_fpack	include/sys/types.h	/^	char f_fpack[6];        \/\/ 文件系统压缩名称。$/;"	m	struct:ustat
 f_tfree	include/sys/types.h	/^	daddr_t f_tfree;        \/\/ 系统总空闲块数。$/;"	m	struct:ustat
@@ -1172,16 +1197,16 @@ f_tinode	include/sys/types.h	/^	ino_t f_tinode;         \/\/ 总空闲i节点数
 fd_set	include/sys/types.h	/^typedef unsigned long fd_set;$/;"	t
 gid_t	include/sys/types.h	/^typedef unsigned short gid_t;	\/\/ 用于组号$/;"	t
 ino_t	include/sys/types.h	/^typedef unsigned short ino_t;	\/\/ 用于文件序列号$/;"	t
-ldiv_t	include/sys/types.h	/^typedef struct { long quot,rem; } ldiv_t;       \/\/ 用于长DIV操作。$/;"	t	typeref:struct:__anon2
+ldiv_t	include/sys/types.h	/^typedef struct { long quot,rem; } ldiv_t;       \/\/ 用于长DIV操作。$/;"	t	typeref:struct:__anon3
 mode_t	include/sys/types.h	/^typedef unsigned short mode_t;	\/\/ 用于某些文件属性$/;"	t
 nlink_t	include/sys/types.h	/^typedef unsigned char nlink_t;	\/\/ 用于链接计数$/;"	t
 off_t	include/sys/types.h	/^typedef long off_t;             \/\/ 用于文件长度(大小).$/;"	t
 pid_t	include/sys/types.h	/^typedef int pid_t;	\/\/ 用于进程号和进程组号$/;"	t
 ptrdiff_t	include/sys/types.h	/^typedef long ptrdiff_t;$/;"	t
-quot	include/sys/types.h	/^typedef struct { int quot,rem; } div_t;         \/\/ 用于DIV操作。$/;"	m	struct:__anon1
-quot	include/sys/types.h	/^typedef struct { long quot,rem; } ldiv_t;       \/\/ 用于长DIV操作。$/;"	m	struct:__anon2
-rem	include/sys/types.h	/^typedef struct { int quot,rem; } div_t;         \/\/ 用于DIV操作。$/;"	m	struct:__anon1
-rem	include/sys/types.h	/^typedef struct { long quot,rem; } ldiv_t;       \/\/ 用于长DIV操作。$/;"	m	struct:__anon2
+quot	include/sys/types.h	/^typedef struct { int quot,rem; } div_t;         \/\/ 用于DIV操作。$/;"	m	struct:__anon2
+quot	include/sys/types.h	/^typedef struct { long quot,rem; } ldiv_t;       \/\/ 用于长DIV操作。$/;"	m	struct:__anon3
+rem	include/sys/types.h	/^typedef struct { int quot,rem; } div_t;         \/\/ 用于DIV操作。$/;"	m	struct:__anon2
+rem	include/sys/types.h	/^typedef struct { long quot,rem; } ldiv_t;       \/\/ 用于长DIV操作。$/;"	m	struct:__anon3
 size_t	include/sys/types.h	/^typedef unsigned int size_t;    \/\/ 用于对象的大小（长度）。$/;"	t
 speed_t	include/sys/types.h	/^typedef unsigned int speed_t;$/;"	t
 tcflag_t	include/sys/types.h	/^typedef unsigned long tcflag_t;$/;"	t
@@ -1376,13 +1401,13 @@ c_cc	include/termios.h	/^	cc_t c_cc[NCCS];		\/* control characters *\/	\/\/ 控�
 c_cc	include/termios.h	/^	unsigned char c_cc[NCC];	\/* control characters *\/ \/\/ 控制字符数组。$/;"	m	struct:termio
 c_cflag	include/termios.h	/^	tcflag_t c_cflag;		\/* control mode flags *\/	\/\/ 控制模式标志.$/;"	m	struct:termios
 c_cflag	include/termios.h	/^	unsigned short c_cflag;		\/* control mode flags *\/ \/\/ 控制模式标志。$/;"	m	struct:termio
-c_iflag	include/termios.h	/^	tcflag_t c_iflag;		\/* input mode flags *\/	\/\/ 输入模式标志$/;"	m	struct:termios
+c_iflag	include/termios.h	/^	tcflag_t c_iflag;		\/* input mode flags *\/		\/\/ 输入模式标志$/;"	m	struct:termios
 c_iflag	include/termios.h	/^	unsigned short c_iflag;		\/* input mode flags *\/   \/\/ 输入模式标志。$/;"	m	struct:termio
 c_lflag	include/termios.h	/^	tcflag_t c_lflag;		\/* local mode flags *\/		\/\/ 本地模式标志.$/;"	m	struct:termios
 c_lflag	include/termios.h	/^	unsigned short c_lflag;		\/* local mode flags *\/   \/\/ 本地模式标志。$/;"	m	struct:termio
 c_line	include/termios.h	/^	cc_t c_line;			\/* line discipline *\/		\/\/ 线路规程(速率).$/;"	m	struct:termios
 c_line	include/termios.h	/^	unsigned char c_line;		\/* line discipline *\/    \/\/ 线路规程（速率）。$/;"	m	struct:termio
-c_oflag	include/termios.h	/^	tcflag_t c_oflag;		\/* output mode flags *\/	\/\/ 输出模式标志$/;"	m	struct:termios
+c_oflag	include/termios.h	/^	tcflag_t c_oflag;		\/* output mode flags *\/		\/\/ 输出模式标志$/;"	m	struct:termios
 c_oflag	include/termios.h	/^	unsigned short c_oflag;		\/* output mode flags *\/  \/\/ 输出模式标志。$/;"	m	struct:termio
 termio	include/termios.h	/^struct termio {$/;"	s
 termios	include/termios.h	/^struct termios {$/;"	s
@@ -1448,6 +1473,7 @@ _UNISTD_H	include/unistd.h	/^#define _UNISTD_H$/;"	d
 __NR_access	include/unistd.h	/^#define __NR_access	/;"	d
 __NR_acct	include/unistd.h	/^#define __NR_acct	/;"	d
 __NR_alarm	include/unistd.h	/^#define __NR_alarm	/;"	d
+__NR_ami	include/unistd.h	/^#define __NR_ami	/;"	d
 __NR_break	include/unistd.h	/^#define __NR_break	/;"	d
 __NR_brk	include/unistd.h	/^#define __NR_brk	/;"	d
 __NR_chdir	include/unistd.h	/^#define __NR_chdir	/;"	d
@@ -1531,6 +1557,7 @@ __NR_uselib	include/unistd.h	/^#define __NR_uselib	/;"	d
 __NR_ustat	include/unistd.h	/^#define __NR_ustat	/;"	d
 __NR_utime	include/unistd.h	/^#define __NR_utime	/;"	d
 __NR_waitpid	include/unistd.h	/^#define __NR_waitpid	/;"	d
+__NR_whoami	include/unistd.h	/^#define __NR_whoami	/;"	d
 __NR_write	include/unistd.h	/^#define __NR_write	/;"	d
 _syscall0	include/unistd.h	/^#define _syscall0(/;"	d
 _syscall1	include/unistd.h	/^#define _syscall1(/;"	d
@@ -1551,23 +1578,23 @@ EXT_MEM_K	init/main.c	/^#define EXT_MEM_K /;"	d	file:
 ORIG_ROOT_DEV	init/main.c	/^#define ORIG_ROOT_DEV /;"	d	file:
 ORIG_SWAP_DEV	init/main.c	/^#define ORIG_SWAP_DEV /;"	d	file:
 __LIBRARY__	init/main.c	/^#define __LIBRARY__$/;"	d	file:
-argv	init/main.c	/^static char * argv[] = { "-\/bin\/sh",NULL };			\/\/ 字符"-"是传递给shell程序sh的一个标志.通过识别该标志,sh程序会作为登录$/;"	v	file:
-argv_rc	init/main.c	/^static char * argv_rc[] = { "\/bin\/sh", NULL };		\/\/ 调用执行程序时参数的字符串数组.$/;"	v	file:
-buffer_memory_end	init/main.c	/^static long buffer_memory_end = 0;				\/\/ 高速缓冲区末端地址.$/;"	v	file:
-drive_info	init/main.c	/^struct drive_info { char dummy[32]; } drive_info;	\/\/ 用于存放硬盘参数表信息.$/;"	s	file:
-drive_info	init/main.c	/^struct drive_info { char dummy[32]; } drive_info;	\/\/ 用于存放硬盘参数表信息.$/;"	v	typeref:struct:drive_info
-dummy	init/main.c	/^struct drive_info { char dummy[32]; } drive_info;	\/\/ 用于存放硬盘参数表信息.$/;"	m	struct:drive_info	file:
+argv	init/main.c	/^static char * argv[] = { "-\/bin\/sh",NULL };         \/\/ 字符"-"是传递给shell程序sh的一个标志.通过识别该标志,sh程序会作为登录$/;"	v	file:
+argv_rc	init/main.c	/^static char * argv_rc[] = { "\/bin\/sh", NULL };      \/\/ 调用执行程序时参数的字符串数组.$/;"	v	file:
+buffer_memory_end	init/main.c	/^static long buffer_memory_end = 0;              \/\/ 高速缓冲区末端地址.$/;"	v	file:
+drive_info	init/main.c	/^struct drive_info { char dummy[32]; } drive_info;   \/\/ 用于存放硬盘参数表信息.$/;"	s	file:
+drive_info	init/main.c	/^struct drive_info { char dummy[32]; } drive_info;   \/\/ 用于存放硬盘参数表信息.$/;"	v	typeref:struct:drive_info
+dummy	init/main.c	/^struct drive_info { char dummy[32]; } drive_info;   \/\/ 用于存放硬盘参数表信息.$/;"	m	struct:drive_info	file:
 envp	init/main.c	/^static char * envp[] = { "HOME=\/usr\/root", NULL, NULL };$/;"	v	file:
-envp_rc	init/main.c	/^static char * envp_rc[] = { "HOME=\/", NULL ,NULL };	\/\/ 调用执行程序时的环境字符串数组.$/;"	v	file:
+envp_rc	init/main.c	/^static char * envp_rc[] = { "HOME=\/", NULL ,NULL }; \/\/ 调用执行程序时的环境字符串数组.$/;"	v	file:
 fork_for_process0	init/main.c	/^static inline long fork_for_process0() {$/;"	f	file:
 init	init/main.c	/^void init(void)$/;"	f
-main	init/main.c	/^int main(void)										\/* This really IS void, no error here. *\/$/;"	f
-main_memory_start	init/main.c	/^static long main_memory_start = 0;				\/\/ 主内存(将用于分页)开始的位置.$/;"	v	file:
-memory_end	init/main.c	/^static long memory_end = 0;						\/\/ 机器具有的物理内存容量(字节数).$/;"	v	file:
-printbuf	init/main.c	/^static char printbuf[1024];							\/\/ 静态字符串数组,用作内核显示信息的缓存.$/;"	v	file:
+main	init/main.c	/^int main(void)                                      \/* This really IS void, no error here. *\/$/;"	f
+main_memory_start	init/main.c	/^static long main_memory_start = 0;              \/\/ 主内存(将用于分页)开始的位置.$/;"	v	file:
+memory_end	init/main.c	/^static long memory_end = 0;                     \/\/ 机器具有的物理内存容量(字节数).$/;"	v	file:
+printbuf	init/main.c	/^static char printbuf[1024];                         \/\/ 静态字符串数组,用作内核显示信息的缓存.$/;"	v	file:
 printf	init/main.c	/^int printf(const char *fmt, ...)$/;"	f
 sprintf	init/main.c	/^static int sprintf(char * str, const char *fmt, ...)$/;"	f	file:
-term	init/main.c	/^static char term[32];							\/\/ 终端设置字符串(环境参数).$/;"	v	file:
+term	init/main.c	/^static char term[32];                           \/\/ 终端设置字符串(环境参数).$/;"	v	file:
 time_init	init/main.c	/^static void time_init(void)$/;"	f	file:
 CLEAR_FILE	kernel/Makefile	/^CLEAR_FILE = $(OBJS) kernel.o tmp_make$/;"	m
 OBJS	kernel/Makefile	/^OBJS  = sched.o sys_call.o traps.o asm.o fork.o \\$/;"	m
@@ -1742,14 +1769,14 @@ rd_start	kernel/blk_drv/ramdisk.c	/^char	*rd_start;								\/\/ 虚拟盘在内�
 CLEAR_FILE	kernel/chr_drv/Makefile	/^CLEAR_FILE = $(OBJS) keyboard.s chr_drv.a tmp_make$/;"	m
 OBJS	kernel/chr_drv/Makefile	/^OBJS  = tty_io.o console.o keyboard.o serial.o rs_io.o \\$/;"	m
 DEF_TERMIOS	kernel/chr_drv/console.c	/^#define DEF_TERMIOS /;"	d	file:
-ESesc	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon12	file:
-ESfunckey	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon12	file:
-ESgetpars	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon12	file:
-ESgotpars	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon12	file:
-ESnormal	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon12	file:
-ESsetgraph	kernel/chr_drv/console.c	/^	ESsetterm, ESsetgraph };$/;"	e	enum:__anon12	file:
-ESsetterm	kernel/chr_drv/console.c	/^	ESsetterm, ESsetgraph };$/;"	e	enum:__anon12	file:
-ESsquare	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon12	file:
+ESesc	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon9	file:
+ESfunckey	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon9	file:
+ESgetpars	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon9	file:
+ESgotpars	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon9	file:
+ESnormal	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon9	file:
+ESsetgraph	kernel/chr_drv/console.c	/^	ESsetterm, ESsetgraph };$/;"	e	enum:__anon9	file:
+ESsetterm	kernel/chr_drv/console.c	/^	ESsetterm, ESsetgraph };$/;"	e	enum:__anon9	file:
+ESsquare	kernel/chr_drv/console.c	/^enum { ESnormal, ESesc, ESsquare, ESgetpars, ESgotpars, ESfunckey,$/;"	e	enum:__anon9	file:
 GRAF_TRANS	kernel/chr_drv/console.c	/^#define GRAF_TRANS /;"	d	file:
 NORM_TRANS	kernel/chr_drv/console.c	/^#define NORM_TRANS /;"	d	file:
 NPAR	kernel/chr_drv/console.c	/^#define NPAR /;"	d	file:
@@ -1824,30 +1851,30 @@ translate	kernel/chr_drv/console.c	/^#define translate	/;"	d	file:
 translations	kernel/chr_drv/console.c	/^static char * translations[] = {$/;"	v	file:
 unblank_screen	kernel/chr_drv/console.c	/^void unblank_screen()$/;"	f
 update_screen	kernel/chr_drv/console.c	/^void update_screen(void)$/;"	f
-vc_attr	kernel/chr_drv/console.c	/^	unsigned char	vc_attr;													\/\/ 字符属性$/;"	m	struct:__anon11	file:
-vc_bold_attr	kernel/chr_drv/console.c	/^	int				vc_bold_attr;												\/\/ 粗体字符属性.$/;"	m	struct:__anon11	file:
-vc_bottom	kernel/chr_drv/console.c	/^	unsigned long	vc_top, vc_bottom;											\/\/ 滚动时顶行行号;底行行号.$/;"	m	struct:__anon11	file:
-vc_checkin	kernel/chr_drv/console.c	/^	unsigned long	vc_checkin;$/;"	m	struct:__anon11	file:
-vc_cons	kernel/chr_drv/console.c	/^} vc_cons [MAX_CONSOLES];$/;"	v	typeref:struct:__anon11	file:
-vc_def_attr	kernel/chr_drv/console.c	/^	unsigned char	vc_def_attr;												\/\/ 默认字符属性.$/;"	m	struct:__anon11	file:
-vc_iscolor	kernel/chr_drv/console.c	/^	unsigned int	vc_iscolor;													\/\/ 彩色显示标志.$/;"	m	struct:__anon11	file:
-vc_npar	kernel/chr_drv/console.c	/^	unsigned long	vc_npar, vc_par[NPAR];										\/\/ 转义序列参数个数和参数数组.$/;"	m	struct:__anon11	file:
-vc_origin	kernel/chr_drv/console.c	/^	unsigned long	vc_origin;													\/* Used for EGA\/VGA fast scroll	*\/$/;"	m	struct:__anon11	file:
-vc_par	kernel/chr_drv/console.c	/^	unsigned long	vc_npar, vc_par[NPAR];										\/\/ 转义序列参数个数和参数数组.$/;"	m	struct:__anon11	file:
-vc_pos	kernel/chr_drv/console.c	/^	unsigned long	vc_pos;														\/\/ 当前光标对应的显示内存位置.$/;"	m	struct:__anon11	file:
-vc_ques	kernel/chr_drv/console.c	/^	unsigned long	vc_ques;													\/\/ 问号字符.$/;"	m	struct:__anon11	file:
-vc_restate	kernel/chr_drv/console.c	/^	unsigned long	vc_restate;													\/\/ 处理转义或控制序列的下一状态.$/;"	m	struct:__anon11	file:
-vc_saved_x	kernel/chr_drv/console.c	/^	unsigned int	vc_saved_x;													\/\/ 保存的光标列号.$/;"	m	struct:__anon11	file:
-vc_saved_y	kernel/chr_drv/console.c	/^	unsigned int	vc_saved_y;													\/\/ 保存的光标行号.$/;"	m	struct:__anon11	file:
-vc_scr_end	kernel/chr_drv/console.c	/^	unsigned long	vc_scr_end;													\/* Used for EGA\/VGA fast scroll	*\/$/;"	m	struct:__anon11	file:
-vc_state	kernel/chr_drv/console.c	/^	unsigned long	vc_state;													\/\/ 处理转义或控制序列的当前状态.$/;"	m	struct:__anon11	file:
-vc_top	kernel/chr_drv/console.c	/^	unsigned long	vc_top, vc_bottom;											\/\/ 滚动时顶行行号;底行行号.$/;"	m	struct:__anon11	file:
-vc_translate	kernel/chr_drv/console.c	/^	char *			vc_translate;												\/\/ 使用的字符集.$/;"	m	struct:__anon11	file:
-vc_video_erase_char	kernel/chr_drv/console.c	/^	unsigned short	vc_video_erase_char;										\/\/ 擦除字符属性及字符(0x0720)$/;"	m	struct:__anon11	file:
-vc_video_mem_end	kernel/chr_drv/console.c	/^	unsigned long	vc_video_mem_end;											\/* End of video RAM (sort of)	*\/$/;"	m	struct:__anon11	file:
-vc_video_mem_start	kernel/chr_drv/console.c	/^	unsigned long	vc_video_mem_start;											\/* Start of video RAM		*\/$/;"	m	struct:__anon11	file:
-vc_x	kernel/chr_drv/console.c	/^	unsigned long	vc_x, vc_y;													\/\/ 当前光标列,行值.$/;"	m	struct:__anon11	file:
-vc_y	kernel/chr_drv/console.c	/^	unsigned long	vc_x, vc_y;													\/\/ 当前光标列,行值.$/;"	m	struct:__anon11	file:
+vc_attr	kernel/chr_drv/console.c	/^	unsigned char	vc_attr;													\/\/ 字符属性$/;"	m	struct:__anon8	file:
+vc_bold_attr	kernel/chr_drv/console.c	/^	int				vc_bold_attr;												\/\/ 粗体字符属性.$/;"	m	struct:__anon8	file:
+vc_bottom	kernel/chr_drv/console.c	/^	unsigned long	vc_top, vc_bottom;											\/\/ 滚动时顶行行号;底行行号.$/;"	m	struct:__anon8	file:
+vc_checkin	kernel/chr_drv/console.c	/^	unsigned long	vc_checkin;$/;"	m	struct:__anon8	file:
+vc_cons	kernel/chr_drv/console.c	/^} vc_cons [MAX_CONSOLES];$/;"	v	typeref:struct:__anon8	file:
+vc_def_attr	kernel/chr_drv/console.c	/^	unsigned char	vc_def_attr;												\/\/ 默认字符属性.$/;"	m	struct:__anon8	file:
+vc_iscolor	kernel/chr_drv/console.c	/^	unsigned int	vc_iscolor;													\/\/ 彩色显示标志.$/;"	m	struct:__anon8	file:
+vc_npar	kernel/chr_drv/console.c	/^	unsigned long	vc_npar, vc_par[NPAR];										\/\/ 转义序列参数个数和参数数组.$/;"	m	struct:__anon8	file:
+vc_origin	kernel/chr_drv/console.c	/^	unsigned long	vc_origin;													\/* Used for EGA\/VGA fast scroll	*\/$/;"	m	struct:__anon8	file:
+vc_par	kernel/chr_drv/console.c	/^	unsigned long	vc_npar, vc_par[NPAR];										\/\/ 转义序列参数个数和参数数组.$/;"	m	struct:__anon8	file:
+vc_pos	kernel/chr_drv/console.c	/^	unsigned long	vc_pos;														\/\/ 当前光标对应的显示内存位置.$/;"	m	struct:__anon8	file:
+vc_ques	kernel/chr_drv/console.c	/^	unsigned long	vc_ques;													\/\/ 问号字符.$/;"	m	struct:__anon8	file:
+vc_restate	kernel/chr_drv/console.c	/^	unsigned long	vc_restate;													\/\/ 处理转义或控制序列的下一状态.$/;"	m	struct:__anon8	file:
+vc_saved_x	kernel/chr_drv/console.c	/^	unsigned int	vc_saved_x;													\/\/ 保存的光标列号.$/;"	m	struct:__anon8	file:
+vc_saved_y	kernel/chr_drv/console.c	/^	unsigned int	vc_saved_y;													\/\/ 保存的光标行号.$/;"	m	struct:__anon8	file:
+vc_scr_end	kernel/chr_drv/console.c	/^	unsigned long	vc_scr_end;													\/* Used for EGA\/VGA fast scroll	*\/$/;"	m	struct:__anon8	file:
+vc_state	kernel/chr_drv/console.c	/^	unsigned long	vc_state;													\/\/ 处理转义或控制序列的当前状态.$/;"	m	struct:__anon8	file:
+vc_top	kernel/chr_drv/console.c	/^	unsigned long	vc_top, vc_bottom;											\/\/ 滚动时顶行行号;底行行号.$/;"	m	struct:__anon8	file:
+vc_translate	kernel/chr_drv/console.c	/^	char *			vc_translate;												\/\/ 使用的字符集.$/;"	m	struct:__anon8	file:
+vc_video_erase_char	kernel/chr_drv/console.c	/^	unsigned short	vc_video_erase_char;										\/\/ 擦除字符属性及字符(0x0720)$/;"	m	struct:__anon8	file:
+vc_video_mem_end	kernel/chr_drv/console.c	/^	unsigned long	vc_video_mem_end;											\/* End of video RAM (sort of)	*\/$/;"	m	struct:__anon8	file:
+vc_video_mem_start	kernel/chr_drv/console.c	/^	unsigned long	vc_video_mem_start;											\/* Start of video RAM		*\/$/;"	m	struct:__anon8	file:
+vc_x	kernel/chr_drv/console.c	/^	unsigned long	vc_x, vc_y;													\/\/ 当前光标列,行值.$/;"	m	struct:__anon8	file:
+vc_y	kernel/chr_drv/console.c	/^	unsigned long	vc_x, vc_y;													\/\/ 当前光标列,行值.$/;"	m	struct:__anon8	file:
 video_erase_char	kernel/chr_drv/console.c	/^#define video_erase_char /;"	d	file:
 video_mem_base	kernel/chr_drv/console.c	/^static unsigned long	video_mem_base;		\/* Base of video memory		*\/		\/\/ 物理显示内存基地址.$/;"	v	file:
 video_mem_end	kernel/chr_drv/console.c	/^#define video_mem_end	/;"	d	file:
@@ -1867,51 +1894,98 @@ alt	kernel/chr_drv/kb.S	/^alt:$/;"	l
 alt_func	kernel/chr_drv/kb.S	/^alt_func:$/;"	l
 alt_map	kernel/chr_drv/kb.S	/^alt_map:                            # Alt键同时按下时的映射表。$/;"	l
 alt_map	kernel/chr_drv/kb.S	/^alt_map:$/;"	l
-buf	kernel/chr_drv/kb.S	/^buf = 16												# 缓冲区字段偏移$/;"	d
+buf	kernel/chr_drv/kb.S	/^buf = 16                                                # 缓冲区字段偏移$/;"	d
 caps	kernel/chr_drv/kb.S	/^caps:$/;"	l
 ctrl	kernel/chr_drv/kb.S	/^ctrl:$/;"	l
 cur	kernel/chr_drv/kb.S	/^cur:$/;"	l
 cur2	kernel/chr_drv/kb.S	/^cur2:$/;"	l
 cur_table	kernel/chr_drv/kb.S	/^cur_table:$/;"	l
 cursor	kernel/chr_drv/kb.S	/^cursor:$/;"	l
-die	kernel/chr_drv/kb.S	/^die:	jmp die									# 停机$/;"	l
+die	kernel/chr_drv/kb.S	/^die:    jmp die                                 # 停机$/;"	l
 do_self	kernel/chr_drv/kb.S	/^do_self:$/;"	l
-e0	kernel/chr_drv/kb.S	/^e0:	.byte 0$/;"	l
-e0_e1	kernel/chr_drv/kb.S	/^e0_e1:	inb $0x61, %al								# 取PPI端口B状态,其位7用于允许\/禁止(0\/1)键盘.$/;"	l
+e0	kernel/chr_drv/kb.S	/^e0:     .byte 0$/;"	l
+e0_e1	kernel/chr_drv/kb.S	/^e0_e1:  inb $0x61, %al                              # 取PPI端口B状态,其位7用于允许\/禁止(0\/1)键盘.$/;"	l
 end_func	kernel/chr_drv/kb.S	/^end_func:$/;"	l
 func	kernel/chr_drv/kb.S	/^func:$/;"	l
 func_table	kernel/chr_drv/kb.S	/^func_table:$/;"	l
-head	kernel/chr_drv/kb.S	/^head = 4												# 缓冲区头指针字段在tty_queue结构中的偏移$/;"	d
+head	kernel/chr_drv/kb.S	/^head = 4                                                # 缓冲区头指针字段在tty_queue结构中的偏移$/;"	d
 kb_wait	kernel/chr_drv/kb.S	/^kb_wait:$/;"	l
 key_map	kernel/chr_drv/kb.S	/^key_map:$/;"	l
 key_table	kernel/chr_drv/kb.S	/^key_table:$/;"	l
 keyboard_interrupt	kernel/chr_drv/kb.S	/^keyboard_interrupt:$/;"	l
-leds	kernel/chr_drv/kb.S	/^leds:	.byte 2		\/* num-lock, caps, scroll-lock mode (nom-lock on) *\/$/;"	l
+leds	kernel/chr_drv/kb.S	/^leds:   .byte 2     \/* num-lock, caps, scroll-lock mode (nom-lock on) *\/$/;"	l
 lshift	kernel/chr_drv/kb.S	/^lshift:$/;"	l
-minus	kernel/chr_drv/kb.S	/^minus:	cmpb $1,e0		# e0标志置位了吗?$/;"	l
-mode	kernel/chr_drv/kb.S	/^mode:	.byte 0		\/* caps, alt, ctrl and shift mode *\/$/;"	l
-none	kernel/chr_drv/kb.S	/^none:	ret$/;"	l
+minus	kernel/chr_drv/kb.S	/^minus:  cmpb $1,e0      # e0标志置位了吗?$/;"	l
+mode	kernel/chr_drv/kb.S	/^mode:   .byte 0     \/* caps, alt, ctrl and shift mode *\/$/;"	l
+none	kernel/chr_drv/kb.S	/^none:   ret$/;"	l
 num	kernel/chr_drv/kb.S	/^num:$/;"	l
 num_table	kernel/chr_drv/kb.S	/^num_table:$/;"	l
 ok_cur	kernel/chr_drv/kb.S	/^ok_cur:$/;"	l
 ok_func	kernel/chr_drv/kb.S	/^ok_func:$/;"	l
-proc_list	kernel/chr_drv/kb.S	/^proc_list = 12											# 等待该缓冲队列的进程字段偏移$/;"	d
+proc_list	kernel/chr_drv/kb.S	/^proc_list = 12                                          # 等待该缓冲队列的进程字段偏移$/;"	d
 put_queue	kernel/chr_drv/kb.S	/^put_queue:$/;"	l
 reboot	kernel/chr_drv/kb.S	/^reboot:$/;"	l
 rshift	kernel/chr_drv/kb.S	/^rshift:$/;"	l
 scroll	kernel/chr_drv/kb.S	/^scroll:$/;"	l
-set_e0	kernel/chr_drv/kb.S	/^set_e0:	movb $1, e0									# 由到扫描前导码0xe0时,设置e0标志(位0).$/;"	l
-set_e1	kernel/chr_drv/kb.S	/^set_e1:	movb $2, e0									# 收到扫描前导码0xe1时,设置e1标	志(位1).$/;"	l
+set_e0	kernel/chr_drv/kb.S	/^set_e0:$/;"	l
+set_e1	kernel/chr_drv/kb.S	/^set_e1:$/;"	l
 set_leds	kernel/chr_drv/kb.S	/^set_leds:$/;"	l
 shift_map	kernel/chr_drv/kb.S	/^shift_map:                          # Shift键同时按下时的映射表。$/;"	l
 shift_map	kernel/chr_drv/kb.S	/^shift_map:$/;"	l
-size	kernel/chr_drv/kb.S	/^size	= 1024		\/* must be a power of two ! And MUST be the same$/;"	d
-tail	kernel/chr_drv/kb.S	/^tail = 8												# 缓冲区尾指针字段偏移$/;"	d
+size	kernel/chr_drv/kb.S	/^size    = 1024      \/* must be a power of two ! And MUST be the same as in tty_io.c !!!! *\/$/;"	d
+tail	kernel/chr_drv/kb.S	/^tail = 8                                                # 缓冲区尾指针字段偏移$/;"	d
 unalt	kernel/chr_drv/kb.S	/^unalt:$/;"	l
-uncaps	kernel/chr_drv/kb.S	/^uncaps:	andb $0x7f, mode							# caps键松开,则复位mode中的对应位(位7)$/;"	l
+uncaps	kernel/chr_drv/kb.S	/^uncaps: andb $0x7f, mode                            # caps键松开,则复位mode中的对应位(位7)$/;"	l
 unctrl	kernel/chr_drv/kb.S	/^unctrl:$/;"	l
 unlshift	kernel/chr_drv/kb.S	/^unlshift:$/;"	l
 unrshift	kernel/chr_drv/kb.S	/^unrshift:$/;"	l
+alt	kernel/chr_drv/keyboard.s	/^alt:$/;"	l
+alt_func	kernel/chr_drv/keyboard.s	/^alt_func:$/;"	l
+alt_map	kernel/chr_drv/keyboard.s	/^alt_map:$/;"	l
+buf	kernel/chr_drv/keyboard.s	/^buf = 16                                                # 缓冲区字段偏移$/;"	d
+caps	kernel/chr_drv/keyboard.s	/^caps:$/;"	l
+ctrl	kernel/chr_drv/keyboard.s	/^ctrl:$/;"	l
+cur	kernel/chr_drv/keyboard.s	/^cur:$/;"	l
+cur2	kernel/chr_drv/keyboard.s	/^cur2:$/;"	l
+cur_table	kernel/chr_drv/keyboard.s	/^cur_table:$/;"	l
+cursor	kernel/chr_drv/keyboard.s	/^cursor:$/;"	l
+die	kernel/chr_drv/keyboard.s	/^die:    jmp die                                 # 停机$/;"	l
+do_self	kernel/chr_drv/keyboard.s	/^do_self:$/;"	l
+e0	kernel/chr_drv/keyboard.s	/^e0:     .byte 0$/;"	l
+e0_e1	kernel/chr_drv/keyboard.s	/^e0_e1:  inb $0x61, %al                              # 取PPI端口B状态,其位7用于允许\/禁止(0\/1)键盘.$/;"	l
+end_func	kernel/chr_drv/keyboard.s	/^end_func:$/;"	l
+func	kernel/chr_drv/keyboard.s	/^func:$/;"	l
+func_table	kernel/chr_drv/keyboard.s	/^func_table:$/;"	l
+head	kernel/chr_drv/keyboard.s	/^head = 4                                                # 缓冲区头指针字段在tty_queue结构中的偏移$/;"	d
+kb_wait	kernel/chr_drv/keyboard.s	/^kb_wait:$/;"	l
+key_map	kernel/chr_drv/keyboard.s	/^key_map:$/;"	l
+key_table	kernel/chr_drv/keyboard.s	/^key_table:$/;"	l
+keyboard_interrupt	kernel/chr_drv/keyboard.s	/^keyboard_interrupt:$/;"	l
+leds	kernel/chr_drv/keyboard.s	/^leds:   .byte 2     $/;"	l
+lshift	kernel/chr_drv/keyboard.s	/^lshift:$/;"	l
+minus	kernel/chr_drv/keyboard.s	/^minus:  cmpb $1,e0      # e0标志置位了吗?$/;"	l
+mode	kernel/chr_drv/keyboard.s	/^mode:   .byte 0     $/;"	l
+none	kernel/chr_drv/keyboard.s	/^none:   ret$/;"	l
+num	kernel/chr_drv/keyboard.s	/^num:$/;"	l
+num_table	kernel/chr_drv/keyboard.s	/^num_table:$/;"	l
+ok_cur	kernel/chr_drv/keyboard.s	/^ok_cur:$/;"	l
+ok_func	kernel/chr_drv/keyboard.s	/^ok_func:$/;"	l
+proc_list	kernel/chr_drv/keyboard.s	/^proc_list = 12                                          # 等待该缓冲队列的进程字段偏移$/;"	d
+put_queue	kernel/chr_drv/keyboard.s	/^put_queue:$/;"	l
+reboot	kernel/chr_drv/keyboard.s	/^reboot:$/;"	l
+rshift	kernel/chr_drv/keyboard.s	/^rshift:$/;"	l
+scroll	kernel/chr_drv/keyboard.s	/^scroll:$/;"	l
+set_e0	kernel/chr_drv/keyboard.s	/^set_e0:$/;"	l
+set_e1	kernel/chr_drv/keyboard.s	/^set_e1:$/;"	l
+set_leds	kernel/chr_drv/keyboard.s	/^set_leds:$/;"	l
+shift_map	kernel/chr_drv/keyboard.s	/^shift_map:$/;"	l
+size	kernel/chr_drv/keyboard.s	/^size    = 1024      $/;"	d
+tail	kernel/chr_drv/keyboard.s	/^tail = 8                                                # 缓冲区尾指针字段偏移$/;"	d
+unalt	kernel/chr_drv/keyboard.s	/^unalt:$/;"	l
+uncaps	kernel/chr_drv/keyboard.s	/^uncaps: andb $0x7f, mode                            # caps键松开,则复位mode中的对应位(位7)$/;"	l
+unctrl	kernel/chr_drv/keyboard.s	/^unctrl:$/;"	l
+unlshift	kernel/chr_drv/keyboard.s	/^unlshift:$/;"	l
+unrshift	kernel/chr_drv/keyboard.s	/^unrshift:$/;"	l
 mpty_write	kernel/chr_drv/pty.c	/^void mpty_write(struct tty_struct * tty)$/;"	f
 pty_copy	kernel/chr_drv/pty.c	/^static inline void pty_copy(struct tty_struct * from, struct tty_struct * to)$/;"	f	file:
 spty_write	kernel/chr_drv/pty.c	/^void spty_write(struct tty_struct * tty)$/;"	f
@@ -2080,6 +2154,8 @@ month	kernel/mktime.c	/^static int month[12] = {$/;"	v	file:
 panic	kernel/panic.c	/^void panic(const char * s)$/;"	f
 buf	kernel/printk.c	/^static char buf[1024];          			\/\/ 显示用临时缓冲区。$/;"	v	file:
 check_data32	kernel/printk.c	/^inline void check_data32(int value, int pos)$/;"	f
+fprintk	kernel/printk.c	/^int fprintk(int fd, const char * fmt, ...) {$/;"	f
+logbuf	kernel/printk.c	/^static char logbuf[1024];$/;"	v	file:
 printk	kernel/printk.c	/^int printk(const char *fmt, ...)$/;"	f
 LATCH	kernel/sched.c	/^#define LATCH /;"	d	file:
 TIME_REQUESTS	kernel/sched.c	/^#define TIME_REQUESTS /;"	d	file:
@@ -2089,24 +2165,24 @@ __sleep_on	kernel/sched.c	/^static inline void __sleep_on(struct task_struct **p
 a	kernel/sched.c	/^	long * a;$/;"	m	struct:__anon10	file:
 add_timer	kernel/sched.c	/^void add_timer(long jiffies, void (*fn)(void))$/;"	f
 b	kernel/sched.c	/^	short b;$/;"	m	struct:__anon10	file:
-current	kernel/sched.c	/^struct task_struct *current = &(init_task.task);	\/\/ 当前任务指针(初始化指向任务0)$/;"	v	typeref:struct:task_struct
+current	kernel/sched.c	/^struct task_struct *current = &(init_task.task);	\/* 当前任务指针(初始化指向任务0) *\/$/;"	v	typeref:struct:task_struct
 current_DOR	kernel/sched.c	/^unsigned char current_DOR = 0x0C;$/;"	v
 do_floppy_timer	kernel/sched.c	/^void do_floppy_timer(void)$/;"	f
 do_timer	kernel/sched.c	/^void do_timer(long cpl)$/;"	f
 floppy_off	kernel/sched.c	/^void floppy_off(unsigned int nr)$/;"	f
 floppy_on	kernel/sched.c	/^void floppy_on(unsigned int nr)$/;"	f
-fn	kernel/sched.c	/^	void (*fn)();										\/\/ 定时处理程序.$/;"	m	struct:timer_list	file:
+fn	kernel/sched.c	/^	void (*fn)();										\/* 定时处理程序. *\/$/;"	m	struct:timer_list	file:
 init_task	kernel/sched.c	/^static union task_union init_task = {INIT_TASK, };$/;"	v	typeref:union:task_union	file:
 interruptible_sleep_on	kernel/sched.c	/^void interruptible_sleep_on(struct task_struct **p)$/;"	f
-jiffies	kernel/sched.c	/^	long jiffies;										\/\/ 定时滴答数.$/;"	m	struct:timer_list	file:
+jiffies	kernel/sched.c	/^	long jiffies;										\/* 定时滴答数. *\/$/;"	m	struct:timer_list	file:
 jiffies	kernel/sched.c	/^unsigned long volatile jiffies = 0;$/;"	v
-jiffies_offset	kernel/sched.c	/^int jiffies_offset = 0;								\/* # clock ticks to add to get "true$/;"	v
-last_task_used_math	kernel/sched.c	/^struct task_struct *last_task_used_math = NULL;		\/\/ 使用过协处理器任务的指针.$/;"	v	typeref:struct:task_struct
+jiffies_offset	kernel/sched.c	/^int jiffies_offset = 0;$/;"	v
+last_task_used_math	kernel/sched.c	/^struct task_struct *last_task_used_math = NULL;		\/* 使用过协处理器任务的指针 *\/$/;"	v	typeref:struct:task_struct
 math_state_restore	kernel/sched.c	/^void math_state_restore()$/;"	f
 moff_timer	kernel/sched.c	/^static int moff_timer[4] = {0, 0, 0, 0};$/;"	v	file:
 mon_timer	kernel/sched.c	/^static int  mon_timer[4] = {0, 0, 0, 0};$/;"	v	file:
-next	kernel/sched.c	/^	struct timer_list * next;							\/\/ 链接指向下一个定时器.$/;"	m	struct:timer_list	typeref:struct:timer_list::timer_list	file:
-next_timer	kernel/sched.c	/^} timer_list[TIME_REQUESTS], * next_timer = NULL;		\/\/ next_timer是定时器队列头指针.$/;"	v	typeref:struct:timer_list	file:
+next	kernel/sched.c	/^	struct timer_list * next;							\/* 链接指向下一个定时器. *\/$/;"	m	struct:timer_list	typeref:struct:timer_list::timer_list	file:
+next_timer	kernel/sched.c	/^} timer_list[TIME_REQUESTS], * next_timer = NULL;		\/* next_timer是定时器队列头指针. *\/$/;"	v	typeref:struct:timer_list	file:
 sched_init	kernel/sched.c	/^void sched_init(void)$/;"	f
 schedule	kernel/sched.c	/^void schedule(void)$/;"	f
 show_state	kernel/sched.c	/^void show_state(void)$/;"	f
@@ -2114,7 +2190,7 @@ show_task	kernel/sched.c	/^void show_task(int nr, struct task_struct * p)$/;"	f
 sleep_on	kernel/sched.c	/^void sleep_on(struct task_struct **p)$/;"	f
 stack	kernel/sched.c	/^	char stack[PAGE_SIZE];$/;"	m	union:task_union	file:
 stack_start	kernel/sched.c	/^	} stack_start = { &user_stack [PAGE_SIZE*2 >> 2], 0x10 };$/;"	v	typeref:struct:__anon10
-startup_time	kernel/sched.c	/^unsigned long startup_time = 0;						\/\/ 开机时间.从1970:0:0:0:0开始计时的秒数.$/;"	v
+startup_time	kernel/sched.c	/^unsigned long startup_time = 0;						\/* 开机时间.从1970:0:0:0:0开始计时的秒数. *\/$/;"	v
 sys_alarm	kernel/sched.c	/^int sys_alarm(long seconds)$/;"	f
 sys_getegid	kernel/sched.c	/^int sys_getegid(void)$/;"	f
 sys_geteuid	kernel/sched.c	/^int sys_geteuid(void)$/;"	f
@@ -2129,8 +2205,8 @@ task	kernel/sched.c	/^struct task_struct * task[NR_TASKS] = {&(init_task.task), 
 task_union	kernel/sched.c	/^union task_union {$/;"	u	file:
 ticks_to_floppy_on	kernel/sched.c	/^int ticks_to_floppy_on(unsigned int nr)$/;"	f
 timer_list	kernel/sched.c	/^static struct timer_list {$/;"	s	file:
-timer_list	kernel/sched.c	/^} timer_list[TIME_REQUESTS], * next_timer = NULL;		\/\/ next_timer是定时器队列头指针.$/;"	v	typeref:struct:timer_list	file:
-user_stack	kernel/sched.c	/^long user_stack [ PAGE_SIZE*2 >> 2 ];	\/\/ 2022.10.31 modify:在MacOS下出现死循环问题修改，原因是user_stack太小，导致esp与.bss的vc_cons内存重叠。$/;"	v
+timer_list	kernel/sched.c	/^} timer_list[TIME_REQUESTS], * next_timer = NULL;		\/* next_timer是定时器队列头指针. *\/$/;"	v	typeref:struct:timer_list	file:
+user_stack	kernel/sched.c	/^long user_stack [ PAGE_SIZE*2 >> 2 ];	\/* 2022.10.31 modify:在MacOS下出现死循环问题修改，原因是user_stack太小，导致esp与.bss的vc_cons内存重叠 *\/$/;"	v
 wait_motor	kernel/sched.c	/^static struct task_struct * wait_motor[4] = {NULL, NULL, NULL, NULL};$/;"	v	typeref:struct:task_struct	file:
 wake_up	kernel/sched.c	/^void wake_up(struct task_struct **p)$/;"	f
 core_dump	kernel/signal.c	/^int core_dump(long signr)$/;"	f
@@ -2183,38 +2259,38 @@ sys_uname	kernel/sys.c	/^int sys_uname(struct utsname * name)$/;"	f
 thisname	kernel/sys.c	/^static struct utsname thisname = {$/;"	v	typeref:struct:utsname	file:
 CS	kernel/sys_call.s	/^CS			= 0x24$/;"	d
 DS	kernel/sys_call.s	/^DS			= 0x1C$/;"	d
-EAX	kernel/sys_call.s	/^EAX			= 0x00					# 堆栈中各个寄存器的偏移位置.$/;"	d
+EAX	kernel/sys_call.s	/^EAX			= 0x00					\/* 堆栈中各个寄存器的偏移位置. *\/$/;"	d
 EBX	kernel/sys_call.s	/^EBX			= 0x04$/;"	d
 ECX	kernel/sys_call.s	/^ECX			= 0x08$/;"	d
 EDX	kernel/sys_call.s	/^EDX			= 0x0C$/;"	d
 EFLAGS	kernel/sys_call.s	/^EFLAGS		= 0x28$/;"	d
-EIP	kernel/sys_call.s	/^EIP			= 0x20					# 以下行由CPU自动入栈.$/;"	d
-ENOSYS	kernel/sys_call.s	/^ENOSYS = 38							# 系统调用号出错码.$/;"	d
+EIP	kernel/sys_call.s	/^EIP			= 0x20					\/* 以下行由CPU自动入栈. *\/$/;"	d
+ENOSYS	kernel/sys_call.s	/^ENOSYS = 38							\/* 系统调用号出错码. *\/$/;"	d
 ES	kernel/sys_call.s	/^ES			= 0x18$/;"	d
 FS	kernel/sys_call.s	/^FS			= 0x14$/;"	d
-OLDESP	kernel/sys_call.s	/^OLDESP		= 0x2C					# 当特权级变化时,原堆栈指针也会入栈.$/;"	d
+OLDESP	kernel/sys_call.s	/^OLDESP		= 0x2C					\/* 当特权级变化时,原堆栈指针也会入栈. *\/$/;"	d
 OLDSS	kernel/sys_call.s	/^OLDSS		= 0x30$/;"	d
-ORIG_EAX	kernel/sys_call.s	/^ORIG_EAX	= 0x10					# 如果不是系统调用(是其他中断)时,该值为-1.$/;"	d
-SIG_CHLD	kernel/sys_call.s	/^SIG_CHLD	= 17					# 定义SIG_CHLD信号(子进程停止或结束).$/;"	d
+ORIG_EAX	kernel/sys_call.s	/^ORIG_EAX	= 0x10					\/* 如果不是系统调用(是其他中断)时,该值为-1. *\/$/;"	d
+SIG_CHLD	kernel/sys_call.s	/^SIG_CHLD	= 17					\/* 定义SIG_CHLD信号(子进程停止或结束). *\/$/;"	d
 bad_sys_call	kernel/sys_call.s	/^bad_sys_call:$/;"	l
-blocked	kernel/sys_call.s	/^blocked 	= (33*16)				# 受阻塞信号位图的偏移量.$/;"	d
+blocked	kernel/sys_call.s	/^blocked 	= (33*16)				\/* 受阻塞信号位图的偏移量. *\/$/;"	d
 coprocessor_error	kernel/sys_call.s	/^coprocessor_error:$/;"	l
-counter	kernel/sys_call.s	/^counter		= 4						# 任务运行时间计数(递减)(滴答数),运行时间片.$/;"	d
+counter	kernel/sys_call.s	/^counter		= 4						\/* 任务运行时间计数(递减)(滴答数),运行时间片. *\/$/;"	d
 device_not_available	kernel/sys_call.s	/^device_not_available:$/;"	l
 floppy_interrupt	kernel/sys_call.s	/^floppy_interrupt:$/;"	l
 hd_interrupt	kernel/sys_call.s	/^hd_interrupt:$/;"	l
-nr_system_calls	kernel/sys_call.s	/^nr_system_calls = 82				# Linux 0.12版内核中的系统调用总数.$/;"	d
+nr_system_calls	kernel/sys_call.s	/^nr_system_calls = 88				\/* Linux 0.12版内核中的系统调用总数. *\/$/;"	d
 parallel_interrupt	kernel/sys_call.s	/^parallel_interrupt:$/;"	l
-priority	kernel/sys_call.s	/^priority 	= 8						# 运行优先数.任务开始运行时counter=priority,越大则运行时间越长.$/;"	d
+priority	kernel/sys_call.s	/^priority 	= 8						\/* 运行优先数.任务开始运行时counter=priority,越大则运行时间越长. *\/$/;"	d
 reschedule	kernel/sys_call.s	/^reschedule:$/;"	l
 ret_from_sys_call	kernel/sys_call.s	/^ret_from_sys_call:$/;"	l
-sa_flags	kernel/sys_call.s	/^sa_flags 	= 8						# 信号集.$/;"	d
-sa_handler	kernel/sys_call.s	/^sa_handler 	= 0						# 信号处理过程的句柄(描述符)$/;"	d
-sa_mask	kernel/sys_call.s	/^sa_mask 	= 4						# 信号屏蔽码$/;"	d
-sa_restorer	kernel/sys_call.s	/^sa_restorer = 12					# 恢复函数指针,参见kernel\/signal.c程序说明.$/;"	d
-sigaction	kernel/sys_call.s	/^sigaction 	= 16					# MUST be 16 (=len of sigaction)	# sigaction结构长度必须是16字节.$/;"	d
-signal	kernel/sys_call.s	/^signal		= 12					# 是信号位图,每个位代表一种信号,信号值=位偏移值+1.$/;"	d
-state	kernel/sys_call.s	/^state		= 0						# these are offsets into the task-struct.	# 进程状态码.$/;"	d
+sa_flags	kernel/sys_call.s	/^sa_flags 	= 8						\/* 信号集. *\/$/;"	d
+sa_handler	kernel/sys_call.s	/^sa_handler 	= 0						\/* 信号处理过程的句柄(描述符) *\/$/;"	d
+sa_mask	kernel/sys_call.s	/^sa_mask 	= 4						\/* 信号屏蔽码 *\/$/;"	d
+sa_restorer	kernel/sys_call.s	/^sa_restorer = 12					\/* 恢复函数指针,参见kernel\/signal.c程序说明. *\/$/;"	d
+sigaction	kernel/sys_call.s	/^sigaction 	= 16					\/* MUST be 16 (=len of sigaction) sigaction结构长度必须是16字节. *\/$/;"	d
+signal	kernel/sys_call.s	/^signal		= 12					\/* 是信号位图,每个位代表一种信号,信号值=位偏移值+1. *\/$/;"	d
+state	kernel/sys_call.s	/^state		= 0						\/* these are offsets into the task-struct.	进程状态码. *\/$/;"	d
 sys_call	kernel/sys_call.s	/^sys_call:$/;"	l
 sys_execve	kernel/sys_call.s	/^sys_execve:$/;"	l
 sys_fork	kernel/sys_call.s	/^sys_fork:$/;"	l
@@ -2254,6 +2330,10 @@ is_digit	kernel/vsprintf.c	/^#define is_digit(/;"	d	file:
 number	kernel/vsprintf.c	/^static char * number(char * str, int num, int base, int size, int precision$/;"	f	file:
 skip_atoi	kernel/vsprintf.c	/^static int skip_atoi(const char **s)$/;"	f	file:
 vsprintf	kernel/vsprintf.c	/^int vsprintf(char *buf, const char *fmt, va_list args)$/;"	f
+__LIBRARY__	kernel/who.c	/^#define __LIBRARY__$/;"	d	file:
+mem	kernel/who.c	/^char mem[80]= {0};$/;"	v
+sys_iam	kernel/who.c	/^int sys_iam(const char* name)$/;"	f
+sys_whoami	kernel/who.c	/^int sys_whoami(char* name,unsigned int size)$/;"	f
 CLEAR_FILE	lib/Makefile	/^CLEAR_FILE = $(OBJS) lib.a tmp_make$/;"	m
 OBJS	lib/Makefile	/^OBJS  = ctype.o _exit.o open.o close.o errno.o write.o dup.o setsid.o \\$/;"	m
 __LIBRARY__	lib/_exit.c	/^#define __LIBRARY__	/;"	d	file:
@@ -2328,10 +2408,6 @@ swap_free	mm/swap.c	/^void swap_free(int swap_nr)$/;"	f
 swap_in	mm/swap.c	/^void swap_in(unsigned long *table_ptr)$/;"	f
 swap_out	mm/swap.c	/^int swap_out(void)$/;"	f
 try_to_swap_out	mm/swap.c	/^int try_to_swap_out(unsigned long * table_ptr)$/;"	f
-CLEAR_FILE	rootfs/Makefile	/^CLEAR_FILE = $(HDA_IMG) $(FLP_IMG) $(RAM_IMG)$/;"	m
-FLP_IMG_FLAG	rootfs/Makefile	/^FLP_IMG_FLAG := $(shell find .\/ -name $(FLP_IMG))$/;"	m
-HDA_IMG_FLAG	rootfs/Makefile	/^HDA_IMG_FLAG := $(shell find .\/ -name $(HDA_IMG))$/;"	m
-RAM_IMG_FLAG	rootfs/Makefile	/^RAM_IMG_FLAG := $(shell find .\/ -name $(RAM_IMG))$/;"	m
 DEFAULT_MAJOR_ROOT	tools/build.c	/^#define DEFAULT_MAJOR_ROOT /;"	d	file:
 DEFAULT_MAJOR_SWAP	tools/build.c	/^#define DEFAULT_MAJOR_SWAP /;"	d	file:
 DEFAULT_MINOR_ROOT	tools/build.c	/^#define DEFAULT_MINOR_ROOT /;"	d	file:

@@ -5,9 +5,16 @@ romimage:    file=$BXSHARE/BIOS-bochs-latest
 vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
 
 floppya: 1_44="images/Image", status=inserted, write_protected=1
-floppyb: 1_44="rootfs/rootimage-0.11", status=inserted
-#ata0-master: type=disk, path="rootfs/hdc-0.11.img", mode=flat, cylinders=410, heads=16, spt=38
-ata0-master: type=disk, path="rootfs/hdc-0.11.img", mode=flat, cylinders=204, heads=16, spt=38
+
+#此镜像为root文件系统镜像，启动后可以通过mount /dev/fd0 /mnt，此时会出错，再mount /dev/fd1 /mnt即可以成功把fd1 mount上
+floppyb: 1_44="rootfs/root-0.12-fd.img", status=inserted
+
+ata0-master: type=disk, path="rootfs/hdc-0.12.img", mode=flat, cylinders=162, heads=16, spt=63
+# ata0-master: type=disk, path="rootfs/root-0.12-hd.img", mode=flat, cylinders=487, heads=16, spt=63
+# root-0.12-hd.img size =251338752, sector =251338752/512=490896, 490896/16=30681, 30681/63=487
+# ata0-master: type=disk, path="rootfs/hdc-0.11.img", mode=flat, cylinders=204, heads=16, spt=38
+# hdc-0.11.img size = 63504384(bytes) sector = 63504384/512 = 124032个 124032/16 = 7752， 7752/38=204
+
 boot: a
 
 display_library: $BOCHS_DISP_LIB

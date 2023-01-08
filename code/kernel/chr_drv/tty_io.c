@@ -79,13 +79,13 @@ struct tty_struct tty_table[256];												// tty表结构数组.
 
 // 下面设定各种类型的tty终端所使用缓冲队列结构在tty_queues[]数组中的起始项位置.
 // 8个虚拟控制台终端占用tty_queues[]数组开头24项(3*MAX_CONSOLES)(0 -- 23)
-// 两个串行终端占用随后的6项(3*NR_SERIALS)(24 -- 29)
+// 2个串行终端占用随后的6项(3*NR_SERIALS=3*2)(24 -- 29)
 // 4个主伪终端占用随后的12项(3*NR_PTYS)(30 -- 41)
 // 4个从伪终端占用随后的12项(3*NR_PTYS)(42 -- 53)
 #define con_queues tty_queues  // 虚拟控制台终端 0-23
-#define rs_queues ((3 * MAX_CONSOLES) + tty_queues)  // 串行终端 24-29
-#define mpty_queues ((3 * (MAX_CONSOLES + NR_SERIALS)) + tty_queues)  // 主伪终端 30-41
-#define spty_queues ((3 * (MAX_CONSOLES + NR_SERIALS + NR_PTYS)) + tty_queues)  // 从伪终端 42-53
+#define rs_queues ((3 * MAX_CONSOLES) + tty_queues)  // 串行终端 24-29 [ 3*MAX_CONSOLES=3*8=24 ]
+#define mpty_queues ((3 * (MAX_CONSOLES + NR_SERIALS)) + tty_queues)  // 主伪终端 30-41 [ 3*(8+2)=30 ]
+#define spty_queues ((3 * (MAX_CONSOLES + NR_SERIALS + NR_PTYS)) + tty_queues)  // 从伪终端 42-53 [3*(8+2+4)=42]
 
 // 下面设定各种类型tty终端所使用的tty结构在tty_table[]数组中的起始项位置.
 // 8个虚拟控制台终端可用tty_table[]数组开头64项(0 -- 63);
@@ -576,10 +576,10 @@ void tty_init(void)
 
 	/**
 	 * 首先初始化所有终端的缓冲队列结构,设置初值.对于串行终端的读/写缓冲队列,将它们的data字段设置为串行端口基地址值.
-	 * 串中1是0x3f8, 串口2是0x2f8.然后先初步设置所有终端的tty结构.
+	 * 串口1是0x3f8, 串口2是0x2f8.然后先初步设置所有终端的tty结构.
 	 * 其中特殊字符数组c_cc[]设置的初值定义在include/linux/tty.h文件中.
 	 */
-	for (i = 0 ; i < QUEUES ; i++)   // QUEUES = 54
+	for (i = 0 ; i < QUEUES ; i++)    /* QUEUES = 54 */
 		tty_queues[i] = (struct tty_queue) {0, 0, 0, 0, ""};
 	rs_queues[0] = (struct tty_queue) {0x3f8, 0, 0, 0, ""};
 	rs_queues[1] = (struct tty_queue) {0x3f8, 0, 0, 0, ""};

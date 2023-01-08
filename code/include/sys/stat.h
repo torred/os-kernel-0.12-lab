@@ -41,6 +41,10 @@ struct stat {
 #define S_ISBLK(m)	(((m) & S_IFMT) == S_IFBLK)	// 是否为块设备文件.
 #define S_ISFIFO(m)	(((m) & S_IFMT) == S_IFIFO)     // 是否为FIFO特殊文件。
 
+//proc 文件的宏定义/宏函数
+#define S_IFPROC 0030000
+#define S_ISPROC(m) (((m) & S_IFPROC) == S_IFPROC) // 测试m是否是proc文件
+
 // 文件访问权限：
 #define S_IRWXU 00700           // 宿主可以读、写、执行/搜索（名称最后字母代表User）。
 #define S_IRUSR 00400           // 宿主读许可。

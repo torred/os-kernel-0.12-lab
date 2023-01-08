@@ -69,13 +69,23 @@
 #define ECC_ERR		0x40	/* ? */
 #define	BBD_ERR		0x80	/* ? */
 
-// 硬盘分区表结构.
+/** 硬盘分区表结构.
+ * 1，2，3字节，5，6，7字节
+ * 磁头号由（1）字节8位表示，其范围为（0 -- 2^8 - 1），也即（0 磁头-- 255磁头）
+ * 扇区号由（2）字节低6位表示，其范围为（0 -- 2^6 - 1），由于扇区号从1开始，所以其范围是（1扇区-- 63扇区）
+ * 柱面号由（2）字节高2位 + （3）字节，共10位表示，其范围为（0 --2^10 - 1），也即（0 柱面-- 1023柱面）
+ * 当柱面号超过1023时，这10位依然表示成1023，需要注意
+ *
+ * 8,9,10,11字节
+ * 如果是主分区表，则这4 个字节表示该分区起始逻辑扇区号与逻辑0扇区（0柱面，0磁头，1扇区）之差。如果非主分区表，
+ * 则这4 个字节要么表示该分区起始逻辑扇区号与扩展分区起始逻辑扇区号之差，要么为63。详细情况在后面有所阐述。
+ */
 struct partition {
 	unsigned char boot_ind;		/* 0x80 - active (unused) */
-	unsigned char head;		/* ? */
-	unsigned char sector;		/* ? */
-	unsigned char cyl;		/* ? */
-	unsigned char sys_ind;		/* ? */
+	unsigned char head;			/* 起始磁头 */
+	unsigned char sector;		/* 起始扇区 */
+	unsigned char cyl;			/* 起始柱面 */
+	unsigned char sys_ind;		/* 系统标示，0x81:Linux minix, 0x82:Solaris swap */
 	unsigned char end_head;		/* ? */
 	unsigned char end_sector;	/* ? */
 	unsigned char end_cyl;		/* ? */

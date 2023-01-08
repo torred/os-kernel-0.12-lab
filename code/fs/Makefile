@@ -3,7 +3,7 @@ include ../Makefile.make
 
 OBJS=	open.o read_write.o inode.o file_table.o buffer.o super.o \
 	block_dev.o char_dev.o file_dev.o stat.o exec.o pipe.o namei.o \
-	bitmap.o fcntl.o ioctl.o truncate.o select.o
+	bitmap.o fcntl.o ioctl.o truncate.o select.o proc.o
 CLEAR_FILE = $(OBJS) fs.o tmp_make
 
 LDFLAGS += -r
@@ -42,31 +42,28 @@ block_dev.o: block_dev.c ../include/errno.h ../include/linux/sched.h \
  ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
  ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
  ../include/sys/param.h ../include/sys/time.h ../include/time.h \
- ../include/sys/resource.h ../include/asm/segment.h \
- ../include/asm/system.h
-buffer.o: buffer.c ../include/stdarg.h ../include/linux/config.h \
- ../include/linux/sched.h ../include/linux/head.h ../include/linux/fs.h \
- ../include/sys/types.h ../include/linux/mm.h ../include/linux/kernel.h \
- ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
- ../include/time.h ../include/sys/resource.h ../include/asm/system.h \
- ../include/asm/io.h
+ ../include/sys/resource.h ../include/asm/segment.h
+buffer.o: buffer.c ../include/stdarg.h ../include/linux/sched.h \
+ ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
+ ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
+ ../include/sys/param.h ../include/sys/time.h ../include/time.h \
+ ../include/sys/resource.h ../include/asm/system.h
 char_dev.o: char_dev.c ../include/errno.h ../include/sys/types.h \
  ../include/linux/sched.h ../include/linux/head.h ../include/linux/fs.h \
  ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
  ../include/sys/param.h ../include/sys/time.h ../include/time.h \
  ../include/sys/resource.h ../include/asm/segment.h ../include/asm/io.h
-exec.o: exec.c ../include/signal.h ../include/sys/types.h \
- ../include/errno.h ../include/string.h ../include/sys/stat.h \
- ../include/a.out.h ../include/linux/fs.h ../include/linux/sched.h \
- ../include/linux/head.h ../include/linux/mm.h ../include/linux/kernel.h \
+exec.o: exec.c ../include/errno.h ../include/string.h \
+ ../include/sys/stat.h ../include/sys/types.h ../include/a.out.h \
+ ../include/linux/fs.h ../include/linux/sched.h ../include/linux/head.h \
+ ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
  ../include/sys/param.h ../include/sys/time.h ../include/time.h \
  ../include/sys/resource.h ../include/asm/segment.h
-fcntl.o: fcntl.c ../include/string.h ../include/errno.h \
- ../include/linux/sched.h ../include/linux/head.h ../include/linux/fs.h \
- ../include/sys/types.h ../include/linux/mm.h ../include/linux/kernel.h \
- ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
- ../include/time.h ../include/sys/resource.h ../include/asm/segment.h \
- ../include/fcntl.h ../include/sys/stat.h
+fcntl.o: fcntl.c ../include/errno.h ../include/linux/sched.h \
+ ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
+ ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
+ ../include/sys/param.h ../include/sys/time.h ../include/time.h \
+ ../include/sys/resource.h ../include/fcntl.h
 file_dev.o: file_dev.c ../include/errno.h ../include/fcntl.h \
  ../include/sys/types.h ../include/linux/sched.h ../include/linux/head.h \
  ../include/linux/fs.h ../include/linux/mm.h ../include/linux/kernel.h \
@@ -78,52 +75,57 @@ inode.o: inode.c ../include/string.h ../include/sys/stat.h \
  ../include/linux/fs.h ../include/linux/mm.h ../include/linux/kernel.h \
  ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
  ../include/time.h ../include/sys/resource.h ../include/asm/system.h
-ioctl.o: ioctl.c ../include/string.h ../include/errno.h \
- ../include/sys/stat.h ../include/sys/types.h ../include/linux/sched.h \
- ../include/linux/head.h ../include/linux/fs.h ../include/linux/mm.h \
- ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \
- ../include/sys/time.h ../include/time.h ../include/sys/resource.h
+ioctl.o: ioctl.c ../include/errno.h ../include/sys/stat.h \
+ ../include/sys/types.h ../include/linux/sched.h ../include/linux/head.h \
+ ../include/linux/fs.h ../include/linux/mm.h ../include/linux/kernel.h \
+ ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
+ ../include/time.h ../include/sys/resource.h
 namei.o: namei.c ../include/linux/sched.h ../include/linux/head.h \
  ../include/linux/fs.h ../include/sys/types.h ../include/linux/mm.h \
  ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \
  ../include/sys/time.h ../include/time.h ../include/sys/resource.h \
  ../include/asm/segment.h ../include/string.h ../include/fcntl.h \
  ../include/errno.h ../include/const.h ../include/sys/stat.h
-open.o: open.c ../include/string.h ../include/errno.h ../include/fcntl.h \
+open.o: open.c ../include/errno.h ../include/fcntl.h \
  ../include/sys/types.h ../include/utime.h ../include/sys/stat.h \
  ../include/linux/sched.h ../include/linux/head.h ../include/linux/fs.h \
  ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
  ../include/sys/param.h ../include/sys/time.h ../include/time.h \
  ../include/sys/resource.h ../include/linux/tty.h ../include/termios.h \
  ../include/asm/segment.h
-pipe.o: pipe.c ../include/signal.h ../include/sys/types.h \
- ../include/errno.h ../include/termios.h ../include/linux/sched.h \
- ../include/linux/head.h ../include/linux/fs.h ../include/linux/mm.h \
- ../include/linux/kernel.h ../include/sys/param.h ../include/sys/time.h \
+pipe.o: pipe.c ../include/errno.h ../include/termios.h \
+ ../include/sys/types.h ../include/linux/sched.h ../include/linux/head.h \
+ ../include/linux/fs.h ../include/linux/mm.h ../include/linux/kernel.h \
+ ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
  ../include/time.h ../include/sys/resource.h ../include/asm/segment.h
+proc.o: proc.c ../include/linux/kernel.h ../include/linux/sched.h \
+ ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
+ ../include/linux/mm.h ../include/signal.h ../include/sys/param.h \
+ ../include/sys/time.h ../include/time.h ../include/sys/resource.h \
+ ../include/asm/segment.h ../include/stdarg.h ../include/unistd.h \
+ ../include/sys/stat.h ../include/sys/times.h ../include/sys/utsname.h \
+ ../include/utime.h
 read_write.o: read_write.c ../include/sys/stat.h ../include/sys/types.h \
  ../include/errno.h ../include/linux/kernel.h ../include/linux/sched.h \
  ../include/linux/head.h ../include/linux/fs.h ../include/linux/mm.h \
  ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
  ../include/time.h ../include/sys/resource.h ../include/asm/segment.h
-select.o: select.c ../include/linux/fs.h ../include/sys/types.h \
- ../include/linux/kernel.h ../include/linux/tty.h ../include/termios.h \
- ../include/linux/sched.h ../include/linux/head.h ../include/linux/mm.h \
+select.o: select.c ../include/linux/kernel.h ../include/linux/tty.h \
+ ../include/termios.h ../include/sys/types.h ../include/linux/sched.h \
+ ../include/linux/head.h ../include/linux/fs.h ../include/linux/mm.h \
  ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
  ../include/time.h ../include/sys/resource.h ../include/asm/segment.h \
- ../include/asm/system.h ../include/sys/stat.h ../include/string.h \
- ../include/const.h ../include/errno.h
+ ../include/asm/system.h ../include/sys/stat.h ../include/errno.h
 stat.o: stat.c ../include/errno.h ../include/sys/stat.h \
  ../include/sys/types.h ../include/linux/fs.h ../include/linux/sched.h \
  ../include/linux/head.h ../include/linux/mm.h ../include/linux/kernel.h \
  ../include/signal.h ../include/sys/param.h ../include/sys/time.h \
  ../include/time.h ../include/sys/resource.h ../include/asm/segment.h
-super.o: super.c ../include/linux/config.h ../include/linux/sched.h \
- ../include/linux/head.h ../include/linux/fs.h ../include/sys/types.h \
- ../include/linux/mm.h ../include/linux/kernel.h ../include/signal.h \
- ../include/sys/param.h ../include/sys/time.h ../include/time.h \
- ../include/sys/resource.h ../include/asm/system.h ../include/errno.h \
- ../include/sys/stat.h
+super.o: super.c ../include/linux/sched.h ../include/linux/head.h \
+ ../include/linux/fs.h ../include/sys/types.h ../include/linux/mm.h \
+ ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \
+ ../include/sys/time.h ../include/time.h ../include/sys/resource.h \
+ ../include/asm/system.h ../include/errno.h ../include/sys/stat.h
 truncate.o: truncate.c ../include/linux/sched.h ../include/linux/head.h \
  ../include/linux/fs.h ../include/sys/types.h ../include/linux/mm.h \
  ../include/linux/kernel.h ../include/signal.h ../include/sys/param.h \

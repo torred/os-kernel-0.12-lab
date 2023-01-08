@@ -1,37 +1,37 @@
 #ifndef _SCHED_H
 #define _SCHED_H
 
-#define HZ 100                                  // 定义系统时钟滴答频率(100Hz,每个滴答10ms)
+#define HZ 100                                  /* 定义系统时钟滴答频率(100Hz,每个滴答10ms) */
 
-#define NR_TASKS        64                      // 系统中同时最多任务(进程)数.
-#define TASK_SIZE       0x04000000              // 每个任务的长度(64MB).
-#define LIBRARY_SIZE    0x00400000              // 动态加载库长度(4MB).
+#define NR_TASKS        64                      /* 系统中同时最多任务(进程)数. */
+#define TASK_SIZE       0x04000000              /* 每个任务的长度(64MB). */
+#define LIBRARY_SIZE    0x00400000              /* 动态加载库长度(4MB). */
 
 #if (TASK_SIZE & 0x3fffff)
-#error "TASK_SIZE must be multiple of 4M"       // 任务长度必须是4MB的倍数.
+#error "TASK_SIZE must be multiple of 4M"       /* 任务长度必须是4MB的倍数. */
 #endif
 
 #if (LIBRARY_SIZE & 0x3fffff)
-#error "LIBRARY_SIZE must be a multiple of 4M"  // 库长度也必须是4MB的倍数.
+#error "LIBRARY_SIZE must be a multiple of 4M"  /* 库长度也必须是4MB的倍数. */
 #endif
 
 #if (LIBRARY_SIZE >= (TASK_SIZE/2))
-#error "LIBRARY_SIZE too damn big!"             // 加载库的长度不得大于任务长度的一半.
+#error "LIBRARY_SIZE too damn big!"             /* 加载库的长度不得大于任务长度的一半. */
 #endif
 
 #if (((TASK_SIZE>>16)*NR_TASKS) != 0x10000)
-#error "TASK_SIZE*NR_TASKS must be 4GB"         // 任务长度*任务总个数必须为4GB.
+#error "TASK_SIZE*NR_TASKS must be 4GB"         /* 任务长度*任务总个数必须为4GB. */
 #endif
 
-// 在进程逻辑地址空间中动态库被加载的位置(60MB).
+/* 在进程逻辑地址空间中动态库被加载的位置(60MB). */
 #define LIBRARY_OFFSET (TASK_SIZE - LIBRARY_SIZE)
 
-// 下面宏CT_TO_SECS和CT_TO_USECS用于把系统当前嘀嗒数转换成用秒值加微秒值表示。
+/* 下面宏CT_TO_SECS和CT_TO_USECS用于把系统当前嘀嗒数转换成用秒值加微秒值表示。 */
 #define CT_TO_SECS(x)   ((x) / HZ)
 #define CT_TO_USECS(x)  (((x) % HZ) * 1000000 / HZ)
 
-#define FIRST_TASK task[0]                      // 任务0比较特殊,所以特意给它单独定义一个符号.
-#define LAST_TASK task[NR_TASKS - 1]            // 任务数组中的最后一项任务.
+#define FIRST_TASK task[0]                      /* 任务0比较特殊,所以特意给它单独定义一个符号. */
+#define LAST_TASK task[NR_TASKS - 1]            /* 任务数组中的最后一项任务. */
 
 #include <linux/head.h>
 #include <linux/fs.h>
@@ -46,47 +46,47 @@
 #endif
 
 /* 这里定义了进程运行时可能处的状态 */
-#define TASK_RUNNING            0   // 进程正在运行或已准备就绪.
-#define TASK_INTERRUPTIBLE      1   // 进程处于可中断等待状态.
-#define TASK_UNINTERRUPTIBLE    2   // 进程处于不可中断等待状态,主要用于I/O操作等待.
-#define TASK_ZOMBIE             3   // 进程处于僵死状态,已经停止运行,但父进程还没发信号.
-#define TASK_STOPPED            4   // 进程已停止.
+#define TASK_RUNNING            0   /* 进程正在运行或已准备就绪. */
+#define TASK_INTERRUPTIBLE      1   /* 进程处于可中断等待状态. */
+#define TASK_UNINTERRUPTIBLE    2   /* 进程处于不可中断等待状态,主要用于I/O操作等待. */
+#define TASK_ZOMBIE             3   /* 进程处于僵死状态,已经停止运行,但父进程还没发信号. */
+#define TASK_STOPPED            4   /* 进程已停止. */
 
 #ifndef NULL
-#define NULL ((void *) 0)           // 定义NULL为空指针.
+#define NULL ((void *) 0)           /* 定义NULL为空指针. */
 #endif
 
-// 复制进程的页目录页表.Linus认为这是内核中最复杂的函数之一.(mm/memory.c)
+/* 复制进程的页目录页表.Linus认为这是内核中最复杂的函数之一.(mm/memory.c) */
 extern int copy_page_tables(unsigned long from, unsigned long to, long size);
-// 释放页表所指定的内存块及页表本身(mm/memory.c)
+/* 释放页表所指定的内存块及页表本身(mm/memory.c) */
 extern int free_page_tables(unsigned long from, unsigned long size);
 
-// 调度程序的初始化函数(kernel/sched.c)
+/* 调度程序的初始化函数(kernel/sched.c) */
 extern void sched_init(void);
-// 进程调度函数(kernel/sched.c)
+/* 进程调度函数(kernel/sched.c) */
 extern void schedule(void);
-// 异常(陷阱)中断处理初始化函数,设置中断调用门并允许中断请求信号.(kernel/traps.c)
+/* 异常(陷阱)中断处理初始化函数,设置中断调用门并允许中断请求信号.(kernel/traps.c) */
 extern void trap_init(void);
-// 显示内核出错信息,然后进入死循环(kernel/panic.c)
+/* 显示内核出错信息,然后进入死循环(kernel/panic.c) */
 extern void panic(const char * str);
-// 往tty上写指定长度的字符串。（kernel/chr_drv/tty_io.c）。
+/* 往tty上写指定长度的字符串。（kernel/chr_drv/tty_io.c） */
 extern int tty_write(unsigned minor,char * buf,int count);
 
-typedef int (*fn_ptr)();            // 定义函数指针类型.
+typedef int (*fn_ptr)();            /* 定义函数指针类型. */
 
-// 下面是数学协处理器使用的结构，主要用于保存进程切换时i387的执行状态信息。
+/* 下面是数学协处理器使用的结构，主要用于保存进程切换时i387的执行状态信息 */
 struct i387_struct {
-    long    cwd;                // 控制字（Control word）。
-    long    swd;                // 状态字（Status word）。
-    long    twd;                // 标记字（Tag word）。
-    long    fip;                // 协处理器代码指针。
-    long    fcs;                // 协处理器代码段寄存器。
-    long    foo;                // 内存操作数的偏移位置。
-    long    fos;                // 内存操作数的段值。
-    long    st_space[20];       /* 8*10 bytes for each FP-reg = 80 bytes */
-};                              /* 8个10字节的协处理器累加器。 */
+    long    cwd;                /* 控制字(Control word) */
+    long    swd;                /* 状态字(Status word) */
+    long    twd;                /* 标记字(Tag word) */
+    long    fip;                /* 协处理器代码指针 */
+    long    fcs;                /* 协处理器代码段寄存器 */
+    long    foo;                /* 内存操作数的偏移位置 */
+    long    fos;                /* 内存操作数的段值 */
+    long    st_space[20];       /* 8*10 bytes for each FP-reg = 80 bytes, 8个10字节的协处理器累加器*/
+};                              /* 4*(7+20)= 108字节*/
 
-// 任务状态段数据结构.
+/* 任务状态段数据结构. */
 struct tss_struct {
     long    back_link;          /* 16 high bits zero */
     long    esp0;
@@ -115,140 +115,123 @@ struct tss_struct {
     long    ldt;                /* 16 high bits zero */
     long    trace_bitmap;       /* bits: trace 0, bitmap 16-31 */
     struct i387_struct i387;
-};
+};                              /* 26*4=104字节, 104+108=212字节 */
 
-// 下面是任务(进程)数据结构,或称为进程描述符.
-// long state                           任务的运行状态(-1 不可运行,0 可运行(就绪), >0 已停止).
-// long counter                         任务运行时间计数(递减)(滴答数),运行时间片.
-// long priority                        优先数.任务开始运行时counter=priority,越大运行越长.
-// long signal                          信号位图,每个比特位代表一种信号,信号值=位偏移值+1.
-// struct sigaction sigaction[32]       信号执行属性结构,对应信号将要执行的操作和标志信息.
-// long blocked                         进程信号屏蔽码(对应信号位图).
-// -----------------------------
-// int exit_code                        任务执行停止的退出码,其父进程会取.
-// unsigned long start_code             代码段地址.
-// unsigned long end_code               代码长度(字节数).
-// unsigned long end_data               代码长度+数据长度(字节数)
-// unsigned long brk                    总长度(字节数)
-// unsigned long start_stack            堆栈段地址.
-// long pid                             进程标识号(进程号)
-// long pgrp                            进程组号.
-// long session                         会话号.
-// long leader                          会话首领.
-// int  groups[NGROUPS];                进程所属组号.一个进程可属于多个组.
-// struct task_struct *p_pptr           指向父进程的指针
-// struct task_struct *p_cptr           指向最新子进程的指针.
-// struct task_struct *p_ysptr          指向比自己后创建的相邻进程的指针.
-// struct task_struct *p_osptr          指向比自己早创建的相邻进程的指针.
-// unsigned short uid                   用户标识号(用户id).
-// unsigned short euid                  有效用户id.
-// unsigned short suid                  保存的用户id.
-// unsigned short gid                   组标识号(级id)
-// unsigned short egid                  有效级id.
-// unsigned short sgid                  保存的组id.
-// unsigned long timeout                内核定时超时值
-// unsigned long alarm                  报警定时值(滴答数)
-// long utime                           用户态运行时间(滴答数)
-// long stime                           系统态运行时间(滴答数)
-// long cutime                          子进程用户态运行时间.
-// long cstime                          子进程系统态运行时间.
-// long start_time                      进程开始运行时刻.
-// struct rlimit rlim[RLIM_NLIMITS]     进程资源使用统计数组.
-// unsigned int flags                   各进程的标志.
-// unsigned short used_math             标志:是否使用了协处理器.
-// ----------------------
-// int tty;                             进程使用tty终端的子设备号.-1表示没有使用.
-// unsigned short umask                 文件创建属性屏蔽位.
-// struct m_inode * pwd                 当前工作目录i节点结构指针.
-// struct m_inode * root                根目录i节点结构指针.
-// struct m_inode * executable          执行文件i节点结构指针.
-// struct m_inode * library             被加载库文件i节点结构指针.
-// unsigned long close_on_exec          执行时关闭文件句柄位图标志.(include/fcntl.h)
-// struct file * filp[NR_OPEN]          文件结构指针表,最多32项.表项号即是文件描述符的值.
-// struct desc_struct ldt[3]            局部描述符表, 0 - 空,1 - 代码段cs,2 - 数据和堆栈段ds&ss.
-// struct tss_struct tss                进程的任务状态段信息结构.
-// ==============================================
 struct task_struct {
-    /* these are hardcoded - don't touch */
-    /* 下面这几个字段是硬编码字段 */
-    long state;                         // 任务的运行状态(-1 不可运行,0 可运行(就绪), >0 已停止)
-    long counter;                       // 任务运行时间计数(递减)(滴答数),运行时间片
-    long priority;                      // 优先数.任务开始运行时counter=priority,越大运行越长
-    long signal;                        // 信号位图,每个比特位代表一种信号,信号值=位偏移值+1
-    struct sigaction sigaction[32];     // 信号执行属性结构,对应信号将要执行的操作和标志信息
-    long blocked;                       // 进程信号屏蔽码(对应信号位图)
+    /* these are hardcoded - don't touch, 下面这几个字段是硬编码字段 */
+    /* 下面6个变量为进程运行时相关的状态 (532B) */
+    long state;                         /* 任务的运行状态(-1 不可运行,0 可运行(就绪), >0 已停止) (4B) */
+    long counter;                       /* 任务运行时间计数(递减)(滴答数),运行时间片 (4B) */
+    long priority;                      /* 优先数.任务开始运行时counter=priority,越大运行越长 (4B) */
 
-    /* various fields */
-    int exit_code;                      // 任务执行停止的退出码,其父进程会取.
-    unsigned long start_code;           // 代码段地址
-    unsigned long end_code;             // 代码长度(字节数)
-    unsigned long end_data;             // 代码长度+数据长度(字节数)
-    unsigned long brk;                  // 总长度(字节数)
-    unsigned long start_stack;          // 堆栈段地址
-    long pid;                           // 进程标识号(进程号)
-    long pgrp;                          // 进程组号
-    long session;                       // 会话号
-    long leader;                        // 会话首领
-    int groups[NGROUPS];                // 进程所属组号.一个进程可属于多个组
+    long signal;                        /* 信号位图,每个比特位代表一种信号,信号值=位偏移值+1 (4B) */
+    struct sigaction sigaction[32];     /* 信号执行属性结构,对应信号将要执行的操作和标志信息 (16*32=512B) */
+    long blocked;                       /* 进程信号屏蔽码(对应信号位图) (4B) */
+
+    /* various fields (168B) */
+    int exit_code;                      /* 任务执行停止的退出码,其父进程会取 (4B) */
+    unsigned long start_code;           /* 代码段地址 (4B) */
+    unsigned long end_code;             /* 代码长度(字节数) (4B) */
+    unsigned long end_data;             /* 代码长度+数据长度(字节数) (4B) */
+    unsigned long brk;                  /* 总长度(字节数) (4B) */
+    unsigned long start_stack;          /* 堆栈段地址 (4B) */
+
+    long pid;                           /* 进程标识号(进程号) (4B) */
+    long pgrp;                          /* 进程组号 (4B) */
+    long session;                       /* 会话号 (4B) */
+    long leader;                        /* 会话首领 (4B) */
+    int groups[NGROUPS];                /* 进程所属组号.一个进程可属于多个组 (32*4=128B) */
+
     /*
      * pointers to parent process, youngest child, younger sibling,
      * older sibling, respectively.  (p->father can be replaced with
-     * p->p_pptr->pid)
+     * p->p_pptr->pid) (104B)
      */
-    struct task_struct *p_pptr;         // 指向父进程的指针
-    struct task_struct *p_cptr;         // 指向最新子进程的指针
-    struct task_struct *p_ysptr;        // 指向比自己后创建的相邻进程的指针
-    struct task_struct *p_osptr;        // 指向比自己早创建的相邻进程的指针
-    unsigned short uid;                 // 用户标识号(用户id)
-    unsigned short euid;                // 有效用户id
-    unsigned short suid;                // 保存的用户id
-    unsigned short gid;                 // 组标识号(级id)
-    unsigned short egid;                // 有效级id
-    unsigned short sgid;                // 保存的组id
-    unsigned long timeout;              // 内核定时超时值
-    unsigned long alarm;                // 报警定时值(滴答数)
-    long utime;                         // 用户态运行时间(滴答数)
-    long stime;                         // 系统态运行时间(滴答数)
-    long cutime;                        // 子进程用户态运行时间
-    long cstime;                        // 子进程系统态运行时间
-    long start_time;                    // 进程开始运行时刻.
-    struct rlimit rlim[RLIM_NLIMITS];   // 进程资源使用统计数组.
-    /* per process flags, defined below */
-    unsigned int flags;                 // 各进程的标志
-    unsigned short used_math;           // 标志:是否使用了协处理器.
+    struct task_struct *p_pptr;         /* 指向父进程的指针 (4B) */
+    struct task_struct *p_cptr;         /* 指向最新子进程的指针 (4B) */
+    struct task_struct *p_ysptr;        /* 指向比自己后创建的相邻进程的指针 (4B) */
+    struct task_struct *p_osptr;        /* 指向比自己早创建的相邻进程的指针 (4B) */
 
-    /* file system info */
+    unsigned short uid;                 /* 用户标识号(用户id) (2B) */
+    unsigned short euid;                /* 有效用户id (2B) */
+    unsigned short suid;                /* 保存的用户id (2B) */
+    unsigned short gid;                 /* 组标识号(级id) (2B) */
+    unsigned short egid;                /* 有效级id (2B) */
+    unsigned short sgid;                /* 保存的组id (2B) */
+
+    unsigned long timeout;              /* 内核定时超时值 (4B) */
+    unsigned long alarm;                /* 报警定时值(滴答数) (4B) */
+
+    long utime;                         /* 用户态运行时间(滴答数) (4B) */
+    long stime;                         /* 系统态运行时间(滴答数) (4B) */
+    long cutime;                        /* 子进程用户态运行时间 (4B) */
+    long cstime;                        /* 子进程系统态运行时间 (4B) */
+    long start_time;                    /* 进程开始运行时刻 (4B) */
+
+    struct rlimit rlim[RLIM_NLIMITS];   /* 进程资源使用统计数组 (48B) */
+
+    /* per process flags, defined below (8B) */
+    unsigned int flags;                 /* 各进程的标志 (4B) */
+    unsigned short used_math;           /* 标志:是否使用了协处理器 (4B) */
+
+    /* file system info (108B) */
     /* -1 if no tty, so it must be signed */
-    int tty;                            // 进程使用tty终端的子设备号.-1表示没有使用
-    unsigned short umask;               // 文件创建属性屏蔽位
-    struct m_inode * pwd;               // 当前工作目录i节点结构指针
-    struct m_inode * root;              // 根目录i节点结构指针
-    struct m_inode * executable;        // 执行文件i节点结构指针
-    struct m_inode * library;           // 被加载库文件i节点结构指针
-    unsigned long close_on_exec;        // 执行时关闭文件句柄位图标志.(include/fcntl.h)
-    struct file * filp[NR_OPEN];        // 文件结构指针表,最多32项.表项号即是文件描述符的值
-    /* ldt for this task 0 - zero 1 - cs 2 - ds&ss */
-    struct desc_struct ldt[3];          // 局部描述符表, 0 - 空,1 - 代码段cs,2 - 数据和堆栈段ds&ss
-    /* tss for this task */
-    struct tss_struct tss;              // 进程的任务状态段信息结构
-};
+    int tty;                            /* 进程使用tty终端的子设备号.-1表示没有使用 (4B) */
+    unsigned short umask;               /* 文件创建属性屏蔽位 (4B) */
+    struct m_inode * pwd;               /* 当前工作目录i节点结构指针 (4B) */
+    struct m_inode * root;              /* 根目录i节点结构指针 (4B) */
+    struct m_inode * executable;        /* 执行文件i节点结构指针 (4B) */
+    struct m_inode * library;           /* 被加载库文件i节点结构指针 (4B) */
+    unsigned long close_on_exec;        /* 执行时关闭文件句柄位图标志.(include/fcntl.h) (4B) */
+    struct file * filp[NR_OPEN];        /* 文件结构指针表,最多32项.表项号即是文件描述符的值 (4*20=80B) */
 
-/*
+    /* ldt for this task 0 - zero, 1 - cs, 2 - ds&ss (24B)*/
+    struct desc_struct ldt[3];          /* 局部描述符表, 0 - 空,1 - 代码段cs,2 - 数据和堆栈段ds&ss (24B) */
+    /* tss for this task (212B) */
+    struct tss_struct tss;              /* 进程的任务状态段信息结构 (212B)*/
+};                                      /* 1156字节 */
+
+/**
  * Per process flags
+ *
+ * 每个进程的标志, 打印对齐警告信息。还未实现，仅用于486
  */
-/* 每个进程的标志, 打印对齐警告信息。还未实现，仅用于486 */
 #define PF_ALIGNWARN    0x00000001  /* Print alignment warning msgs */
                                     /* Not implemented yet, only for 486*/
 
 /*
- *  INIT_TASK is used to set up the first task table, touch at
+ * INIT_TASK is used to set up the first task table, touch at
  * your own risk!. Base=0, limit=0x9ffff (=640kB)
- */
-/*
+ *
  * INIT_TASK用于设置第1个任务表,若想修改,责任自负!
- * 基址Base=0,段长limit = 0x9ffff(=640KB).
+ * codeseg: 0x0000009f(L), 0x00c0fa00(H)
+ *          limit:0x0009f (9f+1=a0个4k页, limit=a0*4k=0x9fffff=640kB)
+ *          base:0x0000 0000
+ *          p&dpl&s&type:0xfa -> 0b1111 1010
+ *          g&d/b&x&avl:0xc -> 0b1100
+ * dataseg: 0x00c0f200 0000009f
+ *          limit:0x0009f (9f+1=a0个4k页, limit=a0*4k=0x9fffff=640kB)
+ *          base:0x0000 0000
+ *          p&dpl&s&type:0xf2 -> 0b1111 0010
+ *          g&d/b&x&avl:0xc -> 0b1100
+ *
+ * esp0 = PAGE_SIZE+(long)&init_task, 为init_task联合体的最后一个字节,这是tss_struct中0特权esp的值
+ * 每个task_union都是4096字节大小,前面104字节是task_struct结构,布局如下：
+ * ｜-------------------------------- 4096字节 --------------------------------｜
+ * ｜--------task_struct--------|---------------------剩余未用------------------|
+ *                                                                            ^
+ *                                                                           esp
+ * 当中断发生时, cpu切换到内核态中断处理程序, 此时cpu按当前进程tss中的esp0, ss0设置, 此时esp0=task_struct+4K,
+ * ss0=0x10, cpu自动压栈ss,esp,eflag,cs,eip,共20个字节, 后续中断完成后由此堆栈进行恢复.
+ *
+ *
+ *  eip  -> esp (系统中断调用返回后执行的指令地址)
+ *  cs
+ *  eflag
+ *  esp
+ *  ss   -> init_stask+4K
  */
-// 对应上面任务结构的第1个任务的信息.
+/* 对应上面任务结构的第1个任务的信息 */
 #define INIT_TASK {\
     /* state etc */ 0, 15, 15, \
     /* signals */   0, {{},}, 0, \
@@ -272,10 +255,15 @@ struct task_struct {
                         {0x9f,0xc0f200}, \
                     }, \
     /*tss*/ \
+                    /* back_link | esp0 | ss0 | esp1 | ss1 | esp2 | ss2 | cr3       */ \
                     {0, PAGE_SIZE + (long)&init_task, 0x10, 0, 0, 0, 0, (long)&pg_dir,\
+                    /* eip | eflags | eax | ecx | edx | ebx | esp | ebp */ \
                         0,0,0,0,0,0,0,0, \
+                    /* esi | edi | es | cs | ss | ds | fs | gs */ \
                         0,0,0x17,0x17,0x17,0x17,0x17,0x17, \
+                    /* ldt | trace_bitmap */ \
                         _LDT(0),0x80000000, \
+                    /* i387_struct */ \
                         {} \
                     }, \
 }
@@ -343,16 +331,18 @@ __asm__(\
  *
  * switch_to(n)将切换当前任务到任务nr,即n.首先检测任务n不是当前任务,如果是则什么也不做退出.如果我们切换
  * 的任务最近(上次运行)使用过数学协处理器的话,则还需复位控制器cr0中的TS标志.
+ *
+ * 跳转到一个任务的TSS段选择符组成的地址处会造成CPU进行任务切换操作.
+ * 输入: %0 - 指向__tmp或__tmp.a;    %1 - 指向__tmp.b处,用于存放新TSS 选择符.
+ *      dx - 新任务n的TSS选择符;      ecx - 新任务n的任务结构指针task[n].
+ * 其中临时数据结构__tmp用于组建远跳转(far jump)指令的操作数.该操作数由4字节偏移地址和2字节的段选择符组成,共6字节.
+ * 跳转指令为 ljmp 16位selector, 32位offset, 指令在内存中的字节码由地位到高位为:
+ *   0xea offset:low offset:high selector:low selector:high (AT&T指令在内存中的操作数表示顺序与指令顺序正好相反)
+ * 即ljmp %0 -> ljmp *&__tmp.a, 相当于__tmp.a = offset, __tmp.b = selector
+ * 对于任务切换的长跳转__tmp.a忽略, TSS的selector字的高2字节不用.
+ * 任务切换回来之后,在判断原任务上次执行是否使用过协处理器时,是通过将原任务指针与保存在last_task_used_math
+ * 变更中的上次使用过协处理器指针进行比较而作出的,参见文件kernel/sched.c中有关math_state_restore()函数的说明.
  */
-// 跳转到一个任务的TSS段选择符组成的地址处会造成CPU进行任务切换操作.
-// 输入: %0 - 指向__tmp;        %1 - 指向__tmp.b处,用于存放新TSS 选择符.
-//      dx - 新任务n的TSS选择符;  ecx - 新任务n的任务结构指针task[n].
-// 其中临时数据结构__tmp用于组建远跳转(far jump)指令的操作数.该操作数由4字节偏移地址和2字节的段选择符组成.因此__tmp
-// 中a的值是32位偏移值,而的低2字节是新TSS段的选择符(高2字节不用).中转与TSS段选择符会造成任务切换到该TSS对应的进程.对于
-// 造成任务切换的长跳转,a值无用.177行上的内存间接跳转指令使用6字节操作数作为跳转目的地的长指针,其格式为:jmp 16位段
-// 选择符:32位偏移值.但在内存中操作数的表示顺序与这里正好相反.任务切换回来之后,在判断原任务上次执行是否使用过协处理器时,
-// 是通过将原任务指针与保存在last_task_used_math变更中的上次使用过协处理器指针进行比较而作出的,参见文件kernel/sched.c
-// 中有关math_state_restore()函数的说明.
 #define switch_to(n) {\
 struct {long a, b;} __tmp; \
 __asm__(\
@@ -372,44 +362,51 @@ __asm__(\
 // 页面地址对准.(在内核代码中同有任何地方引用!!)
 #define PAGE_ALIGN(n) (((n) + 0xfff) & 0xfffff000)
 
-/*
+/**
+ * 设置位于地址addr处描述符中的各基地址字段(基地址是base).
+ * %1 - 地址addr偏移2; %2 - 地址addr偏移4; %3 - 地址addr偏移7; edx - 基地址base.
+ */
 #define _set_base(addr,base) \
-__asm__ __volatile__ ("movw %%dx,%0\n\t" \
-    "rorl $16,%%edx\n\t" \
-    "movb %%dl,%1\n\t" \
-    "movb %%dh,%2" \
+__asm__ __volatile__ (\
+    "pushl %%edx\n\t" \
+    "movw %%dx,%0\n\t"              /* 基地址base低16位(位15-0) -> [addr+2] */\
+    "rorl $16,%%edx\n\t"            /* edx中基址高16位(位31-16) -> dx */\
+    "movb %%dl,%1\n\t"              /* 基址高16位中的低8位(位23-16) -> [addr+4] */\
+    "movb %%dh,%2\n\t"              /* 基址高16位中的高8位(位31-24) -> [addr+7] */\
+    "popl %%edx" \
     ::"m" (*((addr)+2)), \
       "m" (*((addr)+4)), \
       "m" (*((addr)+7)), \
       "d" (base) \
     :)
-*/
 
-// 设置位于地址addr处描述符中的各基地址字段(基地址是base).
-// %0 - 地址addr偏移2; %1 - 地址addr偏移4; %2 - 地址addr偏移7; edx - 基地址base.
-#define _set_base(addr, base) do { unsigned long __pr; \
-__asm__ __volatile__ (\
-        "movw %%dx, %1\n\t"             /* 基地址base低16位(位15-0) -> [addr+2] */\
-        "rorl $16, %%edx\n\t"           /* edx中基址高16位(位31-16) -> dx */\
-        "movb %%dl, %2\n\t"             /* 基址高16位中的低8位(位23-16) -> [addr+4] */\
-        "movb %%dh, %3\n\t"             /* 基址高16位中的高8位(位31-24) -> [addr+7] */\
-        :"=&d"(__pr) \
-        :"m"(*((addr) + 2)), \
-        "m"(*((addr) + 4)), \
-        "m"(*((addr) + 7)), \
-        "0"(base) \
-        ); } while(0)
+/*
+ #define _set_base(addr, base) do { unsigned long __pr; \
+ __asm__ __volatile__ (\
+      "movw %%dx, %1\n\t"
+      "rorl $16, %%edx\n\t"
+      "movb %%dl, %2\n\t"
+      "movb %%dh, %3\n\t"
+      :"=&d"(__pr) \
+      :"m"(*((addr) + 2)), \
+      "m"(*((addr) + 4)), \
+      "m"(*((addr) + 7)), \
+      "0"(base) \
+      ); } while(0)
+*/
 
 // 设置位于地址addr处描述符中的段限长字段(段长是limit).
 // %0 - 地址addr; %1 - 地址addr偏移6处; edx - 段长值limit.
 #define _set_limit(addr, limit) \
-__asm__(\
+__asm__( \
+    "pushl %%edx\n\t" \
     "movw %%dx, %0\n\t"                 /* 段长limit低16位(位15-0) -> [addr] */\
     "rorl $16, %%edx\n\t"               /* edx中的段长高4位(位19-16) -> dl */\
     "movb %1, %%dh\n\t"                 /* 取原[addr+6]字节 -> dh,其中高4位是些标志 */\
     "andb $0xf0, %%dh\n\t"              /* 清dh的低4位(将存放段长的位19-16) */\
     "orb %%dh, %%dl\n\t"                /* 将原高4位标志和段长的高4位(位19-16)合成1字节,并放回[addr+6]处 */\
-    "movb %%dl, %1" \
+    "movb %%dl, %1\n\t" \
+    "popl %%edx" \
     ::"m" (*(addr)), \
       "m" (*((addr) + 6)), \
       "d" (limit) \
@@ -420,8 +417,10 @@ __asm__(\
 // 设置局部描述符表中ldt描述符的段长字段.
 #define set_limit(ldt, limit) _set_limit( ((char *)&(ldt)) , (limit - 1) >> 12 )
 
-// 从地址addr处描述符中取段基地址.功能与_set_base()正好相反.
-// edx - 存放基地址(__base);%1 - 地址addr偏移2;%2 - 地址addr偏移4;%3 - addr偏移7.
+/**
+ * 从地址addr处描述符中取段基地址.功能与_set_base()正好相反.
+ * edx - 存放基地址(__base);%1 - 地址addr偏移2;%2 - 地址addr偏移4;%3 - addr偏移7.
+ */
 #define _get_base(addr) ({\
 unsigned long __base; \
 __asm__(\
@@ -453,13 +452,19 @@ static inline unsigned long _get_base(char * addr){
 // 取局部描述符表中ldt所指段描述符中的基地址.
 #define get_base(ldt) _get_base( ((char *)&(ldt)) )
 
-// 取段选择符segment指定的描述符中的段限长值.
-// 指令lsll是Load Segment Limit的缩写它从指定段描述符中取出分散的限长比特位拼成完整的段限长值放入指定寄存器中.所得的段限长是实际
-// 字节数减1,因此这里还需要加1后返回.
-// %0 - 存放段长值(字节数);%1 - 段选择符segment.
+/**
+ * 取段选择符segment指定的描述符中的段限长值.
+ * 指令lsll是Load Segment Limit的缩写它从指定段描述符中取出分散的限长比特位拼成完整的段限长值放入指定寄存器中.
+ * 所得的段限长是实际字节数减1,因此这里还需要加1后返回.
+ * %0 - 存放段长值(字节数); %1 - 段选择符segment.
+ */
 #define get_limit(segment) ({ \
 unsigned long __limit; \
-__asm__("lsll %1,%0\n\tincl %0":"=r" (__limit):"r" (segment)); \
+__asm__( \
+    "lsll %1,%0\n\t" \
+    "incl %0" \
+    :"=r" (__limit) \
+    :"r" (segment)); \
 __limit;})
 
 #endif

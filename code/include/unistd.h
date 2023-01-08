@@ -162,6 +162,10 @@
 #define __NR_readlink	85
 #define __NR_uselib	86
 
+#define __NR_ami	87
+#define __NR_whoami	88
+
+
 // 以下定义系统调用嵌入式汇编宏函数.
 // 不带参数的系统调用宏函数,type_name(void).
 // %0 - eax(__res),%1 - eax(__NR_##name).其中name是系统调用的名称,与__NR_组合形成上面的系统调用符号常数,用来对系统调用表中

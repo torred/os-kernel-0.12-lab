@@ -39,13 +39,13 @@ else
 	exit -1;
 endif
 
-AS	= $(QUIET_AS)$(TARGET)as --32 -g  # -g为0.12新增
+AS	= $(QUIET_AS)$(TARGET)as --32 -g3  # -g为0.12新增, 可在gdb中查看宏信息
 LD	= $(QUIET_LINK)$(TARGET)ld
 AR	= $(QUIET_AR)$(TARGET)ar
 STRIP	= $(QUIET_STRIP)$(TARGET)strip
 OBJCOPY = $(QUIET_OBJCOPY)$(TARGET)objcopy
-OBJDUMP = $(QUIET_OBJCOPY)$(TARGET)objdump
-NM = $(QUIET_OBJCOPY)$(TARGET)nm
+OBJDUMP = $(QUIET_OBJDUMP)$(TARGET)objdump
+NM = $(QUIET_NM)$(TARGET)nm
 
 RM = $(QUIET_RM)rm
 TAR = $(QUIET_TAR)tar
@@ -121,10 +121,10 @@ LDFLAGS = -m elf_i386    # -M为0.12新增，会把所有过程信息答应出�
 
 # we should use -fno-stack-protector with gcc 4.3
 ifeq ($(OS), Linux)
-	CFLAGS  = -g -O0 -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce -w #-Wall
+	CFLAGS  = -gdwarf-2 -g3 -O0 -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce -w #-Wall
 else ifeq ($(OS), Darwin)
 	#CFLAGS  = -gdwarf-2 -g3 -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce -w #-Wall
-	CFLAGS  = -g -O0 -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce -w #-Wall
+	CFLAGS  = -gdwarf-2 -g3 -O0 -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce -w #-Wall
 else
 	exit -1;
 endif
@@ -181,8 +181,8 @@ SETSWAPDEV = tools/setswapdev.sh
 
 # >>>> Specify the Rootfs Image file
 # ---------------------------------------------------------
-HDA_IMG = hdc-0.11.img
-FLP_IMG = rootimage-0.11
+HDA_IMG = hdc-0.12.img
+FLP_IMG = rootimage-0.12
 RAM_IMG = rootram.img
 # ---------------------------------------------------------
 

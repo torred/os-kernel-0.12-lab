@@ -238,7 +238,7 @@ unsigned long get_free_page(void)
 {
 register unsigned long __res;
 
-// 首先在内存映射字节位图中查找址为0的字节项,然后把对应物理内存页面清零.如果得到的页面地址大于实际物理内存容量则重新寻找.如果没有找到空闲页面则
+// 首先在内存映射字节位图中查找值为0的字节项,然后把对应物理内存页面清零.如果得到的页面地址大于实际物理内存容量则重新寻找.如果没有找到空闲页面则
 // 去调用执行交换处理,并重新查找.最后返回空闲物理页面地址.
 repeat:
 	__asm__(
@@ -333,5 +333,5 @@ void init_swapping(void)
 		swap_bitmap = NULL;
 		return;
 	}
-	Log(LOG_INFO_TYPE, "<<<<< Swap device ok: %d pages (%d bytes) swap-space >>>>>\n\r", j, j * 4096);
+	Log(LOG_INFO_TYPE, "Swap device ok: %d pages (%d bytes) swap-space\n\r", j, j * 4096);
 }
