@@ -344,7 +344,7 @@ __asm__(
 return __res;												// 返回字符串长度值.
 }
 
-char * ___strtok;        									// 用于临时存放指向下面被分析字符串1（s）的指针。
+//char * ___strtok;        									// 用于临时存放指向下面被分析字符串1（s）的指针。
 
 // 利用字符串2中的字符将字符串1分割成标记（tokern）序列。
 // 将串1看作包含零个或多个单词（token）的序列，并由分割符字符串2中的一个或多个字符分开。第一次调用strtok()时，将返回指向
@@ -357,6 +357,7 @@ char * ___strtok;        									// 用于临时存放指向下面被分析字�
 // 搜索下一个token。
 static inline char * strtok(char * s, const char * ct)
 {
+char * ___strtok;
 register char * __res;
 __asm__("testl %1, %1\n\t"               					// 首先测试esi（字符串2指针s）是否为NULL。
 	"jne 1f\n\t"                    						// 如果不是，则表明是首次调用本函数，跳转标号1。
