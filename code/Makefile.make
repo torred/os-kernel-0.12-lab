@@ -149,11 +149,11 @@ endif
 # >>>> Bochs配置，可根据实际安装环境进行定制
 # ---------------------------------------------------------
 ifeq ($(OS), Linux)
-	BOCHS_HOME=/home/todd/.local/bochs-2.6-x86
+	BOCHS_HOME=/home/todd/.local/bochs-2.7-x86
 	BOCHS_DISP_LIB=x
 	BOCHS_KEYBOARD=x11-pc-de.map
 else ifeq ($(OS), Darwin)
-	BOCHS_HOME=/usr/local/Cellar/bochs/2.6.11-x86
+	BOCHS_HOME=/usr/local/Cellar/bochs/2.7-x86
 	BOCHS_DISP_LIB=sdl2
 	BOCHS_KEYBOARD=sdl2-pc-de.map
 else

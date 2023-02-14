@@ -37,7 +37,7 @@ QEMU_CMD_PARA = -m 16M -boot a -fda images/Image   #$(QEMU) -m 16M -boot a -fda 
 QEMU_CMD_FDB_PARA = $(QEMU_CMD_PARA) -fdb rootfs/$(FLP_IMG)
 QEMU_CMD_HDA_PARA = $(QEMU_CMD_PARA) -hda rootfs/$(HDA_IMG)
 
-BOCHS_DBG = .dbg
+BOCHS_GDB = .gdb
 BOCHS_CMD = $(BOCHS)
 
 
@@ -65,8 +65,8 @@ ifeq ($(VM), bochs)
 	VM_CMD_PARA = $(BOCHS_CMD_RC)
 	VM_CMD_FDB_PARA = $(BOCHS_CMD_FDB_RC)
 	VM_CMD_HDA_PARA = $(BOCHS_CMD_HDA_RC)
-	VM_CMD_DBG_SUFFIX = $(BOCHS_DBG)
-	VM_RC_DBG_SUFFIX = $(BOCHS_DBG)
+	VM_CMD_DBG_SUFFIX = $(BOCHS_GDB)
+	VM_RC_DBG_SUFFIX = $(BOCHS_GDB)
 else
 	VM_CMD = $(QEMU_CMD)
 	VM_CMD_PARA = $(QEMU_CMD_PARA)
