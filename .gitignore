@@ -5,3 +5,5 @@
 *.map
 bochsout.txt
 *.sublime-workspace
+*.sublime-project
+*.udb
